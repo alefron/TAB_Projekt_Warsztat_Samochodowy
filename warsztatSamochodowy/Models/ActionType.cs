@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace warsztatSamochodowy.Models
+{
+    public class ActionType
+    {
+        [Key]
+        [Column(TypeName = "nvarchar(10)")]
+        public string CodeAction { get; set; }
+
+        [Required]
+        [Column(TypeName = "nvarchar(50)")]
+        public string Name { get; set; }
+        public ICollection<Action> Actions { get; set; }
+    }
+}
