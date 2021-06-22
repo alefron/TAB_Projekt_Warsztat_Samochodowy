@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace warsztatSamochodowy.Migrations
 {
-    public partial class initialize : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -46,6 +46,18 @@ namespace warsztatSamochodowy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.CodeBrand);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    CodeRole = table.Column<string>(type: "nvarchar(3)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.CodeRole);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,7 +104,7 @@ namespace warsztatSamochodowy.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(3)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     HashPassword = table.Column<string>(type: "nvarchar(100)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(9)", nullable: false),
@@ -106,6 +118,12 @@ namespace warsztatSamochodowy.Migrations
                         column: x => x.AddressId,
                         principalTable: "Addresses",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Personel_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "CodeRole",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -238,6 +256,11 @@ namespace warsztatSamochodowy.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Personel_RoleId",
+                table: "Personel",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Proposals_ManagerId",
                 table: "Proposals",
                 column: "ManagerId");
@@ -279,6 +302,9 @@ namespace warsztatSamochodowy.Migrations
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Brands");

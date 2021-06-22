@@ -186,12 +186,15 @@ namespace warsztatSamochodowy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(9)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(3)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Personel");
                 });
@@ -232,6 +235,20 @@ namespace warsztatSamochodowy.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("Proposals");
+                });
+
+            modelBuilder.Entity("warsztatSamochodowy.Models.Role", b =>
+                {
+                    b.Property<string>("CodeRole")
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("CodeRole");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("warsztatSamochodowy.Models.Vehicle", b =>
@@ -321,7 +338,15 @@ namespace warsztatSamochodowy.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("warsztatSamochodowy.Models.Role", "Role")
+                        .WithMany("personel")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Address");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("warsztatSamochodowy.Models.Proposal", b =>
@@ -394,6 +419,11 @@ namespace warsztatSamochodowy.Migrations
             modelBuilder.Entity("warsztatSamochodowy.Models.Proposal", b =>
                 {
                     b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("warsztatSamochodowy.Models.Role", b =>
+                {
+                    b.Navigation("personel");
                 });
 
             modelBuilder.Entity("warsztatSamochodowy.Models.Vehicle", b =>

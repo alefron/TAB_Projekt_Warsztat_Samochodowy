@@ -21,7 +21,8 @@ namespace warsztatSamochodowy.Models
         public string LastName { get; set; }
 
         [Required]
-        public RolesEnum Role { get; set; }
+        public string RoleId { get; set; }
+        public Role Role { get; set; }
 
         [Required]
         [Column(TypeName = "nvarchar(100)")]

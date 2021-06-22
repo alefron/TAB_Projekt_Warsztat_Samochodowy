@@ -33,6 +33,7 @@ namespace warsztatSamochodowy.Repository
                         Id = person.Id,
                         FirstName = person.FirstName,
                         LastName = person.LastName,
+                        RoleId = person.RoleId,
                         Role = person.Role,
                         PhoneNumber = person.PhoneNumber,
                         Email = person.Email,
