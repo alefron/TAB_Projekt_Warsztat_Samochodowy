@@ -31,5 +31,11 @@ namespace warsztatSamochodowy.Models
         //jeden adres dla wielu klientów może być
         public ICollection<Client> Clients { get; set; }
 
+        public string FormatedAddress
+        {
+            get => $"ul. {Street} {HouseNumber}/{LocalNumber} {City} {Postal}";
+        }
+
+
     }
 }
