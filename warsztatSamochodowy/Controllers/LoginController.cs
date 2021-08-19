@@ -25,18 +25,14 @@ namespace warsztatSamochodowy.Controllers
             return View();
         }
 
-        public List<Personel> GetAllPersonel()
-        {
-            var data = Task.Run(() => personelRepository.GetAllPersonel()).Result;
-            return data;
-        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Validate(string email, string password, string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            List<Personel> personel = GetAllPersonel();
+            List<Personel> personel = personelRepository.GetAllPersonel();
             foreach (var person in personel)
             {
                 if (person.Email == email)

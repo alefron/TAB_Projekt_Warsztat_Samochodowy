@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
+using warsztatSamochodowy.Rendering;
 
 namespace warsztatSamochodowy.Controllers
 {
@@ -12,13 +13,8 @@ namespace warsztatSamochodowy.Controllers
     {
 
         private PersonelRepository personelRepository = new PersonelRepository();
-        //private RoleRepository roleRepository = new RoleRepository();
+        private RoleRepository roleRepository = new RoleRepository();
         //private AddressRepository addressesRepository = new AddressRepository();
-        public List<Personel> GetAllPersonel()
-        {
-            var data = Task.Run(() => personelRepository.GetAllPersonel()).Result;
-            return data;
-        }
         public IActionResult Index()
         {
             return View();
@@ -32,6 +28,13 @@ namespace warsztatSamochodowy.Controllers
 
            
             return View(allPersonel);
+        }
+
+        public IActionResult PersonelEdit(int id)
+        {
+
+            ViewData["RoleId"] =roleRepository.GetAllRoles().ToSelectListItems();
+            return View(new Personel { Id = id,FirstName ="Janusz",LastName="Boss"});
         }
     }
 }

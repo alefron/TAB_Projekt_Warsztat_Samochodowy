@@ -20,7 +20,7 @@ namespace warsztatSamochodowy.Repository
         }
 
 
-        public async Task<List<Personel>> GetAllPersonel()
+        public async Task<List<Personel>> GetAllPersonelAsync()
         {
             var personel = new List<Personel>();
             var allpersonel = await context.Personel.ToListAsync();
@@ -47,6 +47,23 @@ namespace warsztatSamochodowy.Repository
             }
             return personel;
         }
+
+        public List<Personel> GetAllPersonel()
+        {
+            return Task.Run(GetAllPersonelAsync).Result;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         /*
             SELECT * FROM Personel
