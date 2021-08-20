@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using warsztatSamochodowy.Models;
@@ -57,22 +58,45 @@ namespace warsztatSamochodowy.Repository
 
 
 
+        public async Task<Personel> GetPersonelByIDAsync(int id)
+        {
+
+            return await context.Personel
+                .Where((personel) => personel.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public Personel GetPersonelByID(int id)
+        {
+            return Task.Run(() => { return GetPersonelByIDAsync(id); }).Result;
+        }
+
+
+
+        public async Task<int> InsertPersonelAsync(Personel personel)
+        {
+            await context.Personel.AddAsync(personel);
+            return await context.SaveChangesAsync();
+        }
+
+        public int InsertPersonel(Personel personel)
+        {
+            Task<int> t = Task.Run(() => { return InsertPersonelAsync(personel); });
+            return t.Result;
+        }
 
 
 
 
-
-
-
-
-        /*
+        
+        public async Task<List<Personel>> GetJoinedPersonelAsync()
+        {
+            /*
             SELECT * FROM Personel
             LEFT JOIN Role
             LEFT JOIN Addresses
-         */
-        public async Task<List<Personel>> GetJoinedPersonelAsync()
-        {
-            
+            */
+
             var queryResult =await context.Personel.Join<Personel, Role, string, Personel>(
                     context.Role,
                     personel => personel.RoleId,

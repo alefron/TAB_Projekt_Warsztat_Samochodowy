@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
 using warsztatSamochodowy.Rendering;
+using warsztatSamochodowy.Forms;
 
 namespace warsztatSamochodowy.Controllers
 {
@@ -30,11 +32,43 @@ namespace warsztatSamochodowy.Controllers
             return View(allPersonel);
         }
 
+        [HttpGet]
         public IActionResult PersonelEdit(int id)
         {
 
-            ViewData["RoleId"] =roleRepository.GetAllRoles().ToSelectListItems();
-            return View(new Personel { Id = id,FirstName ="Janusz",LastName="Boss"});
+
+
+            Personel theChosenOne = personelRepository.GetPersonelByID(id);
+            if (theChosenOne==null)
+            {
+                //If it returns null just yeet 404 on this mo-fo
+                return new NotFoundResult();
+            }
+
+            //Get posible values for roleID dropdown
+            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            return View(theChosenOne);
+           
+            
         }
+
+        [HttpGet]
+        public IActionResult PersonelCreate()
+        {
+            //Get posible values for roleID dropdown
+            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult PersonelCreate(PersonelForm personel)
+        {
+            //Get posible values for roleID dropdown
+            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            return View();
+        }
+
+
+
     }
 }

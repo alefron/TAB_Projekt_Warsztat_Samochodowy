@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
-
+using warsztatSamochodowy.Security;
 namespace warsztatSamochodowy.Controllers
 {
     public class LoginController : Controller
@@ -37,7 +37,7 @@ namespace warsztatSamochodowy.Controllers
             {
                 if (person.Email == email)
                 {
-                    if (person.HashPassword == password)
+                    if (person.HashPassword == Hashers.Hasher.GetHash(password))
                     {
                         var claims = new List<Claim>();
                         claims.Add(new Claim("email", email));
