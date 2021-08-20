@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -46,9 +47,22 @@ namespace warsztatSamochodowy.Controllers
                         var claims = new List<Claim>();
                         claims.Add(new Claim("email", email));
                         claims.Add(new Claim(ClaimTypes.NameIdentifier, email));
+                        if (person.RoleId == "MAN")
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, "manager"));
+                        }
+                        else if (person.RoleId == "ADM")
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, "admin"));
+                        }
+                        else
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, "worker"));
+                        }
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                         await HttpContext.SignInAsync(claimsPrincipal);
+                        Thread.CurrentPrincipal = claimsPrincipal;
 
                         return Redirect(returnUrl);
 
@@ -57,7 +71,6 @@ namespace warsztatSamochodowy.Controllers
             }
             TempData["Error"] = "Niepoprawny login lub hasło.";
             return View("~/Views/Login/Login.cshtml");
-
         }
 
         [Authorize]
