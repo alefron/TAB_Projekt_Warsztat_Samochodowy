@@ -9,6 +9,7 @@ namespace warsztatSamochodowy.Models
 {
     public class Personel
     {
+
         [Key]
         public int Id { get; set; }
 

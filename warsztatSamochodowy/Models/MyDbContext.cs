@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Models
 {
@@ -20,8 +21,11 @@ namespace warsztatSamochodowy.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Personel> Personel { get; set; }
         public DbSet<Proposal> Proposals { get; set; }
+        public DbSet<Role> Role { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleType> VehicleTypes { get; set; }
+        
+         
 
     }
 }
