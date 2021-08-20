@@ -8,11 +8,17 @@ using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
 using warsztatSamochodowy.Rendering;
 using warsztatSamochodowy.Forms;
+using Microsoft.AspNetCore.Authorization;
 
 namespace warsztatSamochodowy.Controllers
 {
     public class AdminController : Controller
     {
+
+        private PersonelRepository personelRepository = new PersonelRepository();
+        private RoleRepository roleRepository = new RoleRepository();
+        //private AddressRepository addressesRepository = new AddressRepository();
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             return View();
@@ -21,10 +27,10 @@ namespace warsztatSamochodowy.Controllers
 
         public IActionResult PersonelList()
         {
-          
+
             List<Personel> allPersonel = personelRepository.GetJoinedPersonel();
 
-           
+
             return View(allPersonel);
         }
 
@@ -35,7 +41,7 @@ namespace warsztatSamochodowy.Controllers
 
 
             Personel theChosenOne = personelRepository.GetPersonelByID(id);
-            if (theChosenOne==null)
+            if (theChosenOne == null)
             {
                 //If it returns null just yeet 404 on this mo-fo
                 return new NotFoundResult();
@@ -44,8 +50,8 @@ namespace warsztatSamochodowy.Controllers
             //Get posible values for roleID dropdown
             ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
             return View(theChosenOne);
-           
-            
+
+
         }
 
         [HttpGet]
