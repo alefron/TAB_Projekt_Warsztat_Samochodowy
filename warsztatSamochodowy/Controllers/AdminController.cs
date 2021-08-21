@@ -4,10 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
 using warsztatSamochodowy.Rendering;
 using warsztatSamochodowy.Forms;
+
 
 namespace warsztatSamochodowy.Controllers
 {

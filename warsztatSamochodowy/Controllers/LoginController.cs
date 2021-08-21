@@ -37,11 +37,14 @@ namespace warsztatSamochodowy.Controllers
             {
                 if (person.Email == email)
                 {
-                    if (person.HashPassword == Hashers.Hasher.GetHash(password))
+                    if (person.HashPassword == SecurityUtils.Hasher.GetHash(password))
                     {
+                        var roleID = person.RoleId;
+
                         var claims = new List<Claim>();
                         claims.Add(new Claim("email", email));
                         claims.Add(new Claim(ClaimTypes.NameIdentifier, email));
+                        claims.Add(new Claim(ClaimTypes.Role, roleID));
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                         await HttpContext.SignInAsync(claimsPrincipal);

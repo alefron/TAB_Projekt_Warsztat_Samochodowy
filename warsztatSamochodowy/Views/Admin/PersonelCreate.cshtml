@@ -1,16 +1,16 @@
-﻿@model warsztatSamochodowy.Models.PersonelForm
+﻿@model warsztatSamochodowy.Forms.PersonelForm
 
 @{
-    ViewData["Title"] = "PersonelCreate";
+    ViewData["Title"] = "Personel Create";
 }
 
 <h1>Personel Create</h1>
 
-<h4>Personel Form</h4>
+<h4>PersonelForm</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="PersonelCreate">
+        <form asp-action="View">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
