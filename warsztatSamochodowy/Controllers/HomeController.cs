@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,23 @@ namespace warsztatSamochodowy.Controllers
 
         [Authorize]
         public IActionResult Index()
-        {
+        { 
+            var role = User.Claims.Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value).SingleOrDefault();
+
+
+            if (role == "manager")
+            {
+                return Redirect("Manager");
+            }
+            if (role == "admin")
+            {
+                return Redirect("Admin");
+            }
+            if (role == "worker")
+            {
+                return Redirect("Worker");
+            }
             return View();
         }
 
