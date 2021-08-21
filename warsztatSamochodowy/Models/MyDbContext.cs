@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using warsztatSamochodowy.Models;
+using warsztatSamochodowy.Forms;
 
 namespace warsztatSamochodowy.Models
 {
@@ -24,6 +25,7 @@ namespace warsztatSamochodowy.Models
         public DbSet<Role> Role { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleType> VehicleTypes { get; set; }
+        public DbSet<warsztatSamochodowy.Forms.PersonelForm> PersonelForm { get; set; }
         
          
 

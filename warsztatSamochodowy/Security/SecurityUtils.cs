@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace warsztatSamochodowy.Security
 {
-    public static class Hashers
+    public static class SecurityUtils
     {
         public static readonly IHasher Hasher;
-        static Hashers()
+        static SecurityUtils()
         {
             Hasher = new MockHasher();
         }

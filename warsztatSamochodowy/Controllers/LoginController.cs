@@ -38,11 +38,14 @@ namespace warsztatSamochodowy.Controllers
             {
                 if (person.Email == email)
                 {
-                    if (person.HashPassword == Hashers.Hasher.GetHash(password))
+                    if (person.HashPassword == SecurityUtils.Hasher.GetHash(password))
                     {
+                        var roleID = person.RoleId;
+
                         var claims = new List<Claim>();
                         claims.Add(new Claim("email", email));
                         claims.Add(new Claim(ClaimTypes.NameIdentifier, email));
+
                         if (person.RoleId == "MAN")
                         {
                             claims.Add(new Claim(ClaimTypes.Role, "manager"));
@@ -55,6 +58,7 @@ namespace warsztatSamochodowy.Controllers
                         {
                             claims.Add(new Claim(ClaimTypes.Role, "worker"));
                         }
+
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                         await HttpContext.SignInAsync(claimsPrincipal);
