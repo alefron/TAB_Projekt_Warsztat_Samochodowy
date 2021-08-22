@@ -33,7 +33,7 @@ namespace warsztatSamochodowy.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            List<Personel> personel = personelRepository.GetAllPersonel();
+            List<Personel> personel = personelRepository.GetList();
             foreach (var person in personel)
             {
                 if (person.Email == email)
