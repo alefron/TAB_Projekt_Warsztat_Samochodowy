@@ -21,11 +21,12 @@
 
                     @if (User.IsInRole("manager"))
                     {
-                        <div class="container-functions">
-                            <div class="nav-item on-hover-animation">Zlecenia</div>
-                            <div class="nav-item on-hover-animation">Pojazdy</div>
-                            <div class="nav-item on-hover-animation">Klienci</div>
-                        </div>
+                    <div class="container-functions">
+                        <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">Zlecenia</a></div>
+                        <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Vehicle" asp-action="VehicleList">Pojazdy</a></div>
+                        <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Klienci</a></div>
+
+                    </div>
                     }
 
                     @*Redirect jakis do tego*@
@@ -47,7 +48,7 @@
                             </div>
                             <div class="nav-item">
                                 @*DO poprawy asp*@
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Konto</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Personel" asp-action="Account">Konto</a>
                             </div>
 
 

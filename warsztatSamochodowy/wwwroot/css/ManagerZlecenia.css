@@ -55,3 +55,10 @@
 .BUTTONKOSZ {
     justify-self: flex-end !important;
 }
+
+.circle {
+    background: #456BD9;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+}
