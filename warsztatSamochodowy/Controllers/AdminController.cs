@@ -52,7 +52,7 @@ namespace warsztatSamochodowy.Controllers
             }
 
             //Get posible values for roleID dropdown
-            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            ViewData["RoleId"] = roleRepository.GetList().ToSelectListItems();
             return View(theChosenOne);
 
 
@@ -62,7 +62,7 @@ namespace warsztatSamochodowy.Controllers
         public IActionResult PersonelCreate()
         {
             //Get posible values for roleID dropdown
-            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            ViewData["RoleId"] = roleRepository.GetList().ToSelectListItems();
             return View();
         }
 
@@ -70,7 +70,7 @@ namespace warsztatSamochodowy.Controllers
         public IActionResult PersonelCreate(PersonelForm personel)
         {
             //Get posible values for roleID dropdown
-            ViewData["RoleId"] = roleRepository.GetAllRoles().ToSelectListItems();
+            ViewData["RoleId"] = roleRepository.GetList().ToSelectListItems();
             return View();
         }
 

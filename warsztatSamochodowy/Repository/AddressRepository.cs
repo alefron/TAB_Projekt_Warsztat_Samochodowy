@@ -7,18 +7,12 @@ using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Repository
 {
-    public class AddressRepository
+    public class AddressRepository: RepositoryBase<Address>
     {
-        private MyDbContext context;
         public AddressRepository()
         {
-            var contextOptions = new DbContextOptionsBuilder<MyDbContext>()
-        .UseSqlServer(@"Server=(local)\sqlexpress;Database=TAB_proj_DB;Trusted_Connection=True;MultipleActiveResultSets=true")
-        .Options;
-
-            context = new MyDbContext(contextOptions);
+            base.dbSet = context.Addresses;
         }
-
 
         public async Task<Dictionary<int, Address>> GetAddressDictionaryAsync()
         {

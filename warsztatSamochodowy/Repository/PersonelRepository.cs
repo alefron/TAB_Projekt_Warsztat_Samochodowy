@@ -8,55 +8,14 @@ using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Repository
 {
-    public class PersonelRepository
+    public class PersonelRepository: RepositoryBase<Personel>
     {
-        private MyDbContext context;
         public PersonelRepository()
         {
-            var contextOptions = new DbContextOptionsBuilder<MyDbContext>()
-        .UseSqlServer(@"Server=(local)\sqlexpress;Database=TAB_proj_DB;Trusted_Connection=True;MultipleActiveResultSets=true")
-        .Options;
-
-            context = new MyDbContext(contextOptions);
+            base.dbSet = context.Personel;
         }
 
-
-        public async Task<List<Personel>> GetAllPersonelAsync()
-        {
-            var personel = new List<Personel>();
-            var allpersonel = await context.Personel.ToListAsync();
-            if (allpersonel?.Any() == true)
-            {
-                foreach (var person in allpersonel)
-                {
-                    personel.Add(new Personel()
-                    {
-                        Id = person.Id,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                        RoleId = person.RoleId,
-                        Role = person.Role,
-                        PhoneNumber = person.PhoneNumber,
-                        Email = person.Email,
-                        AddressId = person.AddressId,
-                        Address = person.Address,
-                        HashPassword = person.HashPassword,
-                        Proposals = person.Proposals,
-                        Actions = person.Actions
-                    });
-                }
-            }
-            return personel;
-        }
-
-        public List<Personel> GetAllPersonel()
-        {
-            return Task.Run(GetAllPersonelAsync).Result;
-        }
-
-
-
-
+        
 
         public async Task<Personel> GetPersonelByIDAsync(int id)
         {
@@ -93,8 +52,8 @@ namespace warsztatSamochodowy.Repository
         {
             /*
             SELECT * FROM Personel
-            LEFT JOIN Role
-            LEFT JOIN Addresses
+            JOIN Role
+            JOIN Addresses
             */
 
             var queryResult =await context.Personel.Join<Personel, Role, string, Personel>(

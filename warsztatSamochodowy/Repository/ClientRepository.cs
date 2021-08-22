@@ -7,20 +7,15 @@ using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Repository
 {
-    public class ClientRepository
+    public class ClientRepository: RepositoryBase<Client>
     {
-        private MyDbContext context;
         public ClientRepository()
         {
-                var contextOptions = new DbContextOptionsBuilder<MyDbContext>()
-            .UseSqlServer(@"Server=(local)\sqlexpress;Database=TAB_proj_DB;Trusted_Connection=True;MultipleActiveResultSets=true")
-            .Options;
-
-            context = new MyDbContext(contextOptions);
+            dbSet = context.Clients;
         }
 
         
-        public async Task<List<Client>> GetAllClients()
+        public async Task<List<Client>> GetAllClientsAsync()
         {
             var clients = new List<Client>();
             var allclients = await context.Clients.ToListAsync();
@@ -44,5 +39,11 @@ namespace warsztatSamochodowy.Repository
             }
             return clients;
         }
+
+        public List<Client> GetAllClients()
+        {
+            return Task.Run(GetAllClientsAsync).Result;
+        }
+
     }
 }
