@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - warsztatSamochodowy</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-template.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/myNavbar.css"/>
 </head>
 <body>
     <header>
@@ -17,15 +18,41 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Wyloguj</a>
-                            </li>
-                        }
 
-                    </ul>
+                    @if (User.IsInRole("manager"))
+                    {
+                        <div class="container-functions">
+                            <div class="nav-item on-hover-animation">Zlecenia</div>
+                            <div class="nav-item on-hover-animation">Pojazdy</div>
+                            <div class="nav-item on-hover-animation">Klienci</div>
+                        </div>
+                    }
+
+                    @*Redirect jakis do tego*@
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <div class="login-functions">
+                            <div class="nav-item login-button">
+                                <a class="nav-link login-button" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+                            </div>
+                        </div>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <div class="login-functions">
+                            <div class="nav-item logout-button">
+                                <a class="nav-link logout-button" asp-area="" asp-controller="Login" asp-action="Logout">Wyloguj</a>
+                            </div>
+                            <div class="nav-item">
+                                @*DO poprawy asp*@
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Konto</a>
+                            </div>
+
+
+                        </div>
+                    }
                 </div>
             </div>
         </nav>

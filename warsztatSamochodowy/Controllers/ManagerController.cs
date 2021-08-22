@@ -14,5 +14,12 @@ namespace warsztatSamochodowy.Controllers
         {
             return View();
         }
+
+
+        [HttpGet("Manager/pojazdy")]
+        public async Task<IActionResult> devicesPage()
+        {
+            return View("~/Views/Manager/ManagerPojazdy.cshtml");
+        }
     }
 }
