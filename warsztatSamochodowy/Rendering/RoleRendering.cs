@@ -9,6 +9,8 @@ namespace warsztatSamochodowy.Rendering
 {
     public static class RoleRendering
     {
+
+
         public static SelectListItem ToSelectListItem(this Role role)
         {
             return new SelectListItem

@@ -9,6 +9,17 @@ namespace warsztatSamochodowy.Models
 {
     public class Action
     {
+
+
+        public  Action Join( Personel worker, Proposal proposal, ActionType actionType){
+            this.Worker = worker ?? this.Worker;
+            this.Proposal = proposal??this.Proposal;
+            this.ActionType = actionType ?? this.ActionType;
+            return this;
+        }
+
+        
+
         [Key]
         public int Id { get; set; }
 
