@@ -1,4 +1,5 @@
-﻿<!doctype html>
+﻿@Model FormVehicles
+<!doctype html>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -22,27 +23,37 @@
     </div>
 
 
-    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Action
-    </button>
-    <div class="dropdown-menu">
-        <form action="/vehicleList" method="post">
-            <a class="dropdown-item" asp-controller="Vehicle" asp-action="VehicleListS">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-        </form>
-    </div>
-
 
     <div class="sorting-container">
+        <form asp-controller="Vehicle" asp-action="vehicleListRemoved" method="get">
+            <div class="dropdown">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    wybierz markę
+                </button>
 
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    @foreach (var brand in Model[0].getBrands())
+                    {
+                        <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
+                    }
+                </ul>
+            </div>
+        </form>
 
+        <form asp-controller="Vehicle" asp-action="vehicleListRemoved" method="get">
+            <div class="dropdown">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data przyjęcia
+                </button>
 
-        <button class="sort-button dropdown-menu">
-            <span class="sorting-buton-text">Marka</span>
-            <i class="button-icon fas fa-angle-down"></i>
-
-        </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    @foreach (var brand in Model[0].getBrands())
+                    {
+                        <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
+                    }
+                </ul>
+            </div>
+        </form>
 
         <div class="sort-button">
             <a href="#">Data przyjecia</a>
@@ -60,8 +71,52 @@
         </div>
     </div>
 
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="card-hover-shadow-2x mb-3 card">
+                    <div class="card-header">
+                        <div class="text-capitalize font-weight-normal"><i class="fa-tasks"></i>&nbsp;Lista zleceń</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        @foreach (var item in Model[0].getBrands())
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="bg-warning"></div>
+                                                <div class="p-0">
+                                                    <div class="row">
+                                                        <div class="zlecenie-header">
+                                                            <h5>@item.Name</h5>
+                                                            <i>@item.CodeBrand </i>
+                                                        </div>
+                                                        <div class="progess-container">
+                                                            <div class="pudelko progress">
+                                                                <div data-percentage="0%" style="width: 70%;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                            </div>
+                                                            <button class="border-0 btn btn-outline-danger"> <i>USUŃ</i> </button>
+                                                            <span class="circle"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
+        <script src="/js/ManagerPojazdy.js"></script>
+    </body>
 
-    <script src="/js/ManagerPojazdy.js"></script>
-</body>
+    @{
+        ;
+        }
