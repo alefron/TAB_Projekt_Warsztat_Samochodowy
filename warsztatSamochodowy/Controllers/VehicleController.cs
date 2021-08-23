@@ -18,7 +18,7 @@ namespace warsztatSamochodowy.Controllers
         [HttpGet("Vehicle/vehicleList")]
         public IActionResult VehicleList(string firstName)
         {
-            List<Brand> list = brandRepository.GetAllBrands();
+            List<Brand> list = brandRepository.GetList();
             List<FormVehicles> model = new List<FormVehicles>();
             model.Add(new FormVehicles(list));
             return View(model);
