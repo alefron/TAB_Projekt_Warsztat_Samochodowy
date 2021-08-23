@@ -1,0 +1,47 @@
+
+
+.circle {
+    background: #456BD9;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+}
+.klienci-header{
+    width:75%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.klienci-header h1{
+    font-size: 24px !important;
+    font-weight: bold;
+    color:black;
+}
+
+.email{
+    font-size: 20px !important;
+    color: grey;
+
+}
+.liczba-zgloszen {
+    font-size: 16px !important;
+    color: grey;
+}
+.controlls {
+    width:25%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+.trash-button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    padding-right: 50px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+}

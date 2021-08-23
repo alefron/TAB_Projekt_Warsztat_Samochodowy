@@ -1,0 +1,77 @@
+@Model List<Client>
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
+     <link href="/css/ManagerKlienci.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+
+<body> 
+        <div class="search_wrap search_wrap_4">
+        <div class="search_box">
+            <div class="btn btn_common">
+                <i class="fas fa-search"></i>
+            </div>
+            <input type="text" class="input" placeholder="search...">
+        </div>
+    </div>
+
+
+    <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="card-hover-shadow-2x mb-3 card">
+                    <div class="card-header">
+                        <div class="text-capitalize font-weight-normal">&nbsp;Lista zleceń</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        @foreach (var item in Model)
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="bg-warning"></div>
+                                                <div class="p-0">
+                                                    <div class="row">
+                                                        <div class="klienci-header">
+                                                            <div class='nazwa'>
+                                                                       @if(item.CompanyName == null)
+                                                                     {
+                                                                     <h1>@item.FirstName <i class='fas fa-user-alt' style='color:blue'></i></h1>
+                                                                      }
+                                                                         @if(item.CompanyName != null)
+                                                                         {
+                                                                      <h1>@item.CompanyName <i class='fas fa-users' style='padding-left:5px;color:green'></i></h1>
+                                                                    }
+                                                            </div>
+                                                           <div class='email'>@item.Email</div>
+                                                          <div class='liczba-zgloszen'>Liczba zgłoszen: wstaw liczbe :))</div>
+                                                           
+                                                        </div>
+                                                        <div class='controlls'>
+                                                           
+                                                        <div class='circle'></div>
+                                                             <button class='trash-button'><i class="fas fa-trash" style='font-size:24px;color:red'></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>
