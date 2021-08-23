@@ -12,10 +12,13 @@ namespace warsztatSamochodowy.Forms
     {
         VehicleRepository vehicleRepository = new VehicleRepository();
         BrandRepository brandRepository = new BrandRepository();
+        ClientRepository clientRepository = new ClientRepository();
         private List<Brand> brands { get; set; }
         private List<Vehicle> vehicles { get; set; }
-        public FormVehicles(List<Brand> brands, List<Vehicle> vehicles)
+        public List<Client> clients { get; set; }
+        public FormVehicles(List<Brand> brands, List<Vehicle> vehicles, List<Client> clients)
         {
+            this.clients = clients;
             this.brands = brands;
             this.vehicles = vehicles;
         }

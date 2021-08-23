@@ -16,9 +16,9 @@
     <form asp-controller="Vehicle" asp-action="getVehiclesFilteredBySearch" method="get">
         <div class="search_wrap search_wrap_4">
             <div class="search_box">
-                <input class="btn btn_common" type="submit">
+                <button class="btn btn_common" type="submit">
                     <i class="fas fa-search"></i>
-                </input>
+                </button>
                 <input type="text" class="input" name="searching" placeholder="search...">
             </div>
         </div>
@@ -51,9 +51,17 @@
                 </button>
 
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @foreach (var brand in Model[0].getVehicles())
+                    @foreach (var client in Model[0].clients)
                     {
-                        <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
+                        @if (client.CompanyName == null)
+                        {
+                            <li><input type="submit" class="dropdown-item" name="owner" value="@(client.FirstName + " " + client.LastName)" /></li>
+                        }
+                        else
+                        {
+                            <li><input type="submit" class="dropdown-item" name="owner" value="@client.CompanyName" /></li>
+                        }
+
                     }
                 </ul>
             </div>
@@ -69,7 +77,7 @@
             <div class="col-md-8">
                 <div class="card-hover-shadow-2x mb-3 card">
                     <div class="card-header">
-                        <div class="text-capitalize font-weight-normal">&nbsp;Lista zleceń</div>
+                        <div class="text-capitalize font-weight-normal">&nbsp;Lista pojazdów</div>
                     </div>
                     <div class="scroll-area-sm">
                         <perfect-scrollbar class="ps-show-limits">
