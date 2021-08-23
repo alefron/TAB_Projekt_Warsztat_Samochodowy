@@ -20,5 +20,10 @@ namespace warsztatSamochodowy.Controllers
             return View(list);
         }
 
+        public IActionResult AddProposal()
+        {
+            return View();
+        }
+
     }
 }
