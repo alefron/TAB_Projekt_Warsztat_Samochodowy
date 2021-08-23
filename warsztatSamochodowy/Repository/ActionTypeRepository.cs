@@ -1,24 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-
 using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Repository
 {
-    public class BrandRepository :RepositoryBase<Brand>
+    public class ActionTypeRepository:RepositoryBase<ActionType>
     {
-        public BrandRepository()
+        public ActionTypeRepository()
         {
-            dbSet = context.Brands;
+            dbSet = context.ActionTypes;
         }
-
-
-
-
-
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace warsztatSamochodowy.Models
 {
-    public class Role
+    public class Role :ISelectListItem
     {
         [Key]
         [Column(TypeName = "nvarchar(3)")]
@@ -19,6 +19,14 @@ namespace warsztatSamochodowy.Models
         public string Name { get; set; }
         public ICollection<Personel> personel { get; set; }
 
+        public string GetSelectListText()
+        {
+            return Name;
+        }
 
+        public string GetSelectListValue()
+        {
+            return CodeRole;
+        }
     }
 }

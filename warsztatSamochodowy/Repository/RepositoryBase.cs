@@ -23,37 +23,84 @@ namespace warsztatSamochodowy.Repository
         }
 
 
-        public async Task<List<T>> GetListAsync()
+        virtual public T FormatModel(T unformated)
+        {
+
+            IModelFormattable formatable = unformated as IModelFormattable;
+            if (formatable != null) formatable.FormatMe();
+            return unformated;
+        }
+
+        virtual public bool CanInsert(T inerted)
+        {
+            return true;
+        }
+
+        virtual public async Task<List<T>> GetListAsync()
         {
             return await dbSet.ToListAsync();
         }
-        public List<T> GetList()
+        virtual public List<T> GetList()
         {
             return dbSet.ToList();
         }
 
 
-        public async Task<int> AddAsync(T added)
+        virtual public async Task<int> AddAsync(T added)
         {
+            FormatModel(added);
+            if (CanInsert(added) == false)
+            {
+                throw new RepositoryException("Failed To insert Item");
+            }
+
+
+
             await dbSet.AddAsync(added);
             return await context.SaveChangesAsync();
         }
 
-        public int Add(T added)
+        virtual public int Add(T added)
         {
+            FormatModel(added);
+            if (CanInsert(added) == false)
+            {
+                throw new RepositoryException("Failed To insert Item");
+            }
+
+
             dbSet.Add(added);
             return context.SaveChanges();
         }
 
 
-        public async Task<int> AddRangeAsync(IEnumerable<T> added)
+        virtual public async Task<int> AddRangeAsync(IEnumerable<T> added)
         {
+
+            foreach (T item in added)
+            {
+                FormatModel(item);
+                if (CanInsert(item) == false)
+                {
+                    throw new RepositoryException("Failed To insert Items");
+                }
+            }
+
             await dbSet.AddRangeAsync(added);
             return await context.SaveChangesAsync();
         }
 
-        public int AddRange(IEnumerable<T> added)
+        virtual public int AddRange(IEnumerable<T> added)
         {
+            foreach(T item in added)
+            {
+                FormatModel(item);
+                if (CanInsert(item) == false)
+                {
+                    throw new RepositoryException("Failed To insert Items");
+                }
+            }
+
             dbSet.AddRange(added);
             return context.SaveChanges();
         }
