@@ -29,7 +29,7 @@ namespace warsztatSamochodowy.Models
         public DateTime StartDate { get; set; }
 
         [Column(TypeName = "Date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         //wniosek dotyczy jednego pojazdu
         public string VehicleId { get; set; }

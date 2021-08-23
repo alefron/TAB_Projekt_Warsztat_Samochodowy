@@ -44,7 +44,7 @@
             </div>
         </form>
 
-        <form asp-controller="Vehicle" asp-action="vehicleListRemoved" method="get">
+        <form asp-controller="Vehicle" asp-action="vehicleListFilteredByOwner" method="get">
             <div class="dropdown">
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     właściciel
@@ -63,15 +63,30 @@
                         }
 
                     }
+                    <li><input type="submit" class="dropdown-item" name="owner" value="wszyscy" /></li>
+
                 </ul>
             </div>
         </form>
 
-        <div class="sort-button">
-            <a href="#">Status</a>
-            <i class="button-icon fa-angle-down"></i>
-        </div>
+        <form asp-controller="Vehicle" asp-action="vehicleListFilteredByStatus" method="get">
+            <div class="dropdown">
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    status
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><input type="submit" class="dropdown-item" name="status" value="w trakcie naprawy" /></li>
+                    <li><input type="submit" class="dropdown-item" name="status" value="dawniej naprawiane" /></li>
+                    <li><input type="submit" class="dropdown-item" name="status" value="wszystkie" /></li>
+
+                </ul>
+            </div>
+        </form>
     </div>
+
+    <br />
+    <br />
 
         <div class="row d-flex justify-content-center">
             <div class="col-md-8">
@@ -95,10 +110,6 @@
                                                             <i>@item.RegNumber </i>
                                                         </div>
                                                         <div class="progess-container">
-                                                            <div class="pudelko progress">
-                                                                <div data-percentage="0%" style="width: 70%;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-
-                                                            </div>
                                                             <button class="border-0 btn btn-outline-danger"> <i>USUŃ</i> </button>
                                                             <span class="circle"></span>
                                                         </div>

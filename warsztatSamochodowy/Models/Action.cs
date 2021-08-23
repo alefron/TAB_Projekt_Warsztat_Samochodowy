@@ -42,7 +42,7 @@ namespace warsztatSamochodowy.Models
         public DateTime StartDate { get; set; }
 
         [Column(TypeName = "Date")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         //worker który jest odpowiedzialny za tę czynność
         public int? WorkerId { get; set; }
