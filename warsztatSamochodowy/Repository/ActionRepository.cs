@@ -15,17 +15,7 @@ namespace warsztatSamochodowy.Repository
             base.dbSet = context.Actions;
         }
 
-        //Using Models.Action cuz there is System.Action
-        public async Task<List<Models.Action>> GetAllActionsAsync()
-        {
-            var actions = await context.Actions.ToListAsync();
-            return actions;
-        }
 
-        public List<Models.Action> GetAllActions()
-        {
-            return Task.Run(GetAllActionsAsync).Result;
-        }
 
         public async Task<List<Models.Action>> GetActionsForWorkerAsync(int WorkerId)
         {

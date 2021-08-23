@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace warsztatSamochodowy.Models
 {
-    public class Personel
+    public class Personel: ISelectListItem
     {
 
         [Key]
@@ -48,6 +48,14 @@ namespace warsztatSamochodowy.Models
         //wszystkie wykonane aktywności przy pojazdach - dot. workera
         public ICollection<Action> Actions { get; set; }
 
+        public string GetSelectListText()
+        {
+            return $"{FirstName} {LastName} ({Email})";
+        }
 
+        public string GetSelectListValue()
+        {
+            return Id.ToString();
+        }
     }
 }

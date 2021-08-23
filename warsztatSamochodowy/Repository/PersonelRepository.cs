@@ -31,23 +31,19 @@ namespace warsztatSamochodowy.Repository
         }
 
 
-
-        public async Task<int> InsertPersonelAsync(Personel personel)
+        public async Task<List<Personel>> GetPersonelListByRoleAsync(string roleId)
         {
-            await context.Personel.AddAsync(personel);
-            return await context.SaveChangesAsync();
+            return await context.Personel
+                .Where((personel) => personel.RoleId == roleId)
+                .ToListAsync();
         }
 
-        public int InsertPersonel(Personel personel)
+        public List<Personel> GetPersonelListByRole(string roleId)
         {
-            Task<int> t = Task.Run(() => { return InsertPersonelAsync(personel); });
-            return t.Result;
+            return Task.Run(() => { return GetPersonelListByRoleAsync(roleId); }).Result;
         }
 
 
-
-
-        
         public async Task<List<Personel>> GetJoinedPersonelAsync()
         {
             /*

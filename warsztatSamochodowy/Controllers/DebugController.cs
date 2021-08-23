@@ -19,9 +19,14 @@ namespace warsztatSamochodowy.Controllers
         private RoleRepository roleRepository = new RoleRepository();
         private PersonelRepository personelRepository = new PersonelRepository();
         private AddressRepository addressRepository = new AddressRepository();
-
+        
+        private ClientRepository clientRepository = new ClientRepository();
+        private BrandRepository brandRepository = new BrandRepository();
+        private VehicleTypeRepository vehicleTypeRepository = new VehicleTypeRepository();
         private ActionRepository actionRepository = new ActionRepository();
-
+        private VehicleRepository vehicleRepository = new VehicleRepository();
+        private ProposalRepository proposalRepository = new ProposalRepository();
+        private ActionTypeRepository actionTypeRepository = new ActionTypeRepository();
         private void ClearDatabase(MyDbContext dbc)
         {
             dbc.Actions.RemoveRange(dbc.Actions);
@@ -38,7 +43,8 @@ namespace warsztatSamochodowy.Controllers
             dbc.SaveChanges();
 
         }
-
+        /*
+        [HttpPost]
         public IActionResult ClearDatabase()
         {
             var contextOptions = new DbContextOptionsBuilder<MyDbContext>()
@@ -49,7 +55,10 @@ namespace warsztatSamochodowy.Controllers
             ClearDatabase(dbContext);
             return Content("Database Cleared");
         }
+        */
 
+
+        [HttpPost]
         public IActionResult PopulateDatabase()
         {
             var contextOptions = new DbContextOptionsBuilder<MyDbContext>()
@@ -63,8 +72,27 @@ namespace warsztatSamochodowy.Controllers
             addressRepository.AddRange(defaultAddresses());
             List<Address> addresList = addressRepository.GetList();
             personelRepository.AddRange(defaultPersonel(addresList));
+            clientRepository.AddRange(defaultClients(addresList[3]));
+            brandRepository.AddRange(defaultBrands());
+            vehicleTypeRepository.AddRange(defaultVehicleTypes());
+
+            List<Client> clientList = clientRepository.GetList();
+            List<Brand> brandList = brandRepository.GetList();
+            List<VehicleType> vehicleTypeList = vehicleTypeRepository.GetList();
 
 
+            vehicleRepository.AddRange(defaultVehicles(clientList, brandList, vehicleTypeList));
+
+            List<Vehicle> vechicleList = vehicleRepository.GetList();
+            List<Personel> managerList = personelRepository.GetPersonelListByRole("MAN");
+            List<Personel> workerList = personelRepository.GetPersonelListByRole("WOR");
+
+            proposalRepository.AddRange(defaultProposals(vechicleList, managerList));
+            List<Proposal> proposalList = proposalRepository.GetList();
+
+            actionTypeRepository.AddRange(defaultActionTypes());
+            List<ActionType> actionTypeList = actionTypeRepository.GetList(); 
+            actionRepository.AddRange(defaultActions(proposalList, workerList, actionTypeList));
 
 
             return Content("Database Populated");
@@ -188,6 +216,155 @@ namespace warsztatSamochodowy.Controllers
                 };
             }
         }
+        private IEnumerable<Client> defaultClients(Address clientsAddres)
+        {
+            int clientCount = 6;
+            //Add Clients
+            for (int i = 0; i < clientCount; i++)
+            {
+                yield return new Client
+                {
+                    FirstName = $"Imie_Worker{i}",
+                    LastName = $"Nazw_Worker{i}",
+                    CompanyName = "Firma",
+                    Email = $"cli{i}@tab.pl",
+                    PhoneNumber = "444444444",
+                    AddressId = clientsAddres.Id,
+                };
+            }
+        }
+        private IEnumerable<Brand> defaultBrands()
+        {
+            yield return new Brand
+            {
+                CodeBrand = "FIAT",
+                Name = "Fiat"
+            };
+            yield return new Brand
+            {
+                CodeBrand = "OPEL",
+                Name = "Opel"
+            };
+            yield return new Brand
+            {
+                CodeBrand = "TESLA",
+                Name = "Tesla"
+            };
+            yield return new Brand
+            {
+                CodeBrand = "SUBARU",
+                Name = "Sbaru"
+            };
+            yield return new Brand
+            {
+                CodeBrand = "NOKIA",
+                Name = "Nokia"
+            };
+        }
+        private IEnumerable<VehicleType> defaultVehicleTypes()
+        {
+            yield return new VehicleType
+            {
+                CodeType = "OSOBOWY",
+                Name = "Samochód Osobowy"
+            };
+            yield return new VehicleType
+            {
+                CodeType = "AUTOBUS",
+                Name = "Autobus"
+            };
+            yield return new VehicleType
+            {
+                CodeType = "TRICYKL",
+                Name = "Tricykl"
+            };
+            yield return new VehicleType
+            {
+                CodeType = "BICYKL",
+                Name = "Bicykl"
+            };
+        }
+        private IEnumerable<Vehicle> defaultVehicles(List<Client> clinets, List<Brand> brands, List<VehicleType> types)
+        {
+            //1.5 Veh per client
+            int vehicleCount = clinets.Count + clinets.Count / 2;
+            for (int i = 0; i < vehicleCount; i++)
+            {
+
+                yield return new Vehicle
+                {
+                    RegNumber = $"TAB-{i}",
+                    Name = $"Pojazd{i}",
+                    ClientId = clinets[i % clinets.Count].Id,
+                    VehicleTypeId = types[i% types.Count].CodeType,
+                    BrandId = brands[i % brands.Count].CodeBrand,
+                };
+            }
+        }
+    
+        private IEnumerable<Proposal> defaultProposals(List<Vehicle> vehicles,List<Personel> managers)
+        {
+            int proporsalCount = vehicles.Count;
+            for (int i = 0; i < proporsalCount; i++)
+            {
+                yield return new Proposal
+                {
+                    Description = $"Opis{i}",
+                    Result = $"Rezultat{i}",
+                    Status = (StatusEnum)(i%4),
+                    StartDate = new DateTime(2000,5,18,8,33,20),
+                    EndDate = new DateTime(2005,2,4,21,37,00),
+                    VehicleId=vehicles[i%vehicles.Count].RegNumber,
+                    ManagerId=managers[i%managers.Count].Id,
+                };
+            }
+        }
+    
+        private IEnumerable<ActionType> defaultActionTypes()
+        {
+            yield return new ActionType
+            {
+                CodeAction = "FIX",
+                 Name = "Naprawa",
+            };
+            yield return new ActionType
+            {
+                CodeAction = "UPGRADE",
+                Name = "Ulepszenie",
+            };
+            yield return new ActionType
+            {
+                CodeAction = "INSPECT",
+                Name = "Przegląd",
+            };
+        }
+
+        private IEnumerable<Models.Action> defaultActions(List<Proposal> proposals, List<Personel> workers,List<ActionType> actionTypes)
+        {
+            int actionCount = proposals.Count + proposals.Count / 2;
+
+            for (int i = 0; i < actionCount; i++)
+            {
+
+                yield return new Models.Action
+                {
+                    Description = $"Opis{1}",
+                    Result = $"Resultat{i}",
+                    Status = (StatusEnum)( i%4 ),
+                    StartDate = new DateTime(2000, 5, 18, 8, 33, 20),
+                    EndDate = new DateTime(2005, 2, 4, 21, 37, 00),
+                    WorkerId = workers[i % workers.Count].Id,
+                    ProposalId = proposals[i % proposals.Count].Id,
+                    ActionTypeId = actionTypes[i % actionTypes.Count].CodeAction,
+                };
+            }
+
+
+
+        }
+
+
+
 
 
     }

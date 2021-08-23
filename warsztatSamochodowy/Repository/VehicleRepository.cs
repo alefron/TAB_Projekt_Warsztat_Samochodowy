@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
+
 using warsztatSamochodowy.Models;
 
 namespace warsztatSamochodowy.Repository
 {
+
     public class VehicleRepository : RepositoryBase<Vehicle>
     {
         public VehicleRepository()
