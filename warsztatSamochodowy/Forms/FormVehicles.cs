@@ -10,16 +10,22 @@ namespace warsztatSamochodowy.Forms
 {
     public class FormVehicles : FormBase
     {
-        BrandRepository BrandRepository = new BrandRepository();
+        VehicleRepository vehicleRepository = new VehicleRepository();
+        BrandRepository brandRepository = new BrandRepository();
         private List<Brand> brands { get; set; }
         private List<Vehicle> vehicles { get; set; }
-        public FormVehicles(List<Brand> brands)
+        public FormVehicles(List<Brand> brands, List<Vehicle> vehicles)
         {
             this.brands = brands;
+            this.vehicles = vehicles;
         }
         public List<Brand>getBrands()
         {
             return brands;
+        }
+        public List<Vehicle> getVehicles()
+        {
+            return vehicles;
         }
     }
 }
