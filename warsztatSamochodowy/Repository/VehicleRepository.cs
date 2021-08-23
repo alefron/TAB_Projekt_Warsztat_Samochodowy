@@ -123,5 +123,10 @@ namespace warsztatSamochodowy.Repository
             }
             return vehicleList;
         }
+
+        public List<Vehicle> GetJoinedVehicles()
+        {
+            return Task.Run(GetJoinedVehiclesAsync).Result;
+        }
     }
 }

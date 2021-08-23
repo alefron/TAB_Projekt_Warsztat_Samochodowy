@@ -13,19 +13,22 @@
 <body>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
-    <div class="search_wrap search_wrap_4">
-        <div class="search_box">
-            <div class="btn btn_common">
-                <i class="fas fa-search"></i>
+    <form asp-controller="Vehicle" asp-action="getVehiclesFilteredBySearch" method="get">
+        <div class="search_wrap search_wrap_4">
+            <div class="search_box">
+                <input class="btn btn_common" type="submit">
+                    <i class="fas fa-search"></i>
+                </input>
+                <input type="text" class="input" name="searching" placeholder="search...">
             </div>
-            <input type="text" class="input" placeholder="search...">
         </div>
-    </div>
+    </form>
+    
 
 
 
     <div class="sorting-container">
-        <form asp-controller="Vehicle" asp-action="vehicleListRemoved" method="get">
+        <form asp-controller="Vehicle" asp-action="getVehiclesFilteredByBrand" method="get">
             <div class="dropdown">
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     wybierz markę
@@ -36,6 +39,7 @@
                     {
                         <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
                     }
+                    <li><input type="submit" class="dropdown-item" name="brandName" value="wszystkie marki" /></li>
                 </ul>
             </div>
         </form>
@@ -43,27 +47,17 @@
         <form asp-controller="Vehicle" asp-action="vehicleListRemoved" method="get">
             <div class="dropdown">
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    data przyjęcia
+                    właściciel
                 </button>
 
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @foreach (var brand in Model[0].getBrands())
+                    @foreach (var brand in Model[0].getVehicles())
                     {
                         <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
                     }
                 </ul>
             </div>
         </form>
-
-        <div class="sort-button">
-            <a href="#">Data przyjecia</a>
-            <i class="fas fa-angle-down"></i>
-        </div>
-
-        <div class="sort-button">
-            <a href="#">Właściciel</a>
-            <i class="fas fa-angle-down"></i>
-        </div>
 
         <div class="sort-button">
             <a href="#">Status</a>
@@ -82,7 +76,7 @@
                             <div style="position: static;" class="ps ps--active-y">
                                 <div class="ps-content">
                                     <ul class=" list-group list-group-flush">
-                                        @foreach (var item in Model[0].getBrands())
+                                        @foreach (var item in Model[0].getVehicles())
                                         {
                                             <li class="list-group-item">
                                                 <div class="bg-warning"></div>
@@ -90,7 +84,7 @@
                                                     <div class="row">
                                                         <div class="zlecenie-header">
                                                             <h5>@item.Name</h5>
-                                                            <i>@item.CodeBrand </i>
+                                                            <i>@item.RegNumber </i>
                                                         </div>
                                                         <div class="progess-container">
                                                             <div class="pudelko progress">
