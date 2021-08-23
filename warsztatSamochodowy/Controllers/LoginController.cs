@@ -64,8 +64,14 @@ namespace warsztatSamochodowy.Controllers
                         await HttpContext.SignInAsync(claimsPrincipal);
                         Thread.CurrentPrincipal = claimsPrincipal;
 
-                        return Redirect(returnUrl);
-
+                        if (returnUrl != null)
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return Redirect("Home");
+                        }
                     }
                 }
             }

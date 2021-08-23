@@ -1,46 +1,13 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    @Model List<Personel>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-
-
-        .progress {
-            height: 20px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .progress {
-            height: 12px;
-            background-color: #ebeef1;
-            background-image: none;
-            box-shadow: none;
-        }
-
-        .progress-bar {
-            float: left;
-            width: 0;
-            height: 100%;
-            font-size: 12px;
-            line-height: 20px;
-            color: #fff;
-            text-align: center;
-            background-color: #428bca;
-            -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
-            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
-            -webkit-transition: width .6s ease;
-            transition: width .6s ease;
-        }
-    </style>
+        <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
 
 </head>
 
@@ -56,21 +23,28 @@
                         <div style="position: static;" class="ps ps--active-y">
                             <div class="ps-content">
                                 <ul class=" list-group list-group-flush">
-                                    <li class="list-group-item">
-                                        <div class="bg-warning"></div>
-                                        <div class="p-0">
-                                            <div class="row">
-                                                <div class="col-sm-7">
-                                                    <h5>nazwa zlecenia</h5>
-                                                    <i>opis zlecenia</i>
+                                    @foreach (var item in Model)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="bg-warning"></div>
+                                            <div class="p-0">
+                                                <div class="row">
+                                                    <div class="zlecenie-header">
+                                                        <h5>@item.FirstName</h5>
+                                                        <i>@item.LastName </i>
+                                                    </div>
+                                                    <div class="progess-container">
+                                                        <div class="pudelko progress">
+                                                            <div data-percentage="0%" style="width: 70%;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                        </div>
+                                                        <button class="border-0 btn btn-outline-danger"> <i>USUŃ</i> </button>
+                                                        <span class="circle"></span>
+                                                    </div>
                                                 </div>
-                                                <div class="progress col-sm-3">
-                                                    <div data-percentage="0%" style="width: 70%;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-                                                </div>
-                                                <div class="col-sm-2"><button class="border-0 btn btn-outline-danger"> <i>KOSZ</i> </button> </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
                         </div>

@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\css\ManagerZlecenia.css" />
+    <None Include="wwwroot\css\myNavbar.css" />
     <None Include="wwwroot\pictures\auto.jpg" />
   </ItemGroup>
 
