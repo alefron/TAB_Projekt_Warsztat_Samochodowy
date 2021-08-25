@@ -27,6 +27,9 @@ namespace warsztatSamochodowy
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddHttpClient();
             services.AddDbContext<MyDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>

@@ -8,10 +8,11 @@ using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
 using warsztatSamochodowy.Forms;
 using warsztatSamochodowy.Utils;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace warsztatSamochodowy.Controllers
 {
-    [Authorize(Roles = "manager")]
     public class VehicleController : Controller
     {
         private BrandRepository brandRepository = new BrandRepository();
@@ -22,23 +23,26 @@ namespace warsztatSamochodowy.Controllers
         private List<Brand> brands { get; set; }
         private List<Vehicle> vehicles { get; set; }
         private List<Client> clients { get; set; }
-        private List<FormVehicles> model { get; set; } = new List<FormVehicles>();
 
+        private string userToken { get; set; }
+        private List<FormVehicles> model { get; set; } = new List<FormVehicles>();
         public VehicleController()
         {
             this.brands = brandRepository.GetList();
             this.vehicles = vehicleRepository.GetJoinedVehicles();
             this.clients = clientRepository.GetAllClients();
-            model.Add(new FormVehicles(brands, vehicles, clients));
+            model.Add(new FormVehicles(brands, vehicles, clients, userToken));
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/vehicleList")]
         public IActionResult VehicleList()
         {
-            model.Add(new FormVehicles(brands, vehicles, clients));
+            model.Add(new FormVehicles(brands, vehicles, clients, userToken));
             return View(model);
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/getVehiclesFilteredByBrand")]
         public IActionResult getVehiclesFilteredByBrand(string brandName)
         {
@@ -53,12 +57,13 @@ namespace warsztatSamochodowy.Controllers
                     }
                 }
                 List<FormVehicles> modelFiltered = new List<FormVehicles>();
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", this.model);
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/getVehiclesFilteredBySearch")]
         public IActionResult getVehiclesFilteredBySearch(string searching)
         {
@@ -73,12 +78,13 @@ namespace warsztatSamochodowy.Controllers
                         vehiclesFiltered.Add(vehicle);
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/vehicleListFilteredByOwner")]
         public IActionResult vehicleListFilteredByOwner(string owner)
         {
@@ -94,12 +100,13 @@ namespace warsztatSamochodowy.Controllers
                         vehiclesFiltered.Add(vehicle);
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/vehicleListFilteredByStatus")]
         public IActionResult vehicleListFilteredByStatus(string status)
         {
@@ -123,11 +130,57 @@ namespace warsztatSamochodowy.Controllers
                         }
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
         }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Vehicle/vehicleListFilteredByProposalsCount")]
+        public IActionResult vehicleListFilteredByProposalsCount(string sort)
+        {
+            if (sort != "wszystkie")
+            {
+                List<FormVehicles> modelFiltered = new List<FormVehicles>();
+                List<Vehicle> vehiclesSorted = this.vehicles;
+
+                vehiclesSorted.Sort((a, b) => {
+                    var proposalsA = proposalRepository.GetProposalByVehicle(a.RegNumber);
+                    var proposalsB = proposalRepository.GetProposalByVehicle(b.RegNumber);
+                    if (proposalsA.Count > proposalsB.Count)
+                    {
+                        if (sort == "sortuj rosnąco")
+                            return 1;
+                        return -1;
+                    }
+                    if (proposalsA.Count < proposalsB.Count)
+                    {
+                        if (sort == "sortuj malejąco")
+                            return 1;
+                        return -1;
+                    }
+                    return 0;
+                });
+
+                modelFiltered.Add(new FormVehicles(brands, vehiclesSorted, clients, userToken));
+                return View("vehicleList", modelFiltered);
+            }
+            return View("vehicleList", model);
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Vehicle/getVehicleProposalsCount")]
+        public string getVehicleProposalsCount(string regNumber)
+        {
+            int propCount = -1;
+            if (regNumber != null)
+            {
+                propCount = proposalRepository.GetProposalByVehicle(regNumber).Count;
+            }
+            return propCount.ToString();
+        }
+
     }
 
 
