@@ -161,3 +161,8 @@
 	-webkit-transition: width .6s ease;
 	transition: width .6s ease;
 }
+
+.zlecenie-header a{
+	text-decoration: none;
+	color: black;
+}

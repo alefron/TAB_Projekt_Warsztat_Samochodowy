@@ -181,6 +181,14 @@ namespace warsztatSamochodowy.Controllers
             return propCount.ToString();
         }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Vehicle/showVehicle")]
+        public IActionResult showVehicle(string regNum)
+        {
+            return View();
+        }
+
+
     }
 
 
