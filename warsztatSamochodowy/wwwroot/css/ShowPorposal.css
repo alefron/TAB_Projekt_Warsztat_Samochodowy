@@ -1,0 +1,154 @@
+.element {
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.element h1,
+.status h1{
+    font-weight: bolder;
+    font-size: 24px;
+    display: inline;
+    color:black;
+}
+.element h2 ,
+.status h2{
+    font-size: 16px;
+    display: inline;
+    color: black;
+    padding-bottom:10px;
+}
+
+.element a{
+    text-decoration: none;
+    color: black;
+   
+}
+.element a:hover {
+    animation: changeColor 0.5s ease-in forwards;
+}
+@keyframes changeColor{
+    0%{
+        color: black;
+    }
+    100% {
+        color: #428bca;
+    }
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+.status{
+
+}
+
+.progress{
+    margin-top:15px;
+}
+.progress-container-all{
+    width:100%;
+    height:75px;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+}
+
+.progress-container-all a {
+    font-size: 16px;
+    text-decoration: none;
+    color: black;
+}
+
+.end-button {
+    background-color: #6fcaf1 !important;
+    width: 15%;
+    height: 70%;
+    outline: 1px solid black;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 25px;
+}
+
+.progress-bar-container {
+    width: 80%;
+    height: 20px;
+    
+}
+
+
+.my-row{
+    width:100%;
+    height:200px;
+    display: flex;
+    flex-direction:row;
+}
+.my-column{
+    width:50%;
+    height:100%;
+    display:flex;
+    flex-direction: column;
+}
+
+.proposal-card{
+    width:80%;
+    height:80%;
+    outline: 2px solid black;
+    padding: 15px;
+    overflow-wrap: normal;
+}
+.proposal-card p{
+    display:inline;
+}
+
+.action-row{
+    width:100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.action-table-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.my-flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-field{
+    width:20%;
+    color:black;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+.worker-field{
+    width: 40%;
+    color: black;
+    font-size: 16px;
+}
+.status-field{
+    width:40%;
+
+}
+
+.action-table-button {
+    background: #f1d56f !important;
+    width: 55%;
+    height: 70%;
+    outline: 1px solid black;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50px;
+}
+.action-table-button a{
+    text-decoration: none;
+    color :black;
+}

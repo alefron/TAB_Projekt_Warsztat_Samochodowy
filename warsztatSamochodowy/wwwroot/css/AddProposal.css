@@ -1,0 +1,78 @@
+.element-add{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top:15px;
+    margin-bottom: 15px;
+}
+.element-add input{
+
+}
+.element-add h1 {
+    margin-top:5px;
+    margin-right: 20px;
+    align-self: center;
+    font-weight: bolder;
+    font-size: 24px;
+    color: black;
+}
+
+.my-dropdown{
+      margin-right:20px;
+      outline: 1px solid black;
+}
+
+.add-button{
+    width:70px;
+    height: 30px;
+    outline: 1px solid black;
+    background: none;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.proposal-card textarea {
+    resize: none;
+    outline: none;
+    border: none;
+}
+
+.proposal-card input{
+    width: 90%;
+    height: 90%;
+    outline: none;
+    border: none;
+}
+
+.action-table-row button{
+    outline: 1px solid black;
+    border:none;
+}
+
+.save-cancel{
+    width:100%;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.save-cancel button{
+    font-size: 20px;
+    border: none;
+    outline: 1px solid black;
+    width:200px;
+
+}
+
+.save-button {
+    background: hsla(113, 99%, 52%, 0.6);
+}
+.cancel-button {
+    background: hsla(0, 99%, 52%, 0.6);
+}
+
+.edit-vehicle-button{
+
+}
+
