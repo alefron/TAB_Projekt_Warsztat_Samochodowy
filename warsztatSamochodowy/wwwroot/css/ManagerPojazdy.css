@@ -18,10 +18,10 @@
 	color: #fff;
 }
 
-.container .input{
+.container .input {
 	border: 0;
 	outline: none;
-	color: #8b7d77;
+	color: hsla(0, 0%, 75%, 0.3)
 }
 
 .search_wrap{
@@ -58,9 +58,9 @@
 	cursor: pointer;
 }
 
-.search_wrap .search_box .btn:hover{
-	background: #708bd2;	
-}
+.search_wrap .search_box .btn:hover {
+		background: hsla(0, 0%, 0%, 0.08)
+	}
 
 .search_wrap .search_box .btn.btn_common .fas{
 	position: absolute;
@@ -81,7 +81,7 @@
 
 	.search_wrap.search_wrap_4 .search_box .input {
 		border-radius: 50px;
-		background: rgb(190, 190, 190);
+		background: hsla(0, 0%, 75%, 0.3)
 	}
 
 
@@ -91,12 +91,16 @@
 }
 
 
-
+.flex-center{
+	display:flex;
+	justify-content:center;
+	align-items: center;
+}
 
 .sorting-container{
-	width:100%;
+	width:70%;
 	display:flex;
-	justify-content: space-evenly;
+	justify-content: space-between;
 }
 .sorting-container a{
 	text-decoration: none;
@@ -165,4 +169,25 @@
 .zlecenie-header a{
 	text-decoration: none;
 	color: black;
+}
+.trash-button {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	padding-right: 50px;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.round-button{
+	border-radius: 15px;
+}
+
+.dropdown-toggle::after {
+	border-top: 0.5em solid !important;
+	border-right: 0.5em solid transparent !important;
+	border-bottom: 0 !important;
+	border-left: 0.5em solid transparent !important;
 }

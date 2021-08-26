@@ -41,6 +41,17 @@ namespace warsztatSamochodowy.Repository
             return t.Result;
         }
 
+        public async Task<int> DeleteVehicleAsync(Vehicle vehicle)
+        {
+            context.Vehicles.Remove(vehicle);
+            return await context.SaveChangesAsync();
+        }
+        public int DeleteVehicle(Vehicle vehicle)
+        {
+            Task<int> t = Task.Run(() => { return DeleteVehicleAsync(vehicle); });
+            return t.Result;
+        }
+
         public async Task<List<Vehicle>> GetJoinedVehiclesAsync()
         {
             /*

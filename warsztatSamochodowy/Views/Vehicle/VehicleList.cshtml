@@ -7,13 +7,16 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
     <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 </head>
 
 <body>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+    <h2 class="text-center">Lista przyjętych pojazdów</h2>
 
     <form asp-controller="Vehicle" asp-action="getVehiclesFilteredBySearch" method="get">
         <div class="search_wrap search_wrap_4">
@@ -28,80 +31,80 @@
 
 
 
+    <div class="flex-center">
+        <div class="sorting-container">
+            <form asp-controller="Vehicle" asp-action="getVehiclesFilteredByBrand" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        marka pojazdu
+                    </button>
 
-    <div class="sorting-container">
-        <form asp-controller="Vehicle" asp-action="getVehiclesFilteredByBrand" method="get">
-            <div class="dropdown">
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    marka pojazdu
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @foreach (var brand in Model[0].getBrands())
-                    {
-                        <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
-                    }
-                    <li><input type="submit" class="dropdown-item" name="brandName" value="wszystkie marki" /></li>
-                </ul>
-            </div>
-        </form>
-
-        <form asp-controller="Vehicle" asp-action="vehicleListFilteredByOwner" method="get">
-            <div class="dropdown">
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    właściciel pojazdu
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @foreach (var client in Model[0].clients)
-                    {
-                        @if (client.CompanyName == null)
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        @foreach (var brand in Model[0].getBrands())
                         {
-                            <li><input type="submit" class="dropdown-item" name="owner" value="@(client.FirstName + " " + client.LastName)" /></li>
+                            <li><input type="submit" class="dropdown-item" name="brandName" value="@brand.Name" /></li>
                         }
-                        else
+                        <li><input type="submit" class="dropdown-item" name="brandName" value="wszystkie marki" /></li>
+                    </ul>
+                </div>
+            </form>
+
+            <form asp-controller="Vehicle" asp-action="vehicleListFilteredByOwner" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        właściciel pojazdu
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        @foreach (var client in Model[0].clients)
                         {
-                            <li><input type="submit" class="dropdown-item" name="owner" value="@client.CompanyName" /></li>
+                            @if (client.CompanyName == null)
+                            {
+                                <li><input type="submit" class="dropdown-item" name="owner" value="@(client.FirstName + " " + client.LastName)" /></li>
+                            }
+                            else
+                            {
+                                <li><input type="submit" class="dropdown-item" name="owner" value="@client.CompanyName" /></li>
+                            }
+
                         }
+                        <li><input type="submit" class="dropdown-item" name="owner" value="wszyscy" /></li>
 
-                    }
-                    <li><input type="submit" class="dropdown-item" name="owner" value="wszyscy" /></li>
+                    </ul>
+                </div>
+            </form>
 
-                </ul>
-            </div>
-        </form>
+            <form asp-controller="Vehicle" asp-action="vehicleListFilteredByStatus" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        status naprawy
+                    </button>
 
-        <form asp-controller="Vehicle" asp-action="vehicleListFilteredByStatus" method="get">
-            <div class="dropdown">
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    status naprawy
-                </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><input type="submit" class="dropdown-item" name="status" value="w trakcie naprawy" /></li>
+                        <li><input type="submit" class="dropdown-item" name="status" value="dawniej naprawiane" /></li>
+                        <li><input type="submit" class="dropdown-item" name="status" value="wszystkie" /></li>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><input type="submit" class="dropdown-item" name="status" value="w trakcie naprawy" /></li>
-                    <li><input type="submit" class="dropdown-item" name="status" value="dawniej naprawiane" /></li>
-                    <li><input type="submit" class="dropdown-item" name="status" value="wszystkie" /></li>
+                    </ul>
+                </div>
+            </form>
 
-                </ul>
-            </div>
-        </form>
+            <form asp-controller="Vehicle" asp-action="vehicleListFilteredByProposalsCount" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ilość napraw
+                    </button>
 
-        <form asp-controller="Vehicle" asp-action="vehicleListFilteredByProposalsCount" method="get">
-            <div class="dropdown">
-                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ilość napraw
-                </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><input type="submit" class="dropdown-item" name="sort" value="sortuj rosnąco" /></li>
+                        <li><input type="submit" class="dropdown-item" name="sort" value="sortuj malejąco" /></li>
+                        <li><input type="submit" class="dropdown-item" name="sort" value="wszystkie" /></li>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><input type="submit" class="dropdown-item" name="sort" value="sortuj rosnąco" /></li>
-                    <li><input type="submit" class="dropdown-item" name="sort" value="sortuj malejąco" /></li>
-                    <li><input type="submit" class="dropdown-item" name="sort" value="wszystkie" /></li>
-
-                </ul>
-            </div>
-        </form>
+                    </ul>
+                </div>
+            </form>
+        </div>
     </div>
-
     <br />
     <br />
 
@@ -143,12 +146,31 @@
                                                                 var response = await clinet.GetAsync(uri);
                                                                 string textResult = await response.Content.ReadAsStringAsync();
 
-                                                                <i>@textResult</i>
+                                                                <i>liczba napraw: @textResult</i>
                                                             }
                                                     </div>
                                                     <div class="progess-container">
-                                                        <button class="border-0 btn btn-outline-danger"> <i>USUŃ</i> </button>
-                                                        <span class="circle"></span>
+                                                        <form asp-controller="Vehicle" asp-action="deleteVehicle" method="get">
+                                                            <button class='trash-button' type="submit" name="regNumber" value="@item.RegNumber">
+                                                                <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                            </button>
+                                                        </form>
+                                                        
+                                                        @{
+                                                            uri = new Uri("https://localhost:44323/Vehicle/getVehicleStatus?regNumber=" + item.RegNumber);
+                                                            response = await clinet.GetAsync(uri);
+                                                            textResult = await response.Content.ReadAsStringAsync();
+                                                            bool status = textResult == "true" ? true : false;
+
+                                                            if (status)
+                                                            {
+                                                                <span class="circle circle-yellow"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="circle circle-green"></span>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

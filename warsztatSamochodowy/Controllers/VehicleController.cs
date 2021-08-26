@@ -23,22 +23,20 @@ namespace warsztatSamochodowy.Controllers
         private List<Brand> brands { get; set; }
         private List<Vehicle> vehicles { get; set; }
         private List<Client> clients { get; set; }
-
-        private string userToken { get; set; }
         private List<FormVehicles> model { get; set; } = new List<FormVehicles>();
         public VehicleController()
         {
             this.brands = brandRepository.GetList();
             this.vehicles = vehicleRepository.GetJoinedVehicles();
             this.clients = clientRepository.GetAllClients();
-            model.Add(new FormVehicles(brands, vehicles, clients, userToken));
+            model.Add(new FormVehicles(brands, vehicles, clients));
         }
 
         [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/vehicleList")]
         public IActionResult VehicleList()
         {
-            model.Add(new FormVehicles(brands, vehicles, clients, userToken));
+            model.Add(new FormVehicles(brands, vehicles, clients));
             return View(model);
         }
 
@@ -57,7 +55,7 @@ namespace warsztatSamochodowy.Controllers
                     }
                 }
                 List<FormVehicles> modelFiltered = new List<FormVehicles>();
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", this.model);
@@ -78,7 +76,7 @@ namespace warsztatSamochodowy.Controllers
                         vehiclesFiltered.Add(vehicle);
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
@@ -100,7 +98,7 @@ namespace warsztatSamochodowy.Controllers
                         vehiclesFiltered.Add(vehicle);
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
@@ -118,7 +116,7 @@ namespace warsztatSamochodowy.Controllers
                 foreach (var vehicle in this.vehicles)
                 {
                     all_proposals = proposalRepository.GetProposalByVehicle(vehicle.RegNumber);
-                    foreach(var proposal in all_proposals)
+                    foreach (var proposal in all_proposals)
                     {
                         if ((proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING) && status == "w trakcie naprawy")
                         {
@@ -130,7 +128,7 @@ namespace warsztatSamochodowy.Controllers
                         }
                     }
                 }
-                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients, userToken));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
@@ -145,7 +143,8 @@ namespace warsztatSamochodowy.Controllers
                 List<FormVehicles> modelFiltered = new List<FormVehicles>();
                 List<Vehicle> vehiclesSorted = this.vehicles;
 
-                vehiclesSorted.Sort((a, b) => {
+                vehiclesSorted.Sort((a, b) =>
+                {
                     var proposalsA = proposalRepository.GetProposalByVehicle(a.RegNumber);
                     var proposalsB = proposalRepository.GetProposalByVehicle(b.RegNumber);
                     if (proposalsA.Count > proposalsB.Count)
@@ -163,7 +162,7 @@ namespace warsztatSamochodowy.Controllers
                     return 0;
                 });
 
-                modelFiltered.Add(new FormVehicles(brands, vehiclesSorted, clients, userToken));
+                modelFiltered.Add(new FormVehicles(brands, vehiclesSorted, clients));
                 return View("vehicleList", modelFiltered);
             }
             return View("vehicleList", model);
@@ -188,14 +187,42 @@ namespace warsztatSamochodowy.Controllers
             return View();
         }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Vehicle/getVehicleStatus")]
+        public bool getVehicleStatus(string regNumber)
+        {
+            bool status = false;
+            if (regNumber != null)
+            {
+                List<Proposal> proposals = proposalRepository.GetProposalByVehicle(regNumber);
+                foreach (var prop in proposals)
+                {
+                    if (prop.Status == StatusEnum.OPEN || prop.Status == StatusEnum.PROCESSING)
+                    {
+                        status = true;
+                    }
+                }
+            }
+            return status;
+        }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Vehicle/deleteVehicle")]
+        public IActionResult deleteVehicle(string regNumber)
+        {
+            Vehicle vehicle = vehicleRepository.GetVehicleByRegNum(regNumber);
+            vehicleRepository.DeleteVehicle(vehicle);
+            this.vehicles = vehicleRepository.GetJoinedVehicles();
+            this.model = new List<FormVehicles>();
+            this.model.Add(new FormVehicles(this.brands, this.vehicles, this.clients));
+            return View("vehicleList", model);
+        }
+
+        /*[HttpPost("/Vehicle/vehicleList")]
+        public IActionResult getVehicleListSortedByBrand(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }*/
     }
-
-
-    /*[HttpPost("/Vehicle/vehicleList")]
-    public IActionResult getVehicleListSortedByBrand(string returnUrl)
-    {
-        ViewData["ReturnUrl"] = returnUrl;
-        return View();
-    }*/
 }

@@ -16,14 +16,12 @@ namespace warsztatSamochodowy.Forms
         private List<Brand> brands { get; set; }
         private List<Vehicle> vehicles { get; set; }
         public List<Client> clients { get; set; }
-        public string userToken { get; set; }
 
-        public FormVehicles(List<Brand> brands, List<Vehicle> vehicles, List<Client> clients, string token)
+        public FormVehicles(List<Brand> brands, List<Vehicle> vehicles, List<Client> clients)
         {
             this.clients = clients;
             this.brands = brands;
             this.vehicles = vehicles;
-            this.userToken = token;
         }
         public List<Brand>getBrands()
         {
