@@ -122,6 +122,69 @@ namespace warsztatSamochodowy.Repository
         {
             return Task.Run(GetJoinedPersonelAsync).Result;
         }
+
+
+
+        public async Task<Personel> GetJoinedPersonelByIdAsync(int id)
+        {
+            /*
+            SELECT * FROM Personel
+            JOIN Role
+            JOIN Addresses
+            WHERE Personel.Id = id
+            */
+
+            var queryResult = await context.Personel.Join<Personel, Role, string, Personel>(
+                    context.Role,
+                    personel => personel.RoleId,
+                    role => role.CodeRole,
+                    (personel, role) => new Personel
+                    {
+                        //Jak ktoś wie jak to zrobić lepiej to niech podzieli się wiedzą
+                        //Bo wychodzi dużo przepisywania a ludzka lmbda nie działa
+                        Id = personel.Id,
+                        FirstName = personel.FirstName,
+                        LastName = personel.LastName,
+                        RoleId = personel.RoleId,
+                        Email = personel.Email,
+                        HashPassword = personel.HashPassword,//Chyba to jest niebezpieczne
+                        PhoneNumber = personel.PhoneNumber,
+                        AddressId = personel.AddressId,
+
+                        Role = role, //I tutaj walimy tym joinem
+                    }
+                ).Join<Personel, Address, int, Personel>(
+                    context.Addresses,
+                    personel => personel.AddressId,
+                    address => address.Id,
+                    (personel, addresss) => new Personel
+                    {
+                        Id = personel.Id,
+                        FirstName = personel.FirstName,
+                        LastName = personel.LastName,
+                        RoleId = personel.RoleId,
+                        Email = personel.Email,
+                        HashPassword = personel.HashPassword,//Chyba to jest niebezpieczne
+                        PhoneNumber = personel.PhoneNumber,
+                        AddressId = personel.AddressId,
+
+                        Role = personel.Role, //I tutaj walimy tym joinem x2
+                        Address = addresss
+                    }
+                ).Where((personel)=>personel.Id==id)
+                .FirstOrDefaultAsync();
+
+            return queryResult;
+
+            
+
+        }
+
+        public Personel GetJoinedPersonelById(int id)
+        {
+            return Task.Run(()=> { return GetJoinedPersonelByIdAsync(id); }).Result;
+        }
+
     }
 }
 

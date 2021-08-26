@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace warsztatSamochodowy.Models
 {
-    public class Address
+    public class Address : IModelFormattable
     {
         [Key]
         public int Id { get; set; }
@@ -36,6 +36,13 @@ namespace warsztatSamochodowy.Models
             get => $"ul. {Street} {HouseNumber}/{LocalNumber} {City} {Postal}";
         }
 
-
+        public void FormatMe()
+        {
+            Street = Street.ToUpper();
+            HouseNumber = HouseNumber.ToUpper();
+            LocalNumber = LocalNumber.ToUpper();
+            City = City.ToUpper();
+            Postal = Postal.ToUpper();
+        }
     }
 }

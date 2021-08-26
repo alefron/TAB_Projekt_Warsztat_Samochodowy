@@ -8,7 +8,7 @@ using warsztatSamochodowy.Repository;
 
 namespace warsztatSamochodowy.Forms
 {
-    public class FormVehicles : FormBase
+    public class FormVehicles
     {
         VehicleRepository vehicleRepository = new VehicleRepository();
         BrandRepository brandRepository = new BrandRepository();

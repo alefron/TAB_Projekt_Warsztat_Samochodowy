@@ -10,6 +10,9 @@ namespace warsztatSamochodowy.Models
     public class Personel: ISelectListItem
     {
 
+
+
+
         [Key]
         public int Id { get; set; }
 
@@ -57,5 +60,12 @@ namespace warsztatSamochodowy.Models
         {
             return Id.ToString();
         }
+
+
+        public void FormatMe()
+        {
+            Email = Email.ToLower();
+        }
+
     }
 }

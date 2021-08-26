@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace warsztatSamochodowy.Models
 {
-    public class Client
+    public class Client:IModelFormattable
     {
         [Key]
         public int Id { get; set; }
@@ -36,6 +36,11 @@ namespace warsztatSamochodowy.Models
 
         //klient ma wiele pojazdów, pojazd ma jednego właściciela, rel. jeden do wielu
         public ICollection<Vehicle> Vehicles { get; set; }
+
+        public void FormatMe()
+        {
+            Email = Email.ToLower();
+        }
 
 
         //musi być nazwa firmy lub nazwisko i imie - walidacja

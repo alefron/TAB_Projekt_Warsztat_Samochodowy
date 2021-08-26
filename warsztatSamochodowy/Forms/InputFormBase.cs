@@ -12,7 +12,7 @@ namespace warsztatSamochodowy.Forms
     // Models będą wykorzystywane do obsługi bazy danych
 
 
-    public abstract class FormBase
+    public abstract class InputFormBase
     {
         virtual public bool Validate( ICollection<ValidationResult>? results = null )
         {
