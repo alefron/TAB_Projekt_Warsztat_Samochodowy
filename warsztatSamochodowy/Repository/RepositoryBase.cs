@@ -27,7 +27,8 @@ namespace warsztatSamochodowy.Repository
         {
 
             IModelFormattable formatable = unformated as IModelFormattable;
-            if (formatable != null) formatable.FormatMe();
+            if (formatable != null)
+                formatable.FormatMe();
             return unformated;
         }
 
@@ -84,9 +85,10 @@ namespace warsztatSamochodowy.Repository
                 {
                     throw new RepositoryException("Failed To insert Items");
                 }
+                await dbSet.AddAsync(item);
             }
 
-            await dbSet.AddRangeAsync(added);
+            
             return await context.SaveChangesAsync();
         }
 
@@ -99,11 +101,55 @@ namespace warsztatSamochodowy.Repository
                 {
                     throw new RepositoryException("Failed To insert Items");
                 }
+                dbSet.Add(item);
             }
 
-            dbSet.AddRange(added);
+            
             return context.SaveChanges();
         }
+
+
+
+        virtual public async Task<int> RemoveAsync(T removedEntity)
+        {
+            dbSet.Remove(removedEntity);
+            return await context.SaveChangesAsync();
+        }
+
+        virtual public int Remove(T removedEntity)
+        {
+            dbSet.Remove(removedEntity);
+            return context.SaveChanges();
+        }
+
+
+
+        virtual public async Task<int> RemoveRangeAsync(IEnumerable<T> removedEntities)
+        {
+            dbSet.RemoveRange(removedEntities);
+            return await context.SaveChangesAsync();
+        }
+
+
+        virtual public  int RemoveRange(IEnumerable<T> removedEntities)
+        {
+            dbSet.RemoveRange(removedEntities);
+            return context.SaveChanges();
+        }
+
+
+        virtual public async Task<int> UpdateAsync(T entity)
+        {
+            dbSet.Update(entity);
+            return await context.SaveChangesAsync();
+        }
+
+        virtual public int Update(T entity)
+        {
+            dbSet.Update(entity);
+            return context.SaveChanges();
+        }
+
 
     }
 }

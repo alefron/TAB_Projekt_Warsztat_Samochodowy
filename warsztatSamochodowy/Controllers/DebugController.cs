@@ -224,9 +224,9 @@ namespace warsztatSamochodowy.Controllers
             {
                 yield return new Client
                 {
-                    FirstName = $"Imie_Worker{i}",
-                    LastName = $"Nazw_Worker{i}",
-                    CompanyName = "Firma",
+                    FirstName = $"Imie_Client{i}",
+                    LastName = $"Nazw_Client{i}",
+                    CompanyName = $"Firma{i}",
                     Email = $"cli{i}@tab.pl",
                     PhoneNumber = "444444444",
                     AddressId = clientsAddres.Id,
@@ -254,11 +254,6 @@ namespace warsztatSamochodowy.Controllers
             {
                 CodeBrand = "SUBARU",
                 Name = "Sbaru"
-            };
-            yield return new Brand
-            {
-                CodeBrand = "NOKIA",
-                Name = "Nokia"
             };
         }
         private IEnumerable<VehicleType> defaultVehicleTypes()
@@ -293,7 +288,7 @@ namespace warsztatSamochodowy.Controllers
 
                 yield return new Vehicle
                 {
-                    RegNumber = $"TAB-{i}",
+                    RegNumber = $"REJ-TAB-{i}",
                     Name = $"Pojazd{i}",
                     ClientId = clinets[i % clinets.Count].Id,
                     VehicleTypeId = types[i% types.Count].CodeType,

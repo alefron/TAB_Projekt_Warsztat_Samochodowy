@@ -10,13 +10,13 @@ using warsztatSamochodowy.Security;
 
 namespace warsztatSamochodowy.Forms
 {
-    public class PersonelForm: FormBase
+    public class PersonelEditForm : InputFormBase
     {
-        public PersonelForm()
+        public PersonelEditForm()
         {
 
         }
-        public PersonelForm(Personel personel)
+        public PersonelEditForm(Personel personel)
         {
             Id = personel.Id;
             FirstName = personel.FirstName;
@@ -37,15 +37,12 @@ namespace warsztatSamochodowy.Forms
 
         }
 
-        
-
-
         [Key]
         public int Id { get; set; }
         
         [Required(ErrorMessage ="Imię jest wymagane.")]
         [StringLength(100)]
-        [Display()]
+        [Display]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Nazwisko jest wymagane.")]
@@ -64,21 +61,19 @@ namespace warsztatSamochodowy.Forms
         [Compare("Email")]
         public string ConfrimEmail { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
         [StringLength(255,MinimumLength =3)]
-        public string Password { get; set; }
-        [Required]
+        public string? Password { get; set; }
         [DataType(DataType.Password)]
         [Compare("Password")]
-        public string ConfrimPassword { get; set; }
+        public string? ConfrimPassword { get; set; }
 
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
 
         //Hasher is used for hashing password
-        Personel GetPersonel()
+        public Personel GetPersonel()
         {
             return new Personel()
             {

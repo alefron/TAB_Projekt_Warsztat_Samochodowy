@@ -1,28 +1,16 @@
-﻿@model warsztatSamochodowy.Models.Personel
+﻿@model warsztatSamochodowy.Forms.PersonelEditForm
 
 @{
     ViewData["Title"] = "PersonelEdit";
 }
 
+<h1>Edytuj Pracownika</h1>
 
-
-<!--
-    Ten widok wygenerowałem ałtomatycznie 
-    gdy ogarniałem jak się robi widoki i
-    trzeba go będzie zrobić na nowo
--->
-
-
-
-
-
-<h1>PersonelEdit</h1>
-
-<h4>Personel</h4>
+<h4>Pracownik</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Personel Edit">
+        <form asp-action="PersonelEdit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -46,9 +34,19 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HashPassword" class="control-label"></label>
-                <input asp-for="HashPassword" class="form-control" />
-                <span asp-validation-for="HashPassword" class="text-danger"></span>
+                <label asp-for="ConfrimEmail" class="control-label"></label>
+                <input asp-for="ConfrimEmail" class="form-control" />
+                <span asp-validation-for="ConfrimEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfrimPassword" class="control-label"></label>
+                <input asp-for="ConfrimPassword" class="form-control" />
+                <span asp-validation-for="ConfrimPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
@@ -56,9 +54,29 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AddressId" class="control-label"></label>
-                <select asp-for="AddressId" class="form-control" asp-items="ViewBag.AddressId"></select>
-                <span asp-validation-for="AddressId" class="text-danger"></span>
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HouseNumber" class="control-label"></label>
+                <input asp-for="HouseNumber" class="form-control" />
+                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocalNumber" class="control-label"></label>
+                <input asp-for="LocalNumber" class="form-control" />
+                <span asp-validation-for="LocalNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Postal" class="control-label"></label>
+                <input asp-for="Postal" class="form-control" />
+                <span asp-validation-for="Postal" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -68,7 +86,7 @@
 </div>
 
 <div>
-    <a asp-action="PersonelList">Back to List</a>
+    <a asp-action="Index">Lista</a>
 </div>
 
 @section Scripts {
