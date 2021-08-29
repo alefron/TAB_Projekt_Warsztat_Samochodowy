@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+
+<body>
+
+
+    <div class="element">
+        <h1>Klient: </h1>
+        <h2>Imie i nazwisko</h2>
+    </div>
+    <div class="element">
+        <h1>Typ klienta: </h1>
+        <h2>typ klienta</h2>
+    </div>
+
+
+    <div class="element">
+        <h1>Liczba wykonanych napraw: </h1>
+        <h2>n</h2>
+    </div>
+
+    <div class="element">
+        <h1>Nr telefonu: </h1>
+        <h2>123456789</h2>
+    </div>
+
+    <div class="element">
+        <h1>Adres email: </h1>
+        <h2>email</h2>
+    </div>
+
+    <div class="element">
+        <h1>Adres: </h1>
+        <h2>adres</h2>
+    </div>
+
+    <button class="edit-vehicle-button">Edytuj</button>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header">
+                    <div class="text-capitalize font-weight-normal">&nbsp;Historia napraw</div>
+                </div>
+                <div class="scroll-area-sm">
+                    <perfect-scrollbar class="ps-show-limits">
+                        <div style="position: static;" class="ps ps--active-y">
+                            <div class="ps-content">
+                                <ul class=" list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="bg-warning"></div>
+                                        <div class="p-0">
+                                            <div class="row">
+                                                <div class="zlecenie-header">
+                                                    <h5>FirstName</h5>
+                                                    <i>LastName </i>
+                                                </div>
+                                                <div class="progess-container">
+                                                    <div class="pudelko progress">
+                                                        <div data-percentage="0%" style="width: 70%;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                    </div>
+                                                    <button class="border-0 btn btn-outline-danger"> <i>USUŃ</i> </button>
+                                                    <span class="circle"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
