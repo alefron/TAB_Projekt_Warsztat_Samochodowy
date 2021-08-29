@@ -92,10 +92,9 @@ namespace warsztatSamochodowy.Controllers
         {
             var action = actionRepository.GetActionById(form.Id);
 
-
-
-
-
+            action.Result = form.ResultText;
+            actionRepository.Update(action);
+            action = actionRepository.SetActionStatus(form.Id, StatusEnum.FINAL);
 
 
             return View("BrowseAction", action);
@@ -121,6 +120,10 @@ namespace warsztatSamochodowy.Controllers
         public IActionResult SetCancelled(ActionSetCancelledForm form)
         {
             var action = actionRepository.GetActionById(form.Id);
+
+            action.Result = form.ResultText;
+            actionRepository.Update(action);
+            action = actionRepository.SetActionStatus(form.Id, StatusEnum.CANCELED);
 
             return View("BrowseAction", action);
         }

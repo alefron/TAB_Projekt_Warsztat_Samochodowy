@@ -137,6 +137,97 @@ namespace warsztatSamochodowy.Repository
         }
 
 
+        public async Task<List<Models.Action>> GetActionsForProposalAsync(int proposalId)
+        {
+            return await context.Actions
+                .Where(action => action.ProposalId == proposalId)
+                .ToListAsync();
+        }
+
+
+
+
+        private async Task onActionStatusChangedAsync(Models.Action action, StatusEnum oldStatus, StatusEnum newStatus)
+        {
+
+            if (newStatus == StatusEnum.FINAL)
+            {
+                var sameProposalList = await GetActionsForProposalAsync(action.ProposalId);
+
+                bool anyNotFinal = false;
+
+                foreach (var actionItem in sameProposalList)
+                {
+                    if(actionItem.Status != StatusEnum.FINAL)
+                    {
+                        anyNotFinal = true;
+                        break;
+                    }
+                }
+
+                if (anyNotFinal == false) // All are final so propsal is final
+                {
+                    var proposal = await context.Proposals
+                        .Where(proposal => proposal.Id == action.ProposalId)
+                        .FirstOrDefaultAsync();
+
+                    proposal.Status = StatusEnum.FINAL;
+                    context.Proposals.Update(proposal);
+                }
+
+            }else
+            if (newStatus == StatusEnum.CANCELED)
+            {
+                var proposal = await context.Proposals
+                       .Where(proposal => proposal.Id == action.ProposalId)
+                       .FirstOrDefaultAsync();
+
+                proposal.Status = StatusEnum.CANCELED; //Any action is cancelled so propsoal is cancelled
+                context.Proposals.Update(proposal);
+
+            }
+        }
+
+        public async Task< Models.Action> SetActionStatusAsync(int actionId,StatusEnum status)
+        {
+            var queryItem = await context.Actions
+                .Where((action) => action.Id == actionId)
+                 .Join(
+                    context.Proposals,
+                    action => action.ProposalId,
+                    proposal => proposal.Id,
+                    (action, proposal) => new ActionsQuery
+                    {
+                        action = action,
+                        proposal = proposal
+                    }
+                )
+                .FirstOrDefaultAsync();
+
+            Models.Action action = queryItem.action;
+            action.Proposal = queryItem.proposal;
+
+            StatusEnum oldStatus = action.Status;
+            action.Status = status;
+            context.Actions.Update(action);
+
+            await onActionStatusChangedAsync(action, oldStatus, status);
+            await context.SaveChangesAsync();
+
+
+
+            return action;
+
+        }
+
+
+        public Models.Action SetActionStatus(int actionId, StatusEnum status)
+        {
+            return Task.Run(()=> { return SetActionStatusAsync(actionId, status); }).Result;
+        }
+
+
+
 
     }
 
