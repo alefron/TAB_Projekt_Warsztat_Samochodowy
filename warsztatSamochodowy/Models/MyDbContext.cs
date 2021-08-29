@@ -25,6 +25,8 @@ namespace warsztatSamochodowy.Models
         public DbSet<Role> Role { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleType> VehicleTypes { get; set; }
+        public DbSet<warsztatSamochodowy.Forms.ActionSetFinalForm> ActionSetFinalForm { get; set; }
+        public DbSet<warsztatSamochodowy.Forms.ActionSetCancelledForm> ActionSetCancelledForm { get; set; }
         
        
 
