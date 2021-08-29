@@ -31,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Worker)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Proposal)
             </th>
             <th>
@@ -64,13 +61,10 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Worker.Email)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Proposal.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionType.CodeAction)
+                @Html.DisplayFor(modelItem => item.ActionType.Name)
             </td>
             <td>
                 <a asp-action="SetFinal" asp-route-id="@item.Id">Realizuj</a> |
