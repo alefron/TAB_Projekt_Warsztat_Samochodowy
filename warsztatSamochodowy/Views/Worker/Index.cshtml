@@ -1,7 +1,83 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<warsztatSamochodowy.Models.Action>
+
 @{
+    ViewData["Title"] = "Index";
 }
 
-<h1>worker</h1>
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SequenceNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Result)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Worker)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proposal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SequenceNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Result)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Worker.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Proposal.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionType.CodeAction)
+            </td>
+            <td>
+                <a asp-action="SetFinal" asp-route-id="@item.Id">Realizuj</a> |
+                <a asp-action="SetCancelled" asp-route-id="@item.Id">Anuluj</a> |
+                <a asp-action="BrowseAction" asp-route-id="@item.Id">Przeglądaj</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
