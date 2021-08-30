@@ -43,6 +43,9 @@ namespace warsztatSamochodowy.Repository
 
         public async Task<int> DeleteVehicleAsync(Vehicle vehicle)
         {
+            var veh = context.Vehicles.Single(v => v.RegNumber == vehicle.RegNumber);
+            var prop = context.Proposals.Where((proposal) => proposal.VehicleId == vehicle.RegNumber).ToList();
+            
             context.Vehicles.Remove(vehicle);
             return await context.SaveChangesAsync();
         }

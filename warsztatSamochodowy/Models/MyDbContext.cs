@@ -27,8 +27,12 @@ namespace warsztatSamochodowy.Models
         public DbSet<VehicleType> VehicleTypes { get; set; }
         public DbSet<warsztatSamochodowy.Forms.ActionSetFinalForm> ActionSetFinalForm { get; set; }
         public DbSet<warsztatSamochodowy.Forms.ActionSetCancelledForm> ActionSetCancelledForm { get; set; }
-        
-       
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<Proposal>().HasOne(prop => prop.Vehicle).WithMany(veh => veh.Proposals).HasForeignKey(prop => prop.VehicleId).OnDelete(DeleteBehavior.ClientCascade);
+        }
 
     }
 }
