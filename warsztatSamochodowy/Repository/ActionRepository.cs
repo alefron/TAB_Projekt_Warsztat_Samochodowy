@@ -15,6 +15,7 @@ namespace warsztatSamochodowy.Repository
         public Models.Action action;
         public Proposal proposal;
         public Vehicle vehicle;
+        public ActionType actionType;
     }
 
 
@@ -58,7 +59,19 @@ namespace warsztatSamochodowy.Repository
                         proposal = actionQuery.proposal,
                         vehicle = vehicle
                     }
-                )
+                ).Join(
+                    context.ActionTypes,
+                    actionQuery => actionQuery.action.ActionTypeId,
+                    actionType => actionType.CodeAction,
+                    (actionQuery, actionType) => new ActionsQuery
+                    {
+                        action = actionQuery.action,
+                        proposal = actionQuery.proposal,
+                        vehicle = actionQuery.vehicle,
+                        actionType = actionType
+
+                    }
+                 )
                 .ToListAsync();
 
             List<Models.Action> actionList = new List<Models.Action>();
@@ -68,7 +81,7 @@ namespace warsztatSamochodowy.Repository
                 var action = queryItem.action;
                 action.Proposal = queryItem.proposal;
                 action.Proposal.Vehicle = queryItem.vehicle;
-
+                action.ActionType = queryItem.actionType;
                 actionList.Add(action);
 
             }
@@ -115,7 +128,19 @@ namespace warsztatSamochodowy.Repository
                         proposal = actionQuery.proposal,
                         vehicle = vehicle
                     }
-                )
+                ).Join(
+                    context.ActionTypes,
+                    actionQuery => actionQuery.action.ActionTypeId,
+                    actionType => actionType.CodeAction,
+                    (actionQuery, actionType) => new ActionsQuery
+                    {
+                        action = actionQuery.action,
+                        proposal = actionQuery.proposal,
+                        vehicle = actionQuery.vehicle,
+                        actionType = actionType
+
+                    }
+                 )
                 .FirstOrDefaultAsync();
 
             Models.Action action = null;
@@ -125,6 +150,7 @@ namespace warsztatSamochodowy.Repository
                 action = queryResult.action;
                 action.Proposal = queryResult.proposal;
                 action.Proposal.Vehicle = queryResult.vehicle;
+                action.ActionType = queryResult.actionType;
             }
 
             return action;

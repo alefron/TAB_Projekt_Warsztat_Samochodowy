@@ -19,7 +19,6 @@ namespace warsztatSamochodowy.Controllers
     {
 
         ActionRepository actionRepository = new ActionRepository();
-        ProposalRepository proposalRepository = new ProposalRepository();
 
 
 
@@ -53,6 +52,11 @@ namespace warsztatSamochodowy.Controllers
             if (action?.Proposal?.Vehicle != null)
             {
                 headerSb.Append(action.Proposal.Vehicle.RegNumber);
+                headerSb.Append(" - ");
+            }
+            if(action?.ActionType != null)
+            {
+                headerSb.Append(action.ActionType.Name);
                 headerSb.Append(" - ");
             }
             if (action?.Proposal != null)
@@ -92,6 +96,9 @@ namespace warsztatSamochodowy.Controllers
         {
             var action = actionRepository.GetActionById(form.Id);
 
+
+
+            action.EndDate = DateTime.Now;
             action.Result = form.ResultText;
             actionRepository.Update(action);
             action = actionRepository.SetActionStatus(form.Id, StatusEnum.FINAL);
@@ -121,6 +128,7 @@ namespace warsztatSamochodowy.Controllers
         {
             var action = actionRepository.GetActionById(form.Id);
 
+            action.EndDate = DateTime.Now;
             action.Result = form.ResultText;
             actionRepository.Update(action);
             action = actionRepository.SetActionStatus(form.Id, StatusEnum.CANCELED);
