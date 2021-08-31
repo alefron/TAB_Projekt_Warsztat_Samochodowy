@@ -20,5 +20,12 @@ Ten sam string trzeba wstawić w pliki PersonelRepository.cs i ClientRepository.
 
 7. w SQL management studio podłącz się do bazy danych - w folderze database powinna być nowo utworzona baza danych - TAB_proj_DB (czy jakoś tak)
 
-3. Mechanizm logowania działa (jest to raczej prymitywny mechanizm, ale myślę, że taki styknie na potrzeby tego projektu). Żeby go przetestować należy do swojej bazy danych dodać jakichś pracowników. Czyli w SQL management studio klikamy prawym najpierw na tabeli Address => edit top 200 rows, wpisujemy sobie jakieś adresy, bo muszą być adresy, żeby stworzyć użytkowników,  użytkownik musi mieć adres. Potem prawym na tabeli Role i dodajemy role: MAN (Manager), WOR (Worker), ADM (Admin). Potem prawym na tabeli Personel => Edit top 200 rows i dodajemy sobie kilku pracowników.
-4. Jak już coś jest w bazie danych to można przetestować mechanizm logowania. Po wpisaniu niepoprawnego loginu lub hasła (lub jednego i drugiego źle) wyskoczy błąd. Jak się wpisze poprawne login i hasło to przechodzimy do strony głównej.
+3. UPDATE: Odpal appke (włączy się przeglądarka) do wejdź w url localhst:port/Debug i kliknij guzik żeby wypełnić Baze Danych po tym będzie się dało zalogować przy pomcy passów. 
+
+adm0@tab.pl - admin0 (Admin)
+
+wor0@tab.pl - worker0 (Worker)
+
+man0@tab.pl - manager0 (Manager)
+
+7. Jak już coś jest w bazie danych to można przetestować mechanizm logowania. Po wpisaniu niepoprawnego loginu lub hasła (lub jednego i drugiego źle) wyskoczy błąd. Jak się wpisze poprawne login i hasło to przechodzimy do strony głównej.
