@@ -22,7 +22,7 @@
                     @if (User.IsInRole("manager"))
                     {
                     <div class="container-functions">
-                        <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Manager" asp-action="Index">Zlecenia</a></div>
+                        <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Proposals" asp-action="proposalList">Zlecenia</a></div>
                         <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Vehicle" asp-action="VehicleList">Pojazdy</a></div>
                         <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Client" asp-action="Index">Klienci</a></div>
                         <div class="nav-item on-hover-animation"><a class="nav-link" asp-area="" asp-controller="Manager" asp-action="AddProposal">Dodaj zlecenie</a></div>

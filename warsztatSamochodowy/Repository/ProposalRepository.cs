@@ -45,8 +45,8 @@ namespace warsztatSamochodowy.Repository
                         Description = proposal.Description,
                         Result = proposal.Result,
                         Status = proposal.Status,
-                        StartDate = proposal.StartDate,
-                        EndDate = proposal.EndDate,//Chyba to jest niebezpieczne
+                        StartDate = proposal.StartDate.Date,
+                        EndDate = proposal.EndDate,
                         VehicleId = proposal.VehicleId,
                         ManagerId = proposal.ManagerId,
 
@@ -62,7 +62,7 @@ namespace warsztatSamochodowy.Repository
                         Description = proposal.Description,
                         Result = proposal.Result,
                         Status = proposal.Status,
-                        StartDate = proposal.StartDate,
+                        StartDate = proposal.StartDate.Date,
                         EndDate = proposal.EndDate,    //Chyba to jest niebezpieczne
                         VehicleId = proposal.VehicleId,
                         ManagerId = proposal.ManagerId,
@@ -84,8 +84,8 @@ namespace warsztatSamochodowy.Repository
                         Description = proposal.Description,
                         Result = proposal.Result,
                         Status = proposal.Status,
-                        StartDate = proposal.StartDate,
-                        EndDate = proposal.EndDate,    //Chyba to jest niebezpieczne
+                        StartDate = proposal.StartDate.Date,
+                        EndDate = proposal.EndDate,   
                         VehicleId = proposal.VehicleId,
                         ManagerId = proposal.ManagerId,
 

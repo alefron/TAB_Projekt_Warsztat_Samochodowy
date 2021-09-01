@@ -30,7 +30,7 @@ namespace warsztatSamochodowy.Controllers
 
             if (role == "manager")
             {
-                return Redirect("Manager");
+                return Redirect("Proposals/proposalsList");
             }
             if (role == "admin")
             {
