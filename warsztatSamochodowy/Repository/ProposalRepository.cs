@@ -25,6 +25,31 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(() => { return GetProposalByVehicleAsync(regNumber); }).Result;
         }
 
+        public async Task<Proposal> GetProposalByIdAsync(int id)
+        {
+            return await context.Proposals
+                .Where((proposal) => proposal.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Proposal GetProposalById(int id)
+        {
+            return Task.Run(() => { return GetProposalByIdAsync(id); }).Result;
+        }
+
+        public async Task<int> DeleteProposalAsync(Proposal proposal)
+        {
+            var prop = context.Proposals.Single(p => p.Id == proposal.Id);
+            var actions = context.Actions.Where((action) => action.ProposalId == proposal.Id).ToList();
+
+            context.Proposals.Remove(proposal);
+            return await context.SaveChangesAsync();
+        }
+        public int DeleteProposal(Proposal proposal)
+        {
+            Task<int> t = Task.Run(() => { return DeleteProposalAsync(proposal); });
+            return t.Result;
+        }
+
         public async Task<List<Proposal>> GetJoinedProposalsAsync()
         {
             /*

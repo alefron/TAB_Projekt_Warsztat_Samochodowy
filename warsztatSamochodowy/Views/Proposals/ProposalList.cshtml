@@ -80,7 +80,7 @@
                 </div>
             </form>
 
-            <form asp-controller="Proposals" asp-action="AddProposal" method="get" class="flex-center">
+            <form asp-controller="AddProposal" asp-action="AddProposal" method="get" class="flex-center">
                 <div>
                     <button type="submit" class="btn round-button btn-long btn-grey" style="font-size: 30px;">
                         +
@@ -112,7 +112,9 @@
                                             <div class="p-0">
                                                 <div class="row">
                                                     <div class="zlecenie-header">
-                                                        <h5>@item.VehicleId @item.StartDate</h5>
+                                                        <form>
+                                                            <a type="submit" class="h5 a-anim" name="proposalId" value="@item.Id" asp-controller="Proposals" asp-action="editProposal">@item.VehicleId @item.StartDate</a>
+                                                        </form>
                                                         <i>@item.Description</i>
                                                     </div>
                                                     <div class="progess-container">
@@ -155,14 +157,14 @@
                                                             }
                                                             else if (@item.Status == StatusEnum.FINAL)
                                                             {
-                                                                <button class='trash-button' data-toggle="modal" data-target="#exampleModal" type="button" value="@item.VehicleId">
+                                                                <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
                                                                     <i class="fas fa-trash" style='font-size:24px;color:red'></i>
                                                                 </button>
                                                                 <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="zakończone"></span>
                                                             }
                                                             else
                                                             {
-                                                                <button class='trash-button' data-toggle="modal" data-target="#exampleModal" type="button" value="@item.VehicleId">
+                                                                <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
                                                                     <i class="fas fa-trash" style='font-size:24px;color:red'></i>
                                                                 </button>
                                                                 <span class="circle circle-red" data-toggle="tooltip" data-placement="right" title="anulowane"></span>
@@ -181,7 +183,58 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModallabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Usuwanie zlecenia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div>
+                    <p class="modal-body" id="proposal"></p>
+                </div>
+                <div class="modal-footer">
+                    <form asp-controller="Proposals" asp-action="deleteProposal" method="get">
+                        <button type="submit" class="btn btn-primary" name="proposalId" value="" id="deleteConfirmed">Tak, usuń</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function (event) {
+            $("#deleteModal").on('show.bs.modal', function (event) {
+                //get button that triggered the modal
+                var button = $(event.relatedTarget);
+
+                //get the button "tak, usuń" in modal window
+                var confirmDelete = document.getElementById("deleteConfirmed");
+
+                //get modal window
+                var modal = $(this);
+
+                //set the button's value to proposalId
+                confirmDelete.value = button.val();
+
+                //set the text in model window
+                modal.find('.modal-body').html("Czy chcesz usunąć zlecenie wraz z całą jego historią?");
+            });
+
+        });
+    </script>
+
 </body>
+
+
+
 
 @{
     async Task<string> httpRequest(string url)

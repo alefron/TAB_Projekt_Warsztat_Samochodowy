@@ -32,6 +32,7 @@ namespace warsztatSamochodowy.Models
         {
 
             modelBuilder.Entity<Proposal>().HasOne(prop => prop.Vehicle).WithMany(veh => veh.Proposals).HasForeignKey(prop => prop.VehicleId).OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<Action>().HasOne(act => act.Proposal).WithMany(prop => prop.Actions).HasForeignKey(act => act.ProposalId).OnDelete(DeleteBehavior.ClientCascade);
         }
 
     }

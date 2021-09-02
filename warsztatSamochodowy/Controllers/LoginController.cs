@@ -57,8 +57,8 @@ namespace warsztatSamochodowy.Controllers
                         else
                         {
                             claims.Add(new Claim(ClaimTypes.Role, "worker"));
-                            claims.Add(new Claim(CustomClaims.Identifier, person.Id.ToString()));
                         }
+                        claims.Add(new Claim(CustomClaims.Identifier, person.Id.ToString()));
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);

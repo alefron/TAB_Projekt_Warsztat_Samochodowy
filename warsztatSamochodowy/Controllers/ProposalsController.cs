@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Forms;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
+using warsztatSamochodowy.Security;
 using warsztatSamochodowy.Utils;
 
 namespace warsztatSamochodowy.Controllers
@@ -93,7 +95,37 @@ namespace warsztatSamochodowy.Controllers
             return View("proposalList", modelFiltered);
         }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Proposals/deleteProposal")]
+        public IActionResult deleteProposal(int proposalId)
+        {
+            Proposal proposal = proposalRepository.GetProposalById(proposalId);
+            proposalRepository.DeleteProposal(proposal);
+            this.proposals = proposalRepository.GetJoinedProposals();
+            this.model = new List<FormProposals>();
+            this.model.Add(new FormProposals(this.proposals));
+            return View("ProposalList", model);
+        }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Proposals/getOnlyManagerProposals")]
+        public IActionResult getOnlyManagerProposals()
+        {
+            var id = User.Claims.Where(c => c.Type == CustomClaims.Identifier)
+                .Select(c => c.Value).SingleOrDefault();
 
+            List<FormProposals> modelFiltered = new List<FormProposals>();
+            List<Proposal> proposalsFiltered = new List<Proposal>();
+            foreach (var prop in this.proposals)
+            {
+                if (prop.ManagerId.ToString() == id)
+                {
+                    proposalsFiltered.Add(prop);
+                }
+            }
+            modelFiltered.Add(new FormProposals(proposalsFiltered));
+            return View("proposalList", modelFiltered);
+        }
+        
     }
 }

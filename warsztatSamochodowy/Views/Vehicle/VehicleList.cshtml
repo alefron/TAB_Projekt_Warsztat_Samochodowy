@@ -139,7 +139,7 @@
                                                 <div class="row">
                                                     <div class="zlecenie-header">
                                                         <form asp-controller="Vehicle" asp-action="showVehicle" method="get">
-                                                            <a type="submit" name="regNum" value="@item.Name" asp-controller="Vehicle" asp-action="showVehicle">@item.Name</a>
+                                                            <a type="submit" class="a-anim h5" name="regNum" value="@item.Name" asp-controller="Vehicle" asp-action="showVehicle">@item.Name</a>
                                                         </form>
                                                         @{
                                                             var uri = new Uri("https://localhost:44323/Vehicle/getVehicleProposalsCount?regNumber=" + item.RegNumber);
