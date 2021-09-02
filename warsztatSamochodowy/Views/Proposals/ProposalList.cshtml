@@ -1,9 +1,11 @@
-﻿<!doctype html>
+﻿
+<div style="color: transparent;">
+    @Model FormProposals
+</div>
+@using System.Net.Http
+<!doctype html>
 <html lang="en">
 <head>
-
-    @Model FormProposals
-    @using System.Net.Http
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,11 +23,82 @@
 </head>
 
 <body>
+
+    <div class="flex-center">
+        <a type="submit" class="h2" asp-controller="Proposals" asp-action="ProposalList" style="text-decoration: none;">Lista zleceń</a>
+    </div>
+    <form asp-controller="Proposals" asp-action="getProposalsFilteredBySearch" method="get">
+        <div class="search_wrap search_wrap_4">
+            <div class="search_box">
+                <button class="btn btn_common" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                <input type="text" class="input input-font-dark" name="searching" placeholder="szukaj...">
+            </div>
+        </div>
+    </form>
+
+    <div class="flex-center">
+        <div class="sorting-container">
+            <form asp-controller="Proposals" asp-action="getProposalsFilteredBySatus" method="get" class="flex-center">
+                <div>
+                    <button type="submit" class="btn round-button btn-margin btn-blue" name="status" value=0>
+                        przyjęte
+                    </button>
+                </div>
+
+
+                <div>
+                    <button type="submit" class="btn round-button btn-yellow btn-margin" name="status" value=1>
+                        Trwające
+                    </button>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn round-button btn-green btn-margin" name="status" value=2>
+                        Zakończone
+                    </button>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn round-button btn-red btn-margin" name="status" value=3>
+                        Anulowane
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <br />
+    <div class="flex-center">
+        <div class="sorting-container">
+            <form asp-controller="Proposals" asp-action="getOnlyManagerProposals" method="get" class="flex-center">
+                <div>
+                    <button type="submit" class="btn round-button btn-long btn-grey">
+                        pokaż tylko moje zlecenia
+                    </button>
+                </div>
+            </form>
+
+            <form asp-controller="Proposals" asp-action="AddProposal" method="get" class="flex-center">
+                <div>
+                    <button type="submit" class="btn round-button btn-long btn-grey" style="font-size: 30px;">
+                        +
+                    </button>
+                </div>
+            </form>
+
+
+
+
+        </div>
+    </div>
+    <br />
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header">
-                    <div class="text-capitalize font-weight-normal"><i class="fa-tasks"></i>&nbsp;Lista zleceń</div>
+                    <div class="text-capitalize font-weight-normal">Lista zleceń</div>
                 </div>
                 <div class="scroll-area-sm">
                     <perfect-scrollbar class="ps-show-limits">
@@ -59,27 +132,40 @@
                                                             var response = await clinet.GetAsync(uri);
                                                             string textResult = await response.Content.ReadAsStringAsync();
 
-                                                            <div class="pudelko progress">
-                                                                <div data-percentage="0%" style="width: @textResult;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
 
-                                                            </div>
-                                                        }
 
-                                                        @{
-                                                            if (@item.Status == StatusEnum.OPEN || @item.Status == StatusEnum.PROCESSING)
+                                                            if (@item.Status == StatusEnum.OPEN)
                                                             {
-                                                                <button class="trash-button" disabled>
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy najpierw zakończyć naprawę, aby ją usunąć." disabled>
                                                                     <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
                                                                 </button>
 
-                                                                <span class="circle circle-yellow"></span>
+                                                                <span class="circle circle-blue" data-toggle="tooltip" data-placement="right" title="przyjęte"></span>
+                                                            }
+                                                            else if (@item.Status == StatusEnum.PROCESSING)
+                                                            {
+                                                                <div class="pudelko progress">
+                                                                    <div data-percentage="0%" style="width: @textResult;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                                </div>
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy najpierw zakończyć naprawę, aby ją usunąć." disabled>
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                                </button>
+                                                                <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="trwające"></span>
+                                                            }
+                                                            else if (@item.Status == StatusEnum.FINAL)
+                                                            {
+                                                                <button class='trash-button' data-toggle="modal" data-target="#exampleModal" type="button" value="@item.VehicleId">
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                                </button>
+                                                                <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="zakończone"></span>
                                                             }
                                                             else
                                                             {
                                                                 <button class='trash-button' data-toggle="modal" data-target="#exampleModal" type="button" value="@item.VehicleId">
                                                                     <i class="fas fa-trash" style='font-size:24px;color:red'></i>
                                                                 </button>
-                                                                <span class="circle circle-green"></span>
+                                                                <span class="circle circle-red" data-toggle="tooltip" data-placement="right" title="anulowane"></span>
                                                             }
                                                         }
                                                     </div>
@@ -96,3 +182,26 @@
         </div>
     </div>
 </body>
+
+@{
+    async Task<string> httpRequest(string url)
+    {
+        var uri = new Uri(url);
+
+        var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.CookieContainer = new System.Net.CookieContainer();
+        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+        var clinet = new HttpClient(handler);
+
+        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+        var response = await clinet.GetAsync(uri);
+        string textResult = await response.Content.ReadAsStringAsync();
+
+        return textResult;
+    }
+
+}

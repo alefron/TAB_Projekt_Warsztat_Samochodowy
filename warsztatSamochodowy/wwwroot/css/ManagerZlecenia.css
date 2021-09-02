@@ -70,3 +70,38 @@
 .circle-yellow {
     background: hsla(45, 91%, 59%, 0.77);
 }
+.circle-blue {
+    background: hsla(204, 100%, 57%, 0.7);
+}
+.circle-red {
+    background: hsla(0, 100%, 57%, 0.64);
+}
+
+
+.btn-grey {
+    background-color: hsla(0, 0%, 75%, 0.3);
+}
+.btn-blue {
+    background-color: hsla(204, 100%, 57%, 0.7);
+}
+.btn-yellow {
+    background-color: hsla(45, 91%, 59%, 0.77);
+}
+.btn-green {
+    background-color: hsla(128, 78%, 52%, 0.65);
+}
+.btn-red {
+    background-color: hsla(0, 100%, 57%, 0.64);
+}
+
+
+.btn-margin{
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 187px;
+}
+.btn-long {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 414px;
+}

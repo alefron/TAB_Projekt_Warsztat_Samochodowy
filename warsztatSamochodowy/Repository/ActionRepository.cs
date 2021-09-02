@@ -92,6 +92,9 @@ namespace warsztatSamochodowy.Repository
 
 
 
+
+
+
         public List<Models.Action> GetActionsForWorker(int WorkerId)
         {
             return Task.Run(() => { return GetActionsForWorkerAsync(WorkerId); }).Result;
@@ -168,6 +171,12 @@ namespace warsztatSamochodowy.Repository
             return await context.Actions
                 .Where(action => action.ProposalId == proposalId)
                 .ToListAsync();
+        }
+
+
+        public List<Models.Action> GetActionsForProposal(int proposalId)
+        {
+            return Task.Run(() => { return GetActionsForProposalAsync(proposalId); }).Result;
         }
 
 

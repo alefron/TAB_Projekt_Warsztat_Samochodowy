@@ -1,5 +1,7 @@
 ﻿@using System.Net.Http
-@Model FormVehicles
+<div style="color: transparent;">
+    @Model FormVehicles
+</div>
 
 <!doctype html>
 <html lang="en">
@@ -21,8 +23,11 @@
 <body>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
+    <div class="flex-center">
+        <a type="submit" class="h2" asp-controller="Vehicle" asp-action="VehicleList" style="text-decoration: none;">Lista przyjętych pojazdów</a>
+    </div>
 
-    <h2 class="text-center">Lista przyjętych pojazdów</h2>
+    
 
     <form asp-controller="Vehicle" asp-action="getVehiclesFilteredBySearch" method="get">
         <div class="search_wrap search_wrap_4">
@@ -30,7 +35,7 @@
                 <button class="btn btn_common" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
-                <input type="text" class="input" name="searching" placeholder="search...">
+                <input type="text" class="input input-font-dark" name="searching" placeholder="search...">
             </div>
         </div>
     </form>
@@ -164,18 +169,18 @@
 
                                                             if (status)
                                                             {
-                                                                <button class="trash-button" disabled>
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy zakończyć trwające naprawy pojazdu, aby go usunąć." disabled>
                                                                   <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
                                                                 </button>
                                                                 
-                                                                <span class="circle circle-yellow"></span>
+                                                                <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="aktualnie naprawiany"></span>
                                                             }
                                                             else
                                                             {
                                                                 <button class='trash-button' data-toggle="modal" data-target="#exampleModal" type="button" value="@item.RegNumber">
                                                                     <i class="fas fa-trash" style='font-size:24px;color:red'></i>
                                                                 </button>
-                                                                <span class="circle circle-green"></span>
+                                                                <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="Dawniej naprawiany"></span>
                                                             }
                                                         }
                                                     </div>

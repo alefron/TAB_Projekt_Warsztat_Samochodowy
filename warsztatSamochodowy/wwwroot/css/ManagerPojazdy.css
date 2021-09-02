@@ -24,6 +24,10 @@
 	color: hsla(0, 0%, 75%, 0.3)
 }
 
+.input-font-dark {
+	color: #7690da !important;
+}
+
 .search_wrap{
 	width: 500px;
 	margin: 38px auto;
@@ -34,6 +38,7 @@
 	position: relative;
 	width: 500px;
 	height: 60px;
+	color: blue;
 }
 
 .search_wrap .search_box .input{

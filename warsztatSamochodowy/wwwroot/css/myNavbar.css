@@ -11,7 +11,15 @@
 }
 
 .on-hover-animation:hover{
-    animation: grow 0.5s ease-in forwards;
+    animation: grow 0.2s ease-in forwards;
+}
+
+.btn:hover {
+    opacity: 0.6;
+}
+
+.btn {
+    transition: 0.3s;
 }
 
 @keyframes grow{
