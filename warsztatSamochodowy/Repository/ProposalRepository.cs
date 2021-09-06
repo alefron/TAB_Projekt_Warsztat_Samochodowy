@@ -126,5 +126,28 @@ namespace warsztatSamochodowy.Repository
         {
             return Task.Run(GetJoinedProposalsAsync).Result;
         }
+
+        public async Task<int> AddProposalAsync(string regNumber, string description, int managerId)
+        {
+            Proposal proposal = new Proposal { Description = description,
+                Status = StatusEnum.OPEN,
+                StartDate = DateTime.Now,
+                VehicleId = regNumber,
+                ManagerId = managerId };
+
+            context.Add<Proposal>(proposal);
+            await context.SaveChangesAsync();
+
+            int newId = proposal.Id;
+
+            return newId;
+        }
+
+        public int AddProposal(string regNumber, string description, int managerId)
+        {
+            Task<int> t = Task.Run(() => { return AddProposalAsync(regNumber, description, managerId); });
+            var res = t.Result;
+            return t.Result;
+        }
     }
 }

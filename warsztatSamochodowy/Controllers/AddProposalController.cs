@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Forms;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
+using warsztatSamochodowy.Security;
 
 namespace warsztatSamochodowy.Controllers
 {
@@ -33,11 +34,21 @@ namespace warsztatSamochodowy.Controllers
             return View(model);
         }
 
-        [HttpGet("AddProposal/AddProposalPost")]
-        public IActionResult AddProposalPost(string client, string vehicle, string description, string result, string addAction)
+        [HttpGet("AddProposal/AddProposalToDb")]
+        public IActionResult AddProposalToDb(string client, string vehicle, string description, string result, string addAction)
         {
+            if (client != null && vehicle != null && description != null)
+            {
+                var managerId = User.Claims.Where(c => c.Type == CustomClaims.Identifier)
+                .Select(c => c.Value).SingleOrDefault();
+                int newProposalId = proposalRepository.AddProposal(vehicle, description, Int32.Parse(managerId));
 
-            return View(model);
+                if (addAction != null)
+                {
+                    return RedirectToAction("addAction", "Action", new { proposalId = newProposalId});
+                }
+            }
+            return RedirectToAction("ProposalList", "Proposals");
         }
     }
 }
