@@ -9,7 +9,7 @@ namespace warsztatSamochodowy.Forms
 {
     public class FormProposals
     {
-        ProposalRepository vehicleRepository = new ProposalRepository();
+        ProposalRepository proposalRepository = new ProposalRepository();
         public List<Proposal> proposals { get; set; }
 
         public FormProposals(List<Proposal> proposals)

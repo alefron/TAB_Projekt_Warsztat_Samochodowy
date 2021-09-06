@@ -112,8 +112,8 @@
                                             <div class="p-0">
                                                 <div class="row">
                                                     <div class="zlecenie-header">
-                                                        <form>
-                                                            <a type="submit" class="h5 a-anim" name="proposalId" value="@item.Id" asp-controller="Proposals" asp-action="editProposal">@item.VehicleId @item.StartDate</a>
+                                                        <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
+                                                            <button type="submit" class="h5 a-anim nav-link" name="proposalId" value="@item.Id">@item.VehicleId @item.StartDate</button>
                                                         </form>
                                                         <i>@item.Description</i>
                                                     </div>

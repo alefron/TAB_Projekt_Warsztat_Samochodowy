@@ -1,3 +1,7 @@
+﻿<div style="color: transparent;">
+    @Model FormAddEditProposal
+</div>
+@using System.Net.Http
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,126 +14,299 @@
     <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
+
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="/js/SelectFilter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
+   <form id="addProposalForm">
+        <div class="element-add">
+            <h1>Klient: </h1>
+            <div class="dropdown" style="margin-right: 30px;">
 
-    <div class="element-add">
-        <h1>Nazwa: </h1>
-        <input type="text" name="proposalName" value="" placeholder="..." />
-    </div>
-    <div class="element-add">
-        <h1>Pojazd: </h1>
-        <div class="dropdown">
-            <button type="button" class="btn my-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Wybierz pojazd
-            </button>
+                <select class="form-control SelectFilter mdb-select md-form formElement" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="client">
+                    @{
+                        if (Model[0].is_editable)
+                        {
+                            if (Model[0].client.FirstName != null)
+                            {
+                                <option data-ref=@Model[0].client.Id selected>@Model[0].client.FirstName @Model[0].client.LastName</option>
+                            }
+                            else
+                            {
+                                <option data-ref=@Model[0].client.Id selected>@Model[0].client.CompanyName</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="-1" disabled selected>wybierz klienta</option>
+                        }
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa1" /></li>
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa2" /></li>
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa3" /></li>
-            </ul>
-        </div>
-        <button class="add-button"> <i class="fas fa-plus" style="color: black"></i></button>
-    </div>
-
-    <div class="element-add">
-        <h1>Klient: </h1>
-        <div class="dropdown">
-            <button type="button" class="btn my-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Wybierz klienta
-            </button>
-
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa1" /></li>
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa2" /></li>
-                <li><input type="submit" class="dropdown-item" name="brandName" value="Nazwa3" /></li>
-            </ul>
-        </div>
-        <button class="add-button"> <i class="fas fa-plus" style="color: black"></i></button>
-    </div>
-
-
-    <div class='my-row'>
-        <div class='my-column'>
-            <div class='element'>
-                <h1>Opis: </h1>
+                        foreach (var client in Model[0].clients)
+                        {
+                            if (client.CompanyName == null)
+                            {
+                                <option data-ref=@client.Id>@client.FirstName @client.LastName</option>
+                            }
+                            else
+                            {
+                                <option data-ref=@client.Id>@client.CompanyName</option>
+                            }
+                        }
+                    }
+                </select>
             </div>
-            <div class='proposal-card'>
-                <textarea rows="5" cols="58" id="opisZlogszenia" name="opisZgloszenia" placeholder="Wnosze o uzyczenie Stefana Tobiasiewicza na jedna noc do pokoju 218, placone z g�ry przelewem"> </textarea>
-            </div>
+                <button asp-controller="AddClient" asp-action="AddClient" method="get" class="btn add-button" type="submit" value="/AddProposal/AddProposal" name="returnUrl"> <i class="fas fa-plus" style="color: black"></i></button>
         </div>
-        <div class='my-column'>
-            <div class='element'>
-                <h1>Rezultat: </h1>
+
+        <div class="element-add">
+            <h1>Pojazd: </h1>
+            <div class="dropdown" style="margin-right: 30px;">
+                <select class="form-control vehicleDropdown SelectFilter mdb-select md-form dropdown formElement" name="vehicle" value="" searchable="Search here.." id="vehicle">
+                    @{
+                        if (Model[0].is_editable)
+                        {
+                            <option data-belong=@Model[0].vehicle.ClientId selected>@Model[0].vehicle.RegNumber</option>
+                            <option value="-1" disabled>wybierz pojazd</option>
+                        }
+                        else
+                        {
+                            <option value="-1" disabled selected>wybierz pojazd</option>
+                        }
+
+                        foreach (var vehicle in Model[0].vehicles)
+                        {
+                            <option data-belong=@vehicle.ClientId>@vehicle.RegNumber</option>
+                        }
+                    }
+                </select>
             </div>
-            <div class='proposal-card'>
-                <textarea rows="5" cols="58" id="opisZlogszenia" name="opisZgloszenia" placeholder="Wnosze o uzyczenie Stefana Tobiasiewicza na jedna noc do pokoju 218, placone z g�ry przelewem"> </textarea>
-            </div>
+                <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" value="/AddProposal/AddProposal" name="returnUrl" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
         </div>
-    </div>
 
 
-
-    <br>
-    <br>
-    <br>
-    <br>
-
-
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-8">
-            <div class='action-row'>
+        <div class='my-row'>
+            <div class='my-column'>
                 <div class='element'>
-                    <h1>Akcje: </h1>
+                    <h1>Opis: </h1>
                 </div>
-                <div class='end-button' style="background: #6ff1a9">
-                    <a href='#'><i class="fas fa-plus" style="color: black"></i></a>
+                <div class='proposal-card'>
+                    @{
+                        if (!Model[0].is_editable)
+                        {
+                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
+                        }
+                        else
+                        {
+                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].proposal.Description">@Model[0].proposal.Description</textarea>
+                        }
+                    }
                 </div>
-
             </div>
-            <div class="card-hover-shadow-2x mb-3 card">
+            @{
+                if (Model[0].proposal.Result != null)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].proposal.Result">@Model[0].proposal.Result</textarea>
+                        </div>
+                    </div>
+                }
+                else if (Model[0].proposal.Status == StatusEnum.FINAL)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
+                        </div>
+                    </div>
+                }
+                else if (Model[0].is_editable)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
+                        </div>
+                    </div>
+                }
+            }
 
-                <div class="scroll-area-sm">
-                    <perfect-scrollbar class="ps-show-limits">
-                        <div style="position: static;" class="ps ps--active-y">
-                            <div class="ps-content">
-                                <ul class=" list-group list-group-flush">
+        </div>
+        <br>
+        <br>
 
-                                    <li class="list-group-item">
-                                        <div class="bg-warning"></div>
-                                        <div class="p-0">
-                                            <div class="action-table-row">
-                                                <div class="action-field my-flex-center">
-                                                    Typ akcji
-                                                </div>
-                                                <div class="worker-field my-flex-center">
-                                                    imie i nazwisko
-                                                </div>
-                                                <div class="status-field my-flex-center">
-                                                    <div class='circle'></div>
-                                                    <div class="action-table-button"><a href="#">Przywroc</a></div>
-                                                </div>
 
-                                            </div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class='action-row'>
+                    <div class='element'>
+                        <h1>Akcje: </h1>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        @{
+                            if (Model[0].is_editable)
+                            {
+                                <button asp-controller="AddProposal" asp-action="AddProposalPost" method="get" value="true" name="addAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia.">dodaj akcję</button>
+                            }
+                            else
+                            {
+                                <button asp-controller="AddProposal" asp-action="AddProposalPost" method="get" value="true" name="addAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia." disabled>dodaj akcję</button>
+                            }
+                        }
+                    </div>
+
+                </div>
+                <br />
+                @{ if (Model[0].is_editable)
+                    {
+                        <div class="card-hover-shadow-2x mb-3 card">
+
+                            <div class="scroll-area-sm">
+                                <perfect-scrollbar class="ps-show-limits">
+                                    <div style="position: static;" class="ps ps--active-y">
+                                        <div class="ps-content">
+                                            <ul class=" list-group list-group-flush">
+
+                                                <li class="list-group-item">
+                                                    <div class="bg-warning"></div>
+                                                    <div class="p-0">
+                                                        @foreach (var act in Model[0].actions)
+                                                        {
+                                                            <div class="action-table-row">
+                                                                <div class="action-field my-flex-center">
+                                                                    @act.ActionTypeId
+                                                                </div>
+                                                                <div class="worker-field my-flex-center">
+                                                                    worker: @act.WorkerId
+                                                                </div>
+                                                                <div class="status-field my-flex-center">
+                                                                    @if (act.Status == StatusEnum.OPEN)
+                                                                    {
+                                                                        <span class='circle circle-blue'></span>
+                                                                    }
+                                                                    else if (act.Status == StatusEnum.PROCESSING)
+                                                                    {
+                                                                        <span class='circle circle-yellow'></span>
+                                                                    }
+                                                                    else if (act.Status == StatusEnum.FINAL)
+                                                                    {
+                                                                        <span class='circle circle-green'></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class='circle circle-red'></span>
+                                                                    }
+                                                                        <div class="action-table-button"><button asp-controller="AddAction" asp-action="AddAction" method="get" class="btn btn-red" name="actionId" value="act.Id">Edytuj</button></div>
+                                                                </div>
+
+                                                            </div>
+                                                        }
+
+                                                    </div>
+                                                </li>
+
+                                            </ul>
                                         </div>
-                                    </li>
-
-                                </ul>
+                                    </div>
+                                </perfect-scrollbar>
                             </div>
                         </div>
-                    </perfect-scrollbar>
-                </div>
+                    }
+
+                }
             </div>
         </div>
-    </div>
 
-    <div class="save-cancel">
-        <button class="save-button">Zapisz</button>
-        <button class="cancel-button">Anuluj</button>
-    </div>
+        <div class="save-cancel">
+            @{
+                if (Model[0].is_editable)
+                {
+                    <button asp-controller="AddProposal" asp-action="AddProposalPost" method="get" class="btn save-button" id="saveButton" type="submit">Zapisz</button>
+                }
+                else
+                {
+                    <button asp-controller="AddProposal" asp-action="AddProposalPost" method="get" class="btn save-button" id="saveButton" type="submit" disabled>Zapisz</button>
+                }
+            }
+            <button asp-controller="Proposals" asp-action="ProposalList" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
+        </div>
+
+
+    </form>
+    
+
+    <script>
+        $(document).ready(function () {
+            $(".formElement").on("change", function () {
+                var desc = document.getElementById("description");
+                var textVeh = $("#vehicle :selected").val();
+                var textCli = $("#client :selected").val();
+
+                if (textCli != -1 && textVeh != -1) {
+                    $("#description").removeAttr("disabled");
+                    $("#result").removeAttr("disabled");
+                }
+                else {
+                    $("#description").prop("disabled", !0);
+                    $("#result").prop("disabled", !0);
+                }
+
+                var attr = $("#description").attr('disabled');
+                if ((typeof attr == 'undefined' || attr == false) && ($("#description").val() != "")) {
+                    $("#addAction").removeAttr("disabled");
+                    $("#saveButton").removeAttr("disabled");
+                }
+                else {
+                    $("#addAction").prop("disabled", !0);
+                    $("#saveButton").prop("disabled", !0);
+                }                    
+            });
+        });
+    </script>
+
+
 
 </body>
+@{
+    async Task<string> httpRequest(string url)
+    {
+        var uri = new Uri(url);
+
+        var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.CookieContainer = new System.Net.CookieContainer();
+        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+        var clinet = new HttpClient(handler);
+
+        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+        var response = await clinet.GetAsync(uri);
+        string textResult = await response.Content.ReadAsStringAsync();
+
+        return textResult;
+    }
+
+}
+
 

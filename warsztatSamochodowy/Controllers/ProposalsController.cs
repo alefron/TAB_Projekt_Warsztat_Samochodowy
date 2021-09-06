@@ -13,7 +13,7 @@ using warsztatSamochodowy.Utils;
 
 namespace warsztatSamochodowy.Controllers
 {
-    [Authorize(Roles = "manager")]
+    //[Authorize(Roles = "manager")]
     public class ProposalsController : Controller
     {
         private ProposalRepository proposalRepository = new ProposalRepository();

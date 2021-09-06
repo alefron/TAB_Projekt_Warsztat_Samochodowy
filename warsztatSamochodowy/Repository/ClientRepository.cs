@@ -45,5 +45,17 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(GetAllClientsAsync).Result;
         }
 
+        public async Task<Client> getClientByIdAsync(int id)
+        {
+            return await context.Clients
+                .Where((client) => client.Id == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public Client getClientById(int id)
+        {
+            return Task.Run(() => { return getClientByIdAsync(id); }).Result;
+        }
+
     }
 }
