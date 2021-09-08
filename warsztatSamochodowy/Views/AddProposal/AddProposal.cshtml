@@ -165,11 +165,11 @@
                         @{
                             if (Model[0].is_editable)
                             {
-                                <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" value="true" name="addAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia.">dodaj akcję</button>
+                                <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" value=@Model[0].proposal.Id name="proposalIdAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia.">dodaj akcję</button>
                             }
                             else
                             {
-                                <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" value="true" name="addAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia." disabled>dodaj akcję</button>
+                                <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" value=-1 name="proposalIdAction" id="addAction" onclick="onAddActionClicked()" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="spowoduje zapisanie stanu zlecenia." disabled>dodaj akcję</button>
                             }
                         }
                     </div>
@@ -240,11 +240,11 @@
             @{
                 if (Model[0].is_editable)
                 {
-                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit">Zapisz</button>
+                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id>Zapisz</button>
                 }
                 else
                 {
-                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" disabled>Zapisz</button>
+                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=-1 disabled>Zapisz</button>
                 }
             }
             <button asp-controller="Proposals" asp-action="ProposalList" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>

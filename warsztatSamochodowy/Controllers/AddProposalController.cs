@@ -35,15 +35,27 @@ namespace warsztatSamochodowy.Controllers
         }
 
         [HttpGet("AddProposal/AddProposalToDb")]
-        public IActionResult AddProposalToDb(string client, string vehicle, string description, string result, string addAction)
+        public IActionResult AddProposalToDb(string client, string vehicle, string description, string result, int proposalId, int proposalIdAction)
         {
             if (client != null && vehicle != null && description != null)
             {
                 var managerId = User.Claims.Where(c => c.Type == CustomClaims.Identifier)
-                .Select(c => c.Value).SingleOrDefault();
-                int newProposalId = proposalRepository.AddProposal(vehicle, description, Int32.Parse(managerId));
-
-                if (addAction != null)
+                                        .Select(c => c.Value).SingleOrDefault();
+                int newProposalId = 0;
+                if (proposalId == -1 || proposalIdAction == -1)
+                { 
+                    newProposalId = proposalRepository.AddProposal(vehicle, description, Int32.Parse(managerId));
+                }
+                else
+                {
+                    if (proposalId == 0)
+                    {
+                        proposalId = proposalIdAction;
+                    }
+                    newProposalId = proposalRepository.UpdateProposal(vehicle, description, result, Int32.Parse(managerId), proposalId);
+                }
+               
+                if (proposalIdAction != 0)
                 {
                     return RedirectToAction("addAction", "Action", new { proposalId = newProposalId});
                 }
