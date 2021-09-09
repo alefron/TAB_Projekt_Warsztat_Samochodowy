@@ -121,11 +121,14 @@ namespace warsztatSamochodowy.Controllers
                         if ((proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING) && status == "w trakcie naprawy")
                         {
                             vehiclesFiltered.Add(vehicle);
+                            break;
                         }
                         else if ((proposal.Status == StatusEnum.CANCELED || proposal.Status == StatusEnum.FINAL) && status == "dawniej naprawiane")
                         {
                             vehiclesFiltered.Add(vehicle);
+                            break;
                         }
+                        break;
                     }
                 }
                 modelFiltered.Add(new FormVehicles(brands, vehiclesFiltered, clients));

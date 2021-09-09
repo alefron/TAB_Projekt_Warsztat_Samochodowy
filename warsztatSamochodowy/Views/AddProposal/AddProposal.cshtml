@@ -2,6 +2,9 @@
     @Model FormAddEditProposal
 </div>
 @using System.Net.Http
+@using System.Web.Helpers
+@using System.Text.Json;
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -30,7 +33,7 @@
 
 <body>
 
-   <form id="addProposalForm">
+    <form id="addProposalForm">
         <div class="element-add">
             <h1>Klient: </h1>
             <div class="dropdown" style="margin-right: 30px;">
@@ -39,14 +42,7 @@
                     @{
                         if (Model[0].is_editable)
                         {
-                            if (Model[0].client.FirstName != null)
-                            {
-                                <option data-ref=@Model[0].client.Id selected>@Model[0].client.FirstName @Model[0].client.LastName</option>
-                            }
-                            else
-                            {
-                                <option data-ref=@Model[0].client.Id selected>@Model[0].client.CompanyName</option>
-                            }
+                            <option value="-1" disabled>wybierz klienta</option>
                         }
                         else
                         {
@@ -57,17 +53,31 @@
                         {
                             if (client.CompanyName == null)
                             {
-                                <option data-ref=@client.Id>@client.FirstName @client.LastName</option>
+                                if (Model[0].client.FirstName == client.FirstName && Model[0].client.LastName == client.LastName)
+                                {
+                                    <option data-ref=@client.Id selected>@client.FirstName @client.LastName</option>
+                                }
+                                else
+                                {
+                                    <option data-ref=@client.Id>@client.FirstName @client.LastName</option>
+                                }
                             }
                             else
                             {
-                                <option data-ref=@client.Id>@client.CompanyName</option>
+                                if (Model[0].client.CompanyName == client.CompanyName)
+                                {
+                                    <option data-ref=@client.Id selected>@client.CompanyName</option>
+                                }
+                                else
+                                {
+                                    <option data-ref=@client.Id>@client.CompanyName</option>
+                                }
                             }
                         }
                     }
                 </select>
             </div>
-                <button asp-controller="AddClient" asp-action="AddClient" method="get" class="btn add-button" type="submit" value="/AddProposal/AddProposal" name="returnUrl"> <i class="fas fa-plus" style="color: black"></i></button>
+            <button asp-controller="AddClient" asp-action="AddClient" method="get" class="btn add-button" type="submit" value="/AddProposal/AddProposal" name="returnUrl"> <i class="fas fa-plus" style="color: black"></i></button>
         </div>
 
         <div class="element-add">
@@ -77,7 +87,6 @@
                     @{
                         if (Model[0].is_editable)
                         {
-                            <option data-belong=@Model[0].vehicle.ClientId selected>@Model[0].vehicle.RegNumber</option>
                             <option value="-1" disabled>wybierz pojazd</option>
                         }
                         else
@@ -87,12 +96,19 @@
 
                         foreach (var vehicle in Model[0].vehicles)
                         {
-                            <option data-belong=@vehicle.ClientId>@vehicle.RegNumber</option>
+                            if (Model[0].is_editable && Model[0].vehicle.RegNumber == vehicle.RegNumber)
+                            {
+                                <option data-belong=@vehicle.ClientId selected>@vehicle.RegNumber</option>
+                            }
+                            else
+                            {
+                                <option data-belong=@vehicle.ClientId>@vehicle.RegNumber</option>
+                            }
                         }
                     }
                 </select>
             </div>
-                <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" value="/AddProposal/AddProposal" name="returnUrl" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
+            <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" value="/AddProposal/AddProposal" name="returnUrl" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
         </div>
 
 
@@ -215,7 +231,7 @@
                                                                     {
                                                                         <span class='circle circle-red'></span>
                                                                     }
-                                                                        <div class="action-table-button"><button asp-controller="AddAction" asp-action="AddAction" method="get" class="btn btn-red" name="actionId" value="act.Id">Edytuj</button></div>
+                                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="AddAction" method="get" class="btn btn-red" name="actionId" value="act.Id">Edytuj</button></div>
                                                                 </div>
 
                                                             </div>
@@ -252,7 +268,7 @@
 
 
     </form>
-    
+
 
     <script>
         $(document).ready(function () {
@@ -278,9 +294,11 @@
                 else {
                     $("#addAction").prop("disabled", !0);
                     $("#saveButton").prop("disabled", !0);
-                }                    
+                }
             });
         });
+
+
     </script>
 
 

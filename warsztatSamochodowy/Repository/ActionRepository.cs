@@ -107,6 +107,8 @@ namespace warsztatSamochodowy.Repository
              SELECT * FROM Actions AS A
              JOIN Personel AS P
              ON A.WorkerId = P.Id
+             JOIN ActionType
+             ON ActionType.CodeAction = A.ActionTypeId
              */
 
 
