@@ -52,6 +52,10 @@ namespace warsztatSamochodowy.Controllers
                     {
                         proposalId = proposalIdAction;
                     }
+                    if (result == "Aby wpisać rezultat, ustaw stan zlecenia na \"zakończone\".")
+                    {
+                        result = null;
+                    }
                     newProposalId = proposalRepository.UpdateProposal(vehicle, description, result, Int32.Parse(managerId), proposalId);
                 }
                

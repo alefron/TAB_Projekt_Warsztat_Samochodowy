@@ -18,7 +18,7 @@ namespace warsztatSamochodowy.Forms
 
         public Proposal proposal { get; set; } = new Proposal();
         public List<Models.Action> actions { get; set; } = new List<Models.Action>();
-        public Models.Action action { get; set; }
+        public Models.Action action { get; set; } = new Models.Action();
         public Vehicle vehicle { get; set; } = new Vehicle();
         public Client client { get; set; } = new Client();
         public bool is_editable { get; set; }

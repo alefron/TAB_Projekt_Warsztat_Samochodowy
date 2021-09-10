@@ -27,7 +27,33 @@ namespace warsztatSamochodowy.Repository
             base.dbSet = context.Actions;
         }
 
+        public async Task<int> AddActionAsync(int proposalId, string type, int worker, int sequenceNumber, string description)
+        {
+            Models.Action action = new Models.Action
+            {
+                SequenceNumber = sequenceNumber,
+                Description = description,
+                Status = StatusEnum.OPEN,
+                StartDate = DateTime.Now,
+                WorkerId = worker,
+                ProposalId = proposalId,
+                ActionTypeId = type
+            };
 
+            context.Add<Models.Action>(action);
+            await context.SaveChangesAsync();
+
+            int newId = action.Id;
+
+            return newId;
+        }
+
+        public int AddAction(int proposalId, string type, int worker, int sequenceNumber, string description)
+        {
+            Task<int> t = Task.Run(() => { return AddActionAsync(proposalId, type, worker, sequenceNumber, description); });
+            var res = t.Result;
+            return t.Result;
+        }
 
         public async Task<List<Models.Action>> GetActionsForWorkerAsync(int WorkerId)
         {
@@ -88,9 +114,6 @@ namespace warsztatSamochodowy.Repository
 
             return actionList;
         }
-
-
-
 
 
 
@@ -170,9 +193,31 @@ namespace warsztatSamochodowy.Repository
 
         public async Task<List<Models.Action>> GetActionsForProposalAsync(int proposalId)
         {
-            return await context.Actions
-                .Where(action => action.ProposalId == proposalId)
+            var queryResult = await context.Actions
+                .Where((action) => action.ProposalId == proposalId)
+                .Join(
+                    context.ActionTypes,
+                    action => action.ActionTypeId,
+                    type => type.CodeAction,
+                    (action, type) => new ActionsQuery
+                    {
+                        action = action,
+                        actionType = type
+                    }
+                )
                 .ToListAsync();
+
+            List<Models.Action> actionList = new List<Models.Action>();
+
+            foreach (var queryItem in queryResult)
+            {
+                var action = queryItem.action;
+                action.ActionType = queryItem.actionType;
+                actionList.Add(action);
+
+            }
+
+            return actionList;
         }
 
 
