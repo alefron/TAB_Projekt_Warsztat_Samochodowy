@@ -38,7 +38,7 @@
             <h1>Klient: </h1>
             <div class="dropdown" style="margin-right: 30px;">
 
-                <select class="form-control SelectFilter mdb-select md-form formElement" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="client">
+                <select class="form-control SelectFilter mdb-select md-form formElementAddProposal" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="client">
                     @{
                         if (Model[0].is_editable)
                         {
@@ -83,7 +83,7 @@
         <div class="element-add">
             <h1>Pojazd: </h1>
             <div class="dropdown" style="margin-right: 30px;">
-                <select class="form-control vehicleDropdown SelectFilter mdb-select md-form dropdown formElement" name="vehicle" value="" searchable="Search here.." id="vehicle">
+                <select class="form-control vehicleDropdown SelectFilter mdb-select md-form dropdown formElementAddProposal" name="vehicle" value="" searchable="Search here.." id="vehicle">
                     @{
                         if (Model[0].is_editable)
                         {
@@ -231,7 +231,7 @@
                                                                     {
                                                                         <span class='circle circle-red'></span>
                                                                     }
-                                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="AddAction" method="get" class="btn btn-red" name="actionId" value="act.Id">Edytuj</button></div>
+                                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="editAction" method="get" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
                                                                 </div>
 
                                                             </div>

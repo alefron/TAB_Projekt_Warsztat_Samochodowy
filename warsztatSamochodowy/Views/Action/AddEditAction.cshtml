@@ -36,44 +36,50 @@
         if (Model[0].is_editable)
         {
             <div class="element">
-                <h1>Nazwa akcji: </h1>
-                <h4>@Model[0].action.Name</h4>
+                <h1>Nazwa akcji: @Model[0].action.ActionType.Name</h1>
             </div>
         }
     }
-<div class="element-add">
-    <h1>Typ akcji: </h1>
-    <div class="dropdown">
-        <select class="form-control typeDropdown SelectFilter mdb-select md-form dropdown formElement" name="type" value="" searchable="Search here.." id="type">
-            @{
-                if (Model[0].is_editable)
-                {
-                    <option selected>@Model[0].action.ActionType.Name</option>
-                    <option value="-1" disabled>wybierz typ akcji</option>
-                }
-                else
-                {
-                    <option value="-1" disabled selected>wybierz typ akcji</option>
-                }
 
-                foreach (var type in Model[0].types)
-                {
-                    <option>@type.Name</option>
-                }
-            }
-        </select>
-
-    </div>
-
-</div>
+<form id="addEditActionForm">
     <div class="element-add">
-        <h1>Pracownik: </h1>
+        <h1>Typ akcji: </h1>
         <div class="dropdown">
-            <select class="form-control workerDropdown SelectFilter mdb-select md-form dropdown formElement" name="worker" value="" searchable="Search here.." id="worker">
+            <select class="form-control typeDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="type" value="" searchable="Search here.." id="type">
                 @{
                     if (Model[0].is_editable)
                     {
-                        <option selected>@Model[0].action.WorkerId</option>
+                        <option value="-1" disabled>wybierz typ akcji</option>
+                    }
+                    else
+                    {
+                        <option value="-1" disabled selected>wybierz typ akcji</option>
+                    }
+
+                    foreach (var type in Model[0].types)
+                    {
+                        if (Model[0].is_editable && Model[0].action.ActionType.CodeAction == type.CodeAction)
+                        {
+                            <option value="@type.CodeAction" selected>@type.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@type.CodeAction">@type.Name</option>
+                        }
+                    }
+                }
+            </select>
+
+        </div>
+
+    </div>
+    <div class="element-add">
+        <h1>Pracownik: </h1>
+        <div class="dropdown">
+            <select class="form-control workerDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="worker" value="" searchable="Search here.." id="worker">
+                @{
+                    if (Model[0].is_editable)
+                    {
                         <option value="-1" disabled>przypisz pracownika</option>
                     }
                     else
@@ -83,7 +89,14 @@
 
                     foreach (var worker in Model[0].workers)
                     {
-                        <option>@worker.FirstName @worker.LastName</option>
+                        if (Model[0].is_editable && Model[0].action.WorkerId == worker.Id)
+                        {
+                            <option value="@worker.Id" selected>@worker.FirstName @worker.LastName</option>
+                        }
+                        else
+                        {
+                            <option value="@worker.Id">@worker.FirstName @worker.LastName</option>
+                        }
                     }
                 }
             </select>
@@ -94,11 +107,11 @@
     <div class="element-add">
         <h1>Wykonaj po: </h1>
         <div class="dropdown">
-            <select class="form-control sequenceDropdown SelectFilter mdb-select md-form dropdown formElement" name="sequenceNumber" value="" searchable="Search here.." id="sequenceNumber">
+            <select class="form-control sequenceDropdown SelectFilter mdb-select md-form dropdown" name="sequenceNumber" value="" searchable="Search here.." id="sequenceNumber">
                 @{
-                    if (Model[0].is_editable && Model[0].action.SequenceNumber != 0)
+                    warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
+                    if (Model[0].is_editable && Model[0].action.SequenceNumber != null)
                     {
-                        warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
                         foreach (var act in Model[0].actions)
                         {
                             if (act.SequenceNumber == Model[0].action.SequenceNumber)
@@ -106,24 +119,30 @@
                                 actionBefore = act;
                             }
                         }
-                        <option selected>@actionBefore.ActionType.Name</option>
-                        <option value="-1" disabled>wykonaj po</option>
+                        <option value="-1">wykonaj po</option>
                     }
                     else
                     {
-                        <option value="-1" disabled selected>wykonaj po</option>
+                        <option value="-1" selected>wykonaj po</option>
                     }
 
                     foreach (var action in Model[0].actions)
                     {
-                        <option>@action.ActionType.Name</option>
+                        if (Model[0].is_editable && action.SequenceNumber != null && actionBefore.SequenceNumber != null && actionBefore.SequenceNumber == action.SequenceNumber)
+                        {
+                            <option value="@action.Id" selected>@action.ActionType.Name</option>
+
+                        }
+                        else
+                        {
+                            <option value="@action.Id">@action.ActionType.Name</option>
+                        }
                     }
                 }
             </select>
         </div>
 
     </div>
-    <br>
     <br>
     <br>
 
@@ -133,28 +152,72 @@
                 <h1>Opis: </h1>
             </div>
             <div class='proposal-card'>
-                <textarea rows="5" cols="58" id="opisZlogszenia" name="opisZgloszenia" placeholder="Wnosze o uzyczenie Stefana Tobiasiewicza na jedna noc do pokoju 218, placone z g�ry przelewem"> </textarea>
+                @{
+                    if (!Model[0].is_editable)
+                    {
+                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
+                    }
+                    else
+                    {
+                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].action.Description">@Model[0].action.Description</textarea>
+                    }
+                }
             </div>
         </div>
-        <div class='my-column'>
-            <div class='element'>
-                <h1>Rezultat: </h1>
-            </div>
-            <div class='proposal-card'>
-                <p>jakis teskt ciekawe czy zadziala adasdasdasdasdasdasdsdasdsadasdsdsad</p>
-            </div>
-        </div>
+        @{
+            if (Model[0].action.Result != null)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].action.Result">@Model[0].action.Result</textarea>
+                    </div>
+                </div>
+            }
+            else if (Model[0].action.Status == StatusEnum.FINAL)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
+                    </div>
+                </div>
+            }
+            else if (Model[0].is_editable)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
+                    </div>
+                </div>
+            }
+        }
     </div>
     <br />
     <br />
-
-
 
 
     <div class="save-cancel">
-        <button class="save-button">Zapisz</button>
-        <button class="cancel-button">Anuluj</button>
+        @{
+            if (Model[0].is_editable)
+            {
+                <button asp-controller="Action" asp-action="UpdateProposalInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
+            }
+            else
+            {
+                <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
+            }
+        }
+        <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
     </div>
+</form>
 
 </body>
 
