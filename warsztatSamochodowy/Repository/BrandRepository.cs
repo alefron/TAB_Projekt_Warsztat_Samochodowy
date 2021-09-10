@@ -16,7 +16,18 @@ namespace warsztatSamochodowy.Repository
             dbSet = context.Brands;
         }
 
+        public async Task<Brand> GetByIDAsync(string id)
+        {
 
+            return await context.Brands
+                .Where((brand) => brand.CodeBrand == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public Brand GetByID(string id)
+        {
+            return Task.Run(() => { return GetByIDAsync(id); }).Result;
+        }
 
 
 

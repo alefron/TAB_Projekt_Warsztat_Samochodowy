@@ -108,7 +108,17 @@
                     }
                 </select>
             </div>
-            <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" value="/AddProposal/AddProposal" name="returnUrl" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
+            @{
+                if (Model[0].is_editable)
+                {
+                    <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" asp-route-propasalId="@Model[0].proposal.Id" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
+                }
+                else
+                {
+                    <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" type="submit" asp-route-propasalId="0" class="btn add-button"> <i class="fas fa-plus" style="color: black"></i></button>
+                }
+
+            }
         </div>
 
 
