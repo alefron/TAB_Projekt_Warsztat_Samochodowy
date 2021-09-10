@@ -138,15 +138,15 @@
 }
 
 .action-table-button {
-    background: #f1d56f !important;
     width: 55%;
     height: 70%;
-    outline: 1px solid black;
     background: none;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 50px;
+    margin-bottom: 7px;
+    margin-top: 7px;
 }
 .action-table-button a{
     text-decoration: none;

@@ -2,6 +2,7 @@
 <div style="color: transparent;">
     @Model FormAddEditAction
 </div>
+@using System.Net.Http
 <!doctype html>
 <html lang="en">
 <head>
@@ -41,183 +42,219 @@
         }
     }
 
-<form id="addEditActionForm">
-    <div class="element-add">
-        <h1>Typ akcji: </h1>
-        <div class="dropdown">
-            <select class="form-control typeDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="type" value="" searchable="Search here.." id="type">
-                @{
-                    if (Model[0].is_editable)
-                    {
-                        <option value="-1" disabled>wybierz typ akcji</option>
-                    }
-                    else
-                    {
-                        <option value="-1" disabled selected>wybierz typ akcji</option>
-                    }
-
-                    foreach (var type in Model[0].types)
-                    {
-                        if (Model[0].is_editable && Model[0].action.ActionType.CodeAction == type.CodeAction)
+    <form id="addEditActionForm">
+        <div class="element-add">
+            <h1>Typ akcji: </h1>
+            <div class="dropdown">
+                <select class="form-control typeDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="type" value="" searchable="Search here.." id="type">
+                    @{
+                        if (Model[0].is_editable)
                         {
-                            <option value="@type.CodeAction" selected>@type.Name</option>
+                            <option value="-1" disabled>wybierz typ akcji</option>
                         }
                         else
                         {
-                            <option value="@type.CodeAction">@type.Name</option>
+                            <option value="-1" disabled selected>wybierz typ akcji</option>
                         }
-                    }
-                }
-            </select>
 
-        </div>
-
-    </div>
-    <div class="element-add">
-        <h1>Pracownik: </h1>
-        <div class="dropdown">
-            <select class="form-control workerDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="worker" value="" searchable="Search here.." id="worker">
-                @{
-                    if (Model[0].is_editable)
-                    {
-                        <option value="-1" disabled>przypisz pracownika</option>
-                    }
-                    else
-                    {
-                        <option value="-1" disabled selected>przypisz pracownika</option>
-                    }
-
-                    foreach (var worker in Model[0].workers)
-                    {
-                        if (Model[0].is_editable && Model[0].action.WorkerId == worker.Id)
+                        foreach (var type in Model[0].types)
                         {
-                            <option value="@worker.Id" selected>@worker.FirstName @worker.LastName</option>
-                        }
-                        else
-                        {
-                            <option value="@worker.Id">@worker.FirstName @worker.LastName</option>
-                        }
-                    }
-                }
-            </select>
-
-        </div>
-
-    </div>
-    <div class="element-add">
-        <h1>Wykonaj po: </h1>
-        <div class="dropdown">
-            <select class="form-control sequenceDropdown SelectFilter mdb-select md-form dropdown" name="sequenceNumber" value="" searchable="Search here.." id="sequenceNumber">
-                @{
-                    warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
-                    if (Model[0].is_editable && Model[0].action.SequenceNumber != null)
-                    {
-                        foreach (var act in Model[0].actions)
-                        {
-                            if (act.Id == Model[0].action.SequenceNumber)
+                            if (Model[0].is_editable && Model[0].action.ActionType.CodeAction == type.CodeAction)
                             {
-                                actionBefore = act;
+                                <option value="@type.CodeAction" selected>@type.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@type.CodeAction">@type.Name</option>
                             }
                         }
-                        <option value="-1">wykonaj po</option>
                     }
-                    else
-                    {
-                        <option value="-1" selected>wykonaj po</option>
-                    }
+                </select>
 
-                    foreach (var action in Model[0].actions)
-                    {
-                        if (Model[0].is_editable && actionBefore.Id != 0 && actionBefore.Id == action.Id)
+            </div>
+
+        </div>
+        <div class="element-add">
+            <h1>Pracownik: </h1>
+            <div class="dropdown">
+                <select class="form-control workerDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="worker" value="" searchable="Search here.." id="worker">
+                    @{
+                        if (Model[0].is_editable)
                         {
-                            <option value="@action.Id" selected>@action.Description</option>
-
+                            <option value="-1" disabled>przypisz pracownika</option>
                         }
                         else
                         {
-                            <option value="@action.Id">@action.Description</option>
+                            <option value="-1" disabled selected>przypisz pracownika</option>
+                        }
+
+                        foreach (var worker in Model[0].workers)
+                        {
+                            if (Model[0].is_editable && Model[0].action.WorkerId == worker.Id)
+                            {
+                                <option value="@worker.Id" selected>@worker.FirstName @worker.LastName</option>
+                            }
+                            else
+                            {
+                                <option value="@worker.Id">@worker.FirstName @worker.LastName</option>
+                            }
                         }
                     }
-                }
-            </select>
-        </div>
+                </select>
 
-    </div>
-    <br>
-    <br>
-
-    <div class='my-row'>
-        <div class='my-column'>
-            <div class='element'>
-                <h1>Opis: </h1>
             </div>
-            <div class='proposal-card'>
-                @{
-                    if (!Model[0].is_editable)
-                    {
-                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
-                    }
-                    else
-                    {
-                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].action.Description">@Model[0].action.Description</textarea>
-                    }
-                }
-            </div>
+
         </div>
-        @{
-            if (Model[0].action.Result != null)
-            {
-                <div class='my-column'>
-                    <div class='element'>
-                        <h1>Rezultat: </h1>
-                    </div>
-                    <div class='proposal-card'>
-                        <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].action.Result">@Model[0].action.Result</textarea>
-                    </div>
+        <div class="element-add">
+            <h1>Wykonaj po: </h1>
+            <div class="dropdown">
+                <select class="form-control sequenceDropdown SelectFilter mdb-select md-form dropdown" name="sequenceNumber" value="" searchable="Search here.." id="sequenceNumber">
+                    @{
+                        warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
+                        if (Model[0].is_editable && Model[0].action.SequenceNumber != null)
+                        {
+                            foreach (var act in Model[0].actions)
+                            {
+                                if (act.Id == Model[0].action.SequenceNumber)
+                                {
+                                    actionBefore = act;
+                                }
+                            }
+                            <option value="-1">wykonaj po</option>
+                        }
+                        else
+                        {
+                            <option value="-1" selected>wykonaj po</option>
+                        }
+
+                        foreach (var action in Model[0].actions)
+                        {
+                            if (Model[0].is_editable && actionBefore.Id != 0 && actionBefore.Id == action.Id)
+                            {
+                                <option value="@action.Id" selected>@action.Description</option>
+
+                            }
+                            else if (!Model[0].is_editable || Model[0].action.Id != action.Id)
+                            {
+                                string isOk = "true";
+                                if (Model[0].is_editable)
+                                {
+                                    var url = "https://localhost:44323/Action/isSequenceNumberOk?sequenceNumber=" + action.Id + "&actionId=" + Model[0].action.Id;
+                                    isOk = await httpRequest(url);
+                                }
+                                if (isOk == "true")
+                                {
+                                    <option value="@action.Id">@action.Description</option>
+                                }
+                                else
+                                {
+                                    <option value="@action.Id" disabled>@action.Description</option>
+                                }
+                            }
+                        }
+                    }
+                </select>
+            </div>
+
+        </div>
+        <br>
+        <br>
+
+        <div class='my-row'>
+            <div class='my-column'>
+                <div class='element'>
+                    <h1>Opis: </h1>
                 </div>
-            }
-            else if (Model[0].action.Status == StatusEnum.FINAL)
-            {
-                <div class='my-column'>
-                    <div class='element'>
-                        <h1>Rezultat: </h1>
-                    </div>
-                    <div class='proposal-card'>
-                        <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
-                    </div>
+                <div class='proposal-card'>
+                    @{
+                        if (!Model[0].is_editable)
+                        {
+                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
+                        }
+                        else
+                        {
+                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].action.Description">@Model[0].action.Description</textarea>
+                        }
+                    }
                 </div>
-            }
-            else if (Model[0].is_editable)
-            {
-                <div class='my-column'>
-                    <div class='element'>
-                        <h1>Rezultat: </h1>
+            </div>
+            @{
+                if (Model[0].action.Result != null)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].action.Result">@Model[0].action.Result</textarea>
+                        </div>
                     </div>
-                    <div class='proposal-card'>
-                        <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
+                }
+                else if (Model[0].action.Status == StatusEnum.FINAL)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
+                        </div>
                     </div>
-                </div>
+                }
+                else if (Model[0].is_editable)
+                {
+                    <div class='my-column'>
+                        <div class='element'>
+                            <h1>Rezultat: </h1>
+                        </div>
+                        <div class='proposal-card'>
+                            <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
+                        </div>
+                    </div>
+                }
             }
-        }
-    </div>
-    <br />
-    <br />
+        </div>
+        <br />
+        <br />
 
 
-    <div class="save-cancel">
-        @{
-            if (Model[0].is_editable)
-            {
-                <button asp-controller="Action" asp-action="UpdateActionInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
+        <div class="save-cancel">
+            @{
+                if (Model[0].is_editable)
+                {
+                    <button asp-controller="Action" asp-action="UpdateActionInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
+                }
+                else
+                {
+                    <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
+                }
             }
-            else
-            {
-                <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
-            }
-        }
-        <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
-    </div>
-</form>
+            <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
+        </div>
+    </form>
 
 </body>
+
+@{
+    async Task<string> httpRequest(string url)
+    {
+        var uri = new Uri(url);
+
+        var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.CookieContainer = new System.Net.CookieContainer();
+        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+        var clinet = new HttpClient(handler);
+
+        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+        var response = await clinet.GetAsync(uri);
+        string textResult = await response.Content.ReadAsStringAsync();
+
+        return textResult;
+    }
+
+}
 

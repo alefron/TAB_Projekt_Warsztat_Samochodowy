@@ -46,7 +46,8 @@ namespace warsztatSamochodowy.Controllers
             return RedirectToAction("addProposal", "AddProposal", new { proposalId = updatedAction.ProposalId });
         }
 
-        bool isSequenceNumberOk(int sequenceNumber, int proposalId, int actionId)
+        [HttpGet("Action/isSequenceNumberOk")]
+        public bool isSequenceNumberOk(int sequenceNumber, int actionId)
         {
             int nextActionId = sequenceNumber;
             while (nextActionId != 0)
@@ -54,7 +55,7 @@ namespace warsztatSamochodowy.Controllers
                 Models.Action a = actionRepository.GetActionById(nextActionId);
                 if (a.SequenceNumber != actionId)
                 {
-                    if (a.SequenceNumber != 0)
+                    if (a.SequenceNumber != null && a.SequenceNumber != -1)
                     {
                         nextActionId = (int)a.SequenceNumber;
                     }
