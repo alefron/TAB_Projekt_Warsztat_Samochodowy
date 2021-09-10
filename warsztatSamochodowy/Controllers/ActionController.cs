@@ -39,6 +39,13 @@ namespace warsztatSamochodowy.Controllers
             return RedirectToAction("addProposal", "AddProposal", new { proposalId = proposalId });
         }
 
+        public IActionResult UpdateActionInDb(int actionId, string type, int worker, int sequenceNumber, string description, string result)
+        {
+            int insertActionId = actionRepository.UpdateAction(actionId, type, worker, sequenceNumber, description, result);
+            Models.Action updatedAction = actionRepository.GetActionById(insertActionId);
+            return RedirectToAction("addProposal", "AddProposal", new { proposalId = updatedAction.ProposalId });
+        }
+
         bool isSequenceNumberOk(int sequenceNumber, int proposalId, int actionId)
         {
             int nextActionId = sequenceNumber;

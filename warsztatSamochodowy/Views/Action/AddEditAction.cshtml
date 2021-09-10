@@ -114,7 +114,7 @@
                     {
                         foreach (var act in Model[0].actions)
                         {
-                            if (act.SequenceNumber == Model[0].action.SequenceNumber)
+                            if (act.Id == Model[0].action.SequenceNumber)
                             {
                                 actionBefore = act;
                             }
@@ -128,14 +128,14 @@
 
                     foreach (var action in Model[0].actions)
                     {
-                        if (Model[0].is_editable && action.SequenceNumber != null && actionBefore.SequenceNumber != null && actionBefore.SequenceNumber == action.SequenceNumber)
+                        if (Model[0].is_editable && actionBefore.Id != 0 && actionBefore.Id == action.Id)
                         {
-                            <option value="@action.Id" selected>@action.ActionType.Name</option>
+                            <option value="@action.Id" selected>@action.Description</option>
 
                         }
                         else
                         {
-                            <option value="@action.Id">@action.ActionType.Name</option>
+                            <option value="@action.Id">@action.Description</option>
                         }
                     }
                 }
@@ -208,7 +208,7 @@
         @{
             if (Model[0].is_editable)
             {
-                <button asp-controller="Action" asp-action="UpdateProposalInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
+                <button asp-controller="Action" asp-action="UpdateActionInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
             }
             else
             {

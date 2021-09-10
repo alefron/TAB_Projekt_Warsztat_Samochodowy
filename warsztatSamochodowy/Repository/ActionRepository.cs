@@ -33,7 +33,7 @@ namespace warsztatSamochodowy.Repository
             {
                 SequenceNumber = sequenceNumber,
                 Description = description,
-                Status = StatusEnum.OPEN,
+                Status = (int)StatusEnum.OPEN,
                 StartDate = DateTime.Now,
                 WorkerId = worker,
                 ProposalId = proposalId,
@@ -51,6 +51,31 @@ namespace warsztatSamochodowy.Repository
         public int AddAction(int proposalId, string type, int worker, int sequenceNumber, string description)
         {
             Task<int> t = Task.Run(() => { return AddActionAsync(proposalId, type, worker, sequenceNumber, description); });
+            var res = t.Result;
+            return t.Result;
+        }
+
+        public async Task<int> UpdateActionAsync(int actionId, string type, int worker, int sequenceNumber, string description, string result)
+        {
+            Models.Action toUpdate = this.GetActionById(actionId);
+            toUpdate.SequenceNumber = sequenceNumber;
+            toUpdate.Description = description;
+            toUpdate.Result = result;
+            toUpdate.WorkerId = worker;
+            toUpdate.ActionTypeId = type;
+
+
+            context.Update<Models.Action>(toUpdate);
+            await context.SaveChangesAsync();
+
+            int newId = toUpdate.Id;
+
+            return newId;
+        }
+
+        public int UpdateAction(int actionId, string type, int worker, int sequenceNumber, string description, string result)
+        {
+            Task<int> t = Task.Run(() => { return UpdateActionAsync(actionId, type, worker, sequenceNumber, description, result); });
             var res = t.Result;
             return t.Result;
         }
