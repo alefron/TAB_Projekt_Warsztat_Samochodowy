@@ -1,7 +1,7 @@
-﻿@{
-    var returnUrl = ViewData["ReturnUrl"] as string;
-}
-
+﻿
+<div style="color: transparent;">
+    @Model FormAddEditProposal
+</div>
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,24 +18,28 @@
 
 <body>
 
-    <form action="/AddVehicle?returnUrl=@System.Net.WebUtility.UrlEncode(returnUrl)" method="post">
-
-        <div class="element-add">
-            <h1>Pojazd: </h1>
-            <input type="text" name="vehicleName" value="" placeholder="..." />
-        </div>
+    <form id="addEdtVehilcle">
+        @{
+            if (Model[0].is_editable)
+            {
+                <div class="element-add">
+                    <h1>Pojazd: </h1>
+                    <h4>Model[0].vehicle.RegNumber + " " + Model[0].vehicle.Name</h4>
+                </div>
+            }
+        }
         <div class="element-add">
             <h1>Marka: </h1>
             <div class="dropdown">
-                <button type="button" class="btn my-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Wybierz marke
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" name="brand">
-                    <li><input type="submit" class="dropdown-item" value="Nazwa1" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa2" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa3" /></li>
-                </ul>
+                <select class="form-control SelectFilter mdb-select md-form formElement" name="brand" value="" data-target="vehicleDropdown" searchable="Search here.." id="Brand">
+                    @{
+                        <option value="-1" selected disabled>Wybierz markę</option>
+                        foreach (var brand in Model[0].brands)
+                        {
+                            <option value="@brand.CodeBrand" >@brand.Name</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
 
@@ -48,15 +52,15 @@
         <div class="element-add">
             <h1>Typ pojazdu: </h1>
             <div class="dropdown">
-                <button type="button" class="btn my-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Wybierz typ
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" name="type">
-                    <li><input type="submit" class="dropdown-item" value="Nazwa1" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa2" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa3" /></li>
-                </ul>
+                <select class="form-control SelectFilter mdb-select md-form formElement" name="type" value="" data-target="vehicleDropdown" searchable="Search here.." id="Type">
+                    @{
+                        <option value="-1" selected disabled>Wybierz typ</option>
+                        foreach (var type in Model[0].vehicleTypes)
+                        {
+                            <option value="@type.CodeType">@type.Name</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
 
@@ -64,15 +68,15 @@
         <div class="element-add">
             <h1>Wlasciciel: </h1>
             <div class="dropdown">
-                <button type="button" class="btn my-dropdown dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Wybierz wlasciciela
-                </button>
-
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" name="owner">
-                    <li><input type="submit" class="dropdown-item" value="Nazwa1" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa2" /></li>
-                    <li><input type="submit" class="dropdown-item" value="Nazwa3" /></li>
-                </ul>
+                <select class="form-control SelectFilter mdb-select md-form formElement" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="Owner">
+                    @{
+                        <option value="-1" selected disabled >Wybierz klijenta</option>
+                        foreach (var client in Model[0].clients)
+                        {
+                            <option value="@client.Id">>@client.FirstName @client.LastName</option>
+                        }
+                    }
+                </select>
             </div>
 
         </div>
@@ -80,8 +84,9 @@
         <br />
         <br />
         <div class="save-cancel">
-            <button class="save-button" name="action" type="submit" value="save">Zapisz</button>
-            <button class="cancel-button" name="action" type="submit" value="cancel">Anuluj</button>
+            <button asp-controller="AddVehicle" asp-action="AddVehicleToDB" method="get" class="btn save-button" id="saveButton" type="submit" name ="propasalId" value="@Model[0].proposalId">Zapisz</button>
+
+            <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" >Anuluj</button>
         </div>
     </form>
 </body>
