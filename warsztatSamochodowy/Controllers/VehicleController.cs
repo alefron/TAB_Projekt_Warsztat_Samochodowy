@@ -218,7 +218,7 @@ namespace warsztatSamochodowy.Controllers
             this.vehicles = vehicleRepository.GetJoinedVehicles();
             this.model = new List<FormVehicles>();
             this.model.Add(new FormVehicles(this.brands, this.vehicles, this.clients));
-            return View("vehicleList", model);
+            return RedirectToAction("VehicleList", "Vehicle");
         }
 
         /*[HttpPost("/Vehicle/vehicleList")]

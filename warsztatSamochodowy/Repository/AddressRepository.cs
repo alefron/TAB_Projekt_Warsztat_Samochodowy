@@ -14,7 +14,17 @@ namespace warsztatSamochodowy.Repository
             base.dbSet = context.Addresses;
         }
 
+        public async Task<Address> GetAddressByIdAsync(int addressId)
+        {
+            return await context.Addresses
+                .Where((address) => address.Id == addressId)
+                .FirstOrDefaultAsync();
+        }
 
+        public Address GetAddressById(int addressId)
+        {
+            return Task.Run(() => { return GetAddressByIdAsync(addressId); }).Result;
+        }
 
         public async Task<Address> GetMatchcingAddressAwait(Address address)
         {

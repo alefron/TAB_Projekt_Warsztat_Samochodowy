@@ -1,0 +1,254 @@
+﻿<div style="color: transparent;">
+    @Model FormShowClient
+</div>
+@using System.Net.Http
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
+</head>
+
+<body>
+    @{
+        var isCompany = true;
+        if (Model[0].client.CompanyName == null)
+        {
+            isCompany = false;
+        }
+    }
+
+
+    @{
+        if (!isCompany)
+        {
+            <div class="element">
+                <h1>Klient: </h1>
+                <h2>@Model[0].client.FirstName @Model[0].client.LastName</h2>
+            </div>
+        }
+        else
+        {
+            <div class="element">
+                <h1>Klient: </h1>
+                <h2>@Model[0].client.CompanyName</h2>
+            </div>
+
+        }
+    }
+
+    <div class="element">
+        @{
+            if (isCompany)
+            {
+                <h1>typ klienta: </h1>
+                <h2>firma</h2>
+            }
+            else
+            {
+                <h1>typ klienta: </h1>
+                <h2>osoba prywatna</h2> }
+        }
+    </div>
+
+    @{
+        string url = "https://localhost:44323/Client/getProposalsCount?clientId=" + Model[0].client.Id;
+        string proposalsCount = await httpRequest(url);
+    }
+
+    <div class="element">
+        <h1>Liczba zgłoszonych napraw: </h1>
+        <h2>@proposalsCount</h2>
+    </div>
+
+    <div class="element">
+        <h1>Nr telefonu: </h1>
+        <h2>@Model[0].client.PhoneNumber</h2>
+    </div>
+
+    <div class="element">
+        <h1>Adres email: </h1>
+        <h2>@Model[0].client.Email</h2>
+    </div>
+
+    <div class="element">
+        <h1>Adres: </h1>
+        @{
+            if (Model[0].address.LocalNumber != null)
+            {
+                <h2>ul. @Model[0].address.Street @Model[0].address.HouseNumber/@Model[0].address.LocalNumber, @Model[0].address.Postal @Model[0].address.City</h2>
+            }
+            else
+            {
+                <h2>ul. @Model[0].address.Street @Model[0].address.HouseNumber, @Model[0].address.Postal @Model[0].address.City</h2>
+            }
+        }
+    </div>
+
+    <button class="btn btn-blue">Edytuj</button>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header">
+                    <div class="text-capitalize font-weight-normal">&nbsp;Historia napraw</div>
+                </div>
+                <div class="scroll-area-sm">
+                    <perfect-scrollbar class="ps-show-limits">
+                        <div style="position: static;" class="ps ps--active-y">
+                            <div class="ps-content">
+                                <ul class=" list-group list-group-flush">
+                                    @foreach (var item in Model[0].proposals)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="bg-warning"></div>
+                                            <div class="p-0">
+                                                <div class="row">
+                                                    <div class="zlecenie-header">
+                                                        <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
+                                                            <button class="h5 a-anim nav-link btn-table" name="proposalId" value="@item.Id">@item.VehicleId @item.StartDate</button>
+                                                        </form>
+                                                        <i>@item.Description</i>
+                                                    </div>
+                                                    <div class="progess-container">
+                                                        @{
+                                                            string url2 = "https://localhost:44323/Proposals/getProposalActionsComplete?proposalId=" + item.Id;
+                                                            string textResult = await httpRequest(url2);
+
+                                                            if (@item.Status == StatusEnum.OPEN)
+                                                            {
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy najpierw zakończyć naprawę, aby ją usunąć." disabled>
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                                </button>
+
+                                                                <span class="circle circle-blue" data-toggle="tooltip" data-placement="right" title="przyjęte"></span>
+                                                            }
+                                                            else if (@item.Status == StatusEnum.PROCESSING)
+                                                            {
+                                                                <div class="pudelko progress">
+                                                                    <div data-percentage="0%" style="width: @textResult;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                                </div>
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy najpierw zakończyć naprawę, aby ją usunąć." disabled>
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                                </button>
+                                                                <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="trwające"></span>
+                                                            }
+                                                            else if (@item.Status == StatusEnum.FINAL)
+                                                            {
+                                                                <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                                </button>
+                                                                <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="zakończone"></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                                </button>
+                                                                <span class="circle circle-red" data-toggle="tooltip" data-placement="right" title="anulowane"></span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        async Task<string> httpRequest(string url)
+        {
+            var uri = new Uri(url);
+
+            var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.CookieContainer = new System.Net.CookieContainer();
+            handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+            var clinet = new HttpClient(handler);
+
+            clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+            var response = await clinet.GetAsync(uri);
+            string textResult = await response.Content.ReadAsStringAsync();
+
+            return textResult;
+        }
+
+    }
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModallabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Usuwanie zlecenia</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div>
+                    <p class="modal-body" id="proposal"></p>
+                </div>
+                <div class="modal-footer">
+                    <form asp-controller="Proposals" asp-action="deleteProposal" method="get">
+                        <button type="submit" class="btn btn-primary" name="proposalId" value="" id="deleteConfirmed">Tak, usuń</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function (event) {
+            $("#deleteModal").on('show.bs.modal', function (event) {
+                //get button that triggered the modal
+                var button = $(event.relatedTarget);
+
+                //get the button "tak, usuń" in modal window
+                var confirmDelete = document.getElementById("deleteConfirmed");
+
+                //get modal window
+                var modal = $(this);
+
+                //set the button's value to proposalId
+                confirmDelete.value = button.val();
+
+                //set the text in model window
+                modal.find('.modal-body').html("Czy chcesz usunąć zlecenie wraz z całą jego historią?");
+            });
+
+        });
+    </script>
+
+</body>
+

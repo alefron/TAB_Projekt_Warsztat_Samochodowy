@@ -109,7 +109,7 @@
                                                 <div class="row">
                                                     <div class="klienci-header">
                                                         <div class='nazwa'>
-                                                            <form asp-controller="Client" asp-action="ShowClient" method="get">
+                                                            <form asp-controller="ShowClient" asp-action="ShowClient" method="get">
                                                                 @if (item.CompanyName == null)
                                                                 {
                                                                     <button class="h5 a-anim nav-link btn-table" name="clientId" value="@item.Id">@item.FirstName @item.LastName<i class='fas fa-user-alt' style='color:blue'></i></button>

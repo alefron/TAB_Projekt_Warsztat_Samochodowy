@@ -140,6 +140,19 @@ namespace warsztatSamochodowy.Repository
             return clientFiltered;
         }
 
+        public async Task<int> DeleteClientAsync(Client client)
+        {
+            var cli = context.Clients.Single(c => c.Id == client.Id);
+            var veh = context.Vehicles.Where((vehicle) => vehicle.ClientId == client.Id).ToList();
+
+            context.Clients.Remove(client);
+            return await context.SaveChangesAsync();
+        }
+        public int DeleteClient(Client client)
+        {
+            Task<int> t = Task.Run(() => { return DeleteClientAsync(client); });
+            return t.Result;
+        }
 
     }
 }

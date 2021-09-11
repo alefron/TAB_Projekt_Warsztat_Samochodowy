@@ -104,7 +104,7 @@ namespace warsztatSamochodowy.Controllers
             this.proposals = proposalRepository.GetJoinedProposals();
             this.model = new List<FormProposals>();
             this.model.Add(new FormProposals(this.proposals));
-            return View("ProposalList", model);
+            return RedirectToAction("ProposalList", "Proposals");
         }
 
         [Authorize(Roles = "manager")]

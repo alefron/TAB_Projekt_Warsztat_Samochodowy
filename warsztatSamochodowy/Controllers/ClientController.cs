@@ -137,7 +137,7 @@ namespace warsztatSamochodowy.Controllers
                         break;
                     }
                 }
-                modelFiltered.Add(new FormClients(clients));
+                modelFiltered.Add(new FormClients(clientsFiltered));
                 return View("Index", modelFiltered);
             }
             return View("Index", model);
@@ -165,5 +165,22 @@ namespace warsztatSamochodowy.Controllers
             return current;
         }
 
+
+        [HttpGet("Client/deleteClient")]
+        public IActionResult deleteClient(int clientId)
+        {
+            Client client = clientRepository.getClientById(clientId);
+            clientRepository.DeleteClient(client);
+            this.clients = clientRepository.GetJoinedClients();
+            this.model = new List<FormClients>();
+            this.model.Add(new FormClients(this.clients));
+            return RedirectToAction("Index", "Client");
+        }
+
+        [HttpGet("Client/showClient")]
+        public IActionResult ShowClient(int clientId)
+        {
+            return View("Index", model);
+        }
     }
 }
