@@ -1,3 +1,6 @@
+<div style="color: transparent;">
+    @Model ShowProposalForm
+</div>
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,11 +19,11 @@
     <div class='header'>
         <div class='element'>
             <h1>Zgloszenie: </h1>
-            <h2> nazwaTutaj</h2>
+            <h2> @Model[0].proposal.VehicleId @Model[0].proposal.StartDate</h2>
         </div>
         <div class='status'>
             <h1>Status: </h1>
-            <h2> nazwaTutaj</h2>
+            <h2> @Model[0].proposal.Status</h2>
         </div>
     </div>
     <br>
@@ -36,17 +39,17 @@
 
     <div class='element'>
         <h1>Pojazd: </h1>
-        <h2> <a href="#">nazwaTutaj</a></h2>
+        <h2> <a href="#">@Model[0].vehicle.Name</a></h2>
     </div>
 
     <div class='element'>
         <h1>Klient: </h1>
-        <h2> nazwaTutaj</h2>
+        <h2> @Model[0].client.FirstName @Model[0].client.LastName</h2>
     </div>
 
     <div class='element'>
         <h1>Przyjmujacy: </h1>
-        <h2> nazwaTutaj</h2>
+        <h2>@Model[0].meneger.FirstName @Model[0].meneger.LastName</h2>
     </div>
 </body>
 
@@ -60,7 +63,7 @@
             <h1>Opis: </h1>
         </div>
         <div class='proposal-card'>
-            <p>jakis teskt ciekawe czy zadziala adasdasdasdasdasdasdsdasdsadasdsdsad</p>
+            <p>@Model[0].proposal.Description</p>
         </div>
     </div>
     <div class='my-column'>
@@ -68,7 +71,7 @@
             <h1>Rezultat: </h1>
         </div>
         <div class='proposal-card'>
-            <p>jakis teskt ciekawe czy zadziala adasdasdasdasdasdasdsdasdsadasdsdsad</p>
+            <p>@Model[0].proposal.Result</p>
         </div>
     </div>
 </div>
