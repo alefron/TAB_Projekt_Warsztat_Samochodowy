@@ -12,8 +12,17 @@
 
     <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
     <link href="/css/ManagerKlienci.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="/js/ManagerPojazdy.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="/js/site.js"></script>
+
 </head>
 
 <body>
@@ -85,7 +94,7 @@
         <div class="col-md-8">
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header">
-                    <div class="text-capitalize font-weight-normal">&nbsp;Lista zleceń</div>
+                    <div class="text-capitalize font-weight-normal">&nbsp;Lista klientów</div>
                 </div>
                 <div class="scroll-area-sm">
                     <perfect-scrollbar class="ps-show-limits">
@@ -100,23 +109,47 @@
                                                 <div class="row">
                                                     <div class="klienci-header">
                                                         <div class='nazwa'>
-                                                            @if (item.CompanyName == null)
-                                                            {
-                                                                <h1>@item.FirstName <i class='fas fa-user-alt' style='color:blue'></i></h1>
-                                                            }
-                                                            @if (item.CompanyName != null)
-                                                            {
-                                                                <h1>@item.CompanyName <i class='fas fa-users' style='padding-left:5px;color:green'></i></h1>
-                                                            }
+                                                            <form asp-controller="Client" asp-action="ShowClient" method="get">
+                                                                @if (item.CompanyName == null)
+                                                                {
+                                                                    <button class="h5 a-anim nav-link btn-table" name="clientId" value="@item.Id">@item.FirstName @item.LastName<i class='fas fa-user-alt' style='color:blue'></i></button>
+
+                                                                }
+                                                                @if (item.CompanyName != null)
+                                                                {
+                                                                    <button class="h5 a-anim nav-link btn-table" name="clientId" value="@item.Id">@item.CompanyName<i class='fas fa-users' style='padding-left:5px;color:green'></i></button>
+                                                                }
+                                                            </form>
                                                         </div>
                                                         <div class='email'>@item.Email</div>
-                                                        <div class='liczba-zgloszen'>Liczba zgłoszen: wstaw liczbe :))</div>
+                                                        @{
+                                                            string url = "https://localhost:44323/Client/getProposalsCount?clientId=" + item.Id;
+                                                            string count = await httpRequest(url);
+                                                        }
+                                                        <div class='liczba-zgloszen'>Liczba zgłoszen: @count</div>
 
                                                     </div>
                                                     <div class='controlls'>
+                                                        @{
+                                                            url = "https://localhost:44323/Client/getClientStatus?clientId=" + item.Id;
+                                                            string textResult = await httpRequest(url);
+                                                            bool status = textResult == "true" ? true : false;
 
-                                                        <div class='circle'></div>
-                                                        <button class='trash-button'><i class="fas fa-trash" style='font-size:24px;color:red'></i></button>
+                                                            if (status)
+                                                            {
+                                                                <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="aktualnie obsługiwany"></span>
+                                                                <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Należy zakończyć trwające naprawy pojazdów tego klienta, aby go usunąć." disabled>
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                                </button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="Dawniej obsługiwany"></span>
+                                                                <button class='trash-button' data-toggle="modal" data-target="#deleteClientModal" type="button" value="@item.Id.ToString()">
+                                                                    <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                                </button>
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,6 +163,78 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="deleteClientModal" aria-labelledby="deleteClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Usuwanie klienta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div>
+                    <p class="modal-body"></p>
+                </div>
+                <div class="modal-footer">
+                    <form asp-controller="Client" asp-action="deleteClient" method="get">
+                        <button type="submit" class="btn btn-primary" name="clientId" value="jj" id="deleteConfirmed">Tak, usuń</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/js/ManagerPojazdy.js"></script>
+    <script>
+
+        $(document).ready(function (event) {
+            $("#deleteClientModal").on('show.bs.modal', function (event) {
+                //get button that triggered the modal
+                var button = $(event.relatedTarget);
+
+                //get the button "tak, usuń" in modal window
+                var confirmDelete = document.getElementById("deleteConfirmed");
+
+                //get modal window
+                var modal = $(this);
+
+                //set the button's value to regNumber
+                confirmDelete.value = button.val();
+
+                //set the text in model window
+                modal.find('.modal-body').html("Czy chcesz usunąć tego klienta wraz z całą jego historią?");
+            });
+
+        });
+    </script>
+
 </body>
 
-</html>
+@{
+    async Task<string> httpRequest(string url)
+    {
+        var uri = new Uri(url);
+
+        var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.CookieContainer = new System.Net.CookieContainer();
+        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+        var clinet = new HttpClient(handler);
+
+        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+        var response = await clinet.GetAsync(uri);
+        string textResult = await response.Content.ReadAsStringAsync();
+
+        return textResult;
+    }
+
+}
+
+

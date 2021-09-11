@@ -143,5 +143,27 @@ namespace warsztatSamochodowy.Controllers
             return View("Index", model);
         }
 
+        [HttpGet("Client/getProposalsCount")]
+        public string getProposalsCount(int clientId)
+        {
+            return this.proposalRepository.GetProposalByClient(clientId).Count.ToString();
+        }
+
+        [HttpGet("Client/getClientStatus")]
+        public string getClientStatus(int clientId)
+        {
+            List<Proposal> proposals = proposalRepository.GetProposalByClient(clientId);
+            string current = "false";
+            foreach(var proposal in proposals)
+            {
+                if (proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING)
+                {
+                    current = "true";
+                    break;
+                }
+            }
+            return current;
+        }
+
     }
 }
