@@ -14,9 +14,10 @@ namespace warsztatSamochodowy.Controllers
 
         public List<ShowProposalForm> model { get; set; } = new List<ShowProposalForm>();
 
+        [HttpGet("ShowProposal/ShowProposal")]
         public IActionResult ShowProposal(int proposalId)
         {
-            this.model.Add(new ShowProposalForm(proposalId));
+            this.model.Add(new ShowProposalForm(7));
             return View(model);
         }
     }
