@@ -82,7 +82,7 @@ namespace warsztatSamochodowy.Forms
                 LastName = this.LastName,
                 RoleId = this.RoleId,
                 Email = this.Email,
-                HashPassword = SecurityUtils.Hasher.GetHash(this.Password),
+                HashPassword = this.Password==null?"":SecurityUtils.Hasher.GetHash(this.Password),
                 PhoneNumber = this.PhoneNumber,
             };
         }
