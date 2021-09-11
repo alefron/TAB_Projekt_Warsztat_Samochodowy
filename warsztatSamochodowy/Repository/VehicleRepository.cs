@@ -142,5 +142,10 @@ namespace warsztatSamochodowy.Repository
         {
             return Task.Run(GetJoinedVehiclesAsync).Result;
         }
+
+
+        
+
+
     }
 }

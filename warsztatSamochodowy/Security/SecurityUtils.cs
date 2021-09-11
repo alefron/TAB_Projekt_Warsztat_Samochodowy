@@ -10,7 +10,7 @@ namespace warsztatSamochodowy.Security
         public static readonly IHasher Hasher;
         static SecurityUtils()
         {
-            Hasher = new MockHasher();
+            Hasher = new SHA1Hasher();
         }
 
     }
