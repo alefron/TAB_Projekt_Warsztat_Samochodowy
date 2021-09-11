@@ -15,6 +15,7 @@ namespace warsztatSamochodowy.Controllers
     public class ClientController : Controller
     {
         private ClientRepository clientRepository = new ClientRepository();
+        private ProposalRepository proposalRepository = new ProposalRepository();
         private List<FormClients> model { get; set; } = new List<FormClients>();
         private List<Client> clients { get; set; } = new List<Client>();
 
@@ -30,7 +31,7 @@ namespace warsztatSamochodowy.Controllers
             return View(model);
         }
 
-        [HttpGet("Clients/getClientsFilteredBySearch")]
+        [HttpGet("Client/getClientsFilteredBySearch")]
         public IActionResult getClientsFilteredBySearch(string searching)
         {
             if (searching != null)
@@ -58,5 +59,89 @@ namespace warsztatSamochodowy.Controllers
             }
             return View("Index", model);
         }
+
+        
+        [HttpGet("Client/getClientsFilteredByType")]
+        public IActionResult getClientsFilteredByType(string type)
+        {
+            if (type == "osoba prywatna")
+            {
+                this.clients = clientRepository.getPersonsClient();
+            }
+            else if (type == "firma")
+            {
+                this.clients = clientRepository.getCompaniesClient();
+            }
+            this.model = new List<FormClients>();
+            FormClients form = new FormClients(this.clients);
+            this.model.Add(form);
+            return View("Index", model);
+        }
+
+        [HttpGet("Client/clientListFilteredByProposalCount")]
+        public IActionResult clientListFilteredByProposalCount(string sortingType)
+        {
+            if (sortingType != "wszyscy klienci")
+            {
+                List<FormClients> modelFiltered = new List<FormClients>();
+                List<Client> clientsSorted = this.clients;
+
+                clientsSorted.Sort((a, b) =>
+                {
+                    var proposalsA = proposalRepository.GetProposalByClient(a.Id);
+                    var proposalsB = proposalRepository.GetProposalByClient(b.Id);
+                    if (proposalsA.Count > proposalsB.Count)
+                    {
+                        if (sortingType == "sortuj rosnąco")
+                            return 1;
+                        return -1;
+                    }
+                    if (proposalsA.Count < proposalsB.Count)
+                    {
+                        if (sortingType == "sortuj malejąco")
+                            return 1;
+                        return -1;
+                    }
+                    return 0;
+                });
+
+                modelFiltered.Add(new FormClients(clients));
+                return View("Index", modelFiltered);
+            }
+            return View("Index", model);
+        }
+
+        [HttpGet("Client/clientListFilteredByStatus")]
+        public IActionResult clientListFilteredByStatus(string status)
+        {
+            if (status != "wszyscy klienci")
+            {
+                List<FormClients> modelFiltered = new List<FormClients>();
+                List<Client> clientsFiltered = new List<Client>();
+                List<Proposal> all_proposals = new List<Proposal>();
+                foreach (var client in this.clients)
+                {
+                    all_proposals = proposalRepository.GetProposalByClient(client.Id);
+                    foreach (var proposal in all_proposals)
+                    {
+                        if ((proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING) && status == "aktualnie obsługiwani")
+                        {
+                            clientsFiltered.Add(client);
+                            break;
+                        }
+                        else if ((proposal.Status == StatusEnum.CANCELED || proposal.Status == StatusEnum.FINAL) && status == "dawniej obsługiwani")
+                        {
+                            clientsFiltered.Add(client);
+                            break;
+                        }
+                        break;
+                    }
+                }
+                modelFiltered.Add(new FormClients(clients));
+                return View("Index", modelFiltered);
+            }
+            return View("Index", model);
+        }
+
     }
 }

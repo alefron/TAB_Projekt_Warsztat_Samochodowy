@@ -110,6 +110,36 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(GetJoinedClientsAsync).Result;
         }
 
+        public List<Client> getPersonsClient()
+        {
+            List<Client> clientFiltered = new List<Client>();
+            List<Client> clients = this.GetAllClients();
+            foreach(var client in clients)
+            {
+                if (client.CompanyName == null)
+                {
+                    clientFiltered.Add(client);
+                }
+            }
+
+            return clientFiltered;
+        }
+
+        public List<Client> getCompaniesClient()
+        {
+            List<Client> clientFiltered = new List<Client>();
+            List<Client> clients = this.GetAllClients();
+            foreach (var client in clients)
+            {
+                if (client.CompanyName != null)
+                {
+                    clientFiltered.Add(client);
+                }
+            }
+
+            return clientFiltered;
+        }
+
 
     }
 }

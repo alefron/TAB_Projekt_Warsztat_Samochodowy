@@ -31,6 +31,55 @@
         </div>
     </form>
 
+    <div class="flex-center">
+        <div class="sorting-container">
+            <form asp-controller="Client" asp-action="getClientsFilteredByType" method="get">
+                <div class="dropdown" style="margin-left: 100px;">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        typ klienta
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><input type="submit" class="dropdown-item" name="type" value="osoba prywatna" /></li>
+                        <li><input type="submit" class="dropdown-item" name="type" value="firma" /></li>
+                        <li><input type="submit" class="dropdown-item" name="type" value="wszyscy klienci" /></li>
+                    </ul>
+                </div>
+            </form>
+
+            <form asp-controller="Client" asp-action="clientListFilteredByProposalCount" method="get">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        liczba zgłoszonych zleceń
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><input type="submit" class="dropdown-item" name="sortingType" value="sortuj rosnąco" /></li>
+                        <li><input type="submit" class="dropdown-item" name="sortingType" value="sortuj malejąco" /></li>
+                        <li><input type="submit" class="dropdown-item" name="sortingType" value="wszyscy klienci" /></li>
+                    </ul>
+                </div>
+            </form>
+
+            <form asp-controller="Client" asp-action="clientListFilteredByStatus" method="get">
+                <div class="dropdown" style="margin-right: 100px;">
+                    <button type="button" class="btn btn-danger dropdown-toggle round-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        status obsługi
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><input type="submit" class="dropdown-item" name="status" value="aktualnie obsługiwani" /></li>
+                        <li><input type="submit" class="dropdown-item" name="status" value="dawniej obsługiwani" /></li>
+                        <li><input type="submit" class="dropdown-item" name="status" value="wszyscy klienci" /></li>
+
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br />
+
 
     <div class="row d-flex justify-content-center">
         <div class="col-md-8">
