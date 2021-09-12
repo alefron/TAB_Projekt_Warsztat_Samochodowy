@@ -36,14 +36,14 @@ namespace warsztatSamochodowy.Controllers
         public IActionResult AddActionToDb(int proposalId, string type, int worker, int sequenceNumber, string description, string result)
         {
             int insertActionId = actionRepository.AddAction(proposalId, type, worker, sequenceNumber, description);
-            return RedirectToAction("addProposal", "AddProposal", new { proposalId = proposalId });
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId });
         }
 
         public IActionResult UpdateActionInDb(int actionId, string type, int worker, int sequenceNumber, string description, string result)
         {
             int insertActionId = actionRepository.UpdateAction(actionId, type, worker, sequenceNumber, description, result);
             Models.Action updatedAction = actionRepository.GetActionById(insertActionId);
-            return RedirectToAction("addProposal", "AddProposal", new { proposalId = updatedAction.ProposalId });
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = updatedAction.ProposalId });
         }
 
         [HttpGet("Action/isSequenceNumberOk")]
@@ -71,5 +71,7 @@ namespace warsztatSamochodowy.Controllers
             }
             return true;
         }
+
+        
     }
 }

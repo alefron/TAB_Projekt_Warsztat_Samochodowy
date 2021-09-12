@@ -126,6 +126,15 @@ namespace warsztatSamochodowy.Controllers
             modelFiltered.Add(new FormProposals(proposalsFiltered));
             return View("proposalList", modelFiltered);
         }
-        
+
+        [HttpGet("Proposals/SetStatus")]
+        public IActionResult SetStatus(int proposalId, int status)
+        {
+            Proposal proposal = this.proposalRepository.GetProposalById(proposalId);
+            proposal.Status = (StatusEnum)status;
+            int idUpdated = this.proposalRepository.Update(proposal);
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId });
+        }
+
     }
 }
