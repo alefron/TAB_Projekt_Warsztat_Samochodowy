@@ -208,27 +208,30 @@
                                                         @foreach (var act in Model[0].actions)
                                                         {
                                                         <div class="action-table-row">
-                                                            <div class="action-field my-flex-center">
+                                                            <div class="name">
                                                                 @act.ActionTypeId
                                                             </div>
-                                                            <div class="worker-field my-flex-center">
+                                                            <div class="worker">
                                                                 worker: @act.WorkerId
                                                             </div>
-                                                            @if (act.SequenceNumber != null)
-                                                            {
-                                                                foreach (var a in Model[0].actions)
+                                                            <div class="wykonaj-po">
+                                                                @if (act.SequenceNumber != null)
                                                                 {
-                                                                    if (a.Id == act.SequenceNumber)
+                                                                    foreach (var a in Model[0].actions)
                                                                     {
-                                                                        <div class="worker-field my-flex-center">
-                                                                            wykonaj po: @a.ActionType.CodeAction
-                                                                        </div>
+                                                                        if (a.Id == act.SequenceNumber)
+                                                                        {
+                                                                            <div class="worker-field my-flex-center">
+                                                                                wykonaj po: @a.ActionType.CodeAction
+                                                                            </div>
+                                                                        }
                                                                     }
+
                                                                 }
 
-                                                            }
-
-                                                            <div class="status-field my-flex-center">
+                                                            </div>
+                                                            
+                                                            <div class="edit-dot my-flex-center">
                                                                 @if (act.Status == StatusEnum.OPEN)
                                                                 {
                                                                     <span class='circle circle-blue'></span>
