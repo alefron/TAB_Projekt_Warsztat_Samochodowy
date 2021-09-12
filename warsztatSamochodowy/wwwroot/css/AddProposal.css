@@ -1,3 +1,7 @@
+.transparent-element{
+    opacity:0;
+}
+
 .element-add{
     display: flex;
     justify-content: flex-start;
