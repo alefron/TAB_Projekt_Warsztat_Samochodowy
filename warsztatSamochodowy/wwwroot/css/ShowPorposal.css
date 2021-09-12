@@ -114,6 +114,30 @@
     justify-content: space-between;
 }
 
+
+.action-table-row .name{
+    width:20%;
+    height:100%;
+}
+
+.action-table-row .worker{
+   width:20%;
+   height:100%;
+}
+
+.action-table-row .wykonaj-po{
+   width:30%;
+   height:100%;
+}
+
+.action-table-row .edit-dot{
+    display:flex;
+    justify-content: space-between;
+   width:30%;
+   height:100%;
+}
+
+
 .my-flex-center{
     display: flex;
     justify-content: center;

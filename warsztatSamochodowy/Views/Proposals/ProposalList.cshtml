@@ -19,7 +19,11 @@
     <script src="/js/site.js"></script>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <script src="/js/ManagerPojazdy.js"></script>
-
+    <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table-locale-all.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/export/bootstrap-table-export.min.js"></script>
 </head>
 
 <body>
@@ -99,6 +103,19 @@
             <div class="card-hover-shadow-2x mb-3 card">
                 <div class="card-header">
                     <div class="text-capitalize font-weight-normal">Lista zleceń</div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="scroll-area-sm">
                     <perfect-scrollbar class="ps-show-limits">
@@ -183,7 +200,28 @@
             </div>
         </div>
     </div>
-
+    <table id="table"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-fullscreen="true"
+           data-show-columns="true"
+           data-show-columns-toggle-all="true"
+           data-detail-view="true"
+           data-show-export="true"
+           data-click-to-select="true"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, all]"
+           data-show-footer="true"
+           data-side-pagination="server"
+           data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
+           data-response-handler="responseHandler">
+    </table>
 
     <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModallabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
