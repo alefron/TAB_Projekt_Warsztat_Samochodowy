@@ -19,7 +19,6 @@ namespace warsztatSamochodowy.Forms
         public List<Models.Action> actions { get; set; } = new List<Models.Action>();
         public Vehicle vehicle { get; set; } = new Vehicle();
         public Client client { get; set; } = new Client();
-
         public Personel meneger { get; set; } = new Personel();
 
 
