@@ -288,7 +288,7 @@
                 }
                 else
                 {
-                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=-1 disabled>Zapisz</button>
+                    <button asp-controller="AddProposal" asp-action="AddProposalToDb" name="proposalId" value="-1" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=-1 disabled>Zapisz</button>
                     <button asp-controller="Proposals" asp-action="proposalList" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
                 }
             }

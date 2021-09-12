@@ -63,8 +63,17 @@ namespace warsztatSamochodowy.Controllers
                 {
                     return RedirectToAction("addAction", "Action", new { proposalId = newProposalId});
                 }
+                if (newProposalId != 0)
+                {
+                    return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = newProposalId });
+                }
+                else if (proposalId != 0)
+                {
+                    return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId });
+                }
             }
-            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId});
+            return RedirectToAction("proposalList", "Proposals");
+
         }
     }
 }
