@@ -60,9 +60,18 @@
                 }
                 else if (textResult == "0%" && Model[0].proposal.Status == StatusEnum.OPEN)
                 {
-                    <div class="end-button" style="background: none !important; outline: none !important;">
-                        <button type="submit" name="status" value=1 class="btn btn-blue" style="margin-left: 100px;">rozpocznij</button>
-                    </div>
+                    if (Model[0].actions.Count != 0)
+                    {
+                        <div class="end-button" style="background: none !important; outline: none !important;">
+                            <button type="submit" name="status" value=1 class="btn btn-blue" style="margin-left: 100px;">rozpocznij</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="end-button" style="background: none !important; outline: none !important;">
+                            <button data-toggle="tooltip" data-placement="left" title="Aby rozpocząć dodaj przynajmniej jedną akcję" class="btn btn-blue" style="margin-left: 100px;" disabled>rozpocznij</button>
+                        </div>
+                    }
                 }
                 else if ((textResult == "100%" && Model[0].proposal.Status == StatusEnum.FINAL) || Model[0].proposal.Status == StatusEnum.CANCELED)
                 {
@@ -76,12 +85,26 @@
                         <button type="submit" name="status" value=3 class="btn btn-red" style="margin-left: 100px;">anuluj</button>
                     </div>
                 }
+
             }
 
         </form>
 
-
     </div>
+
+    <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
+        @{
+            if (Model[0].proposal.Status == StatusEnum.PROCESSING || Model[0].proposal.Status == StatusEnum.OPEN)
+            {
+                <button type="submit" name="proposalId" value=@Model[0].proposal.Id class="btn btn-red">edytuj zlecenie</button>
+            }
+            else
+            {
+                <button class="btn btn-red" disabled>edytuj zlecenie</button>
+            }
+        }
+
+    </form>
 
     <div class='element'>
         <h1>Pojazd: </h1>
@@ -150,7 +173,7 @@
                             }
                         }
                     </form>
-                    
+
                 </div>
 
 

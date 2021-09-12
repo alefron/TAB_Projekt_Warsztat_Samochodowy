@@ -70,10 +70,10 @@
             <div class="dropdown">
                 <select class="form-control SelectFilter mdb-select md-form formElement" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="Owner">
                     @{
-                        <option value="-1" selected disabled >Wybierz klijenta</option>
+                        <option value="-1" selected disabled >Wybierz klienta</option>
                         foreach (var client in Model[0].clients)
                         {
-                            <option value="@client.Id">>@client.FirstName @client.LastName</option>
+                            <option value="@client.Id">@client.FirstName @client.LastName @client.CompanyName</option>
                         }
                     }
                 </select>

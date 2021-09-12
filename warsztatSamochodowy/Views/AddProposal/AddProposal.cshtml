@@ -284,13 +284,15 @@
                 if (Model[0].is_editable)
                 {
                     <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id>Zapisz</button>
+                    <button asp-controller="ShowProposal" asp-action="ShowProposal" name="proposalId" value="@Model[0].proposal.Id" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
                 }
                 else
                 {
                     <button asp-controller="AddProposal" asp-action="AddProposalToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=-1 disabled>Zapisz</button>
+                    <button asp-controller="Proposals" asp-action="proposalList" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
                 }
             }
-            <button asp-controller="Proposals" asp-action="ProposalList" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
+
         </div>
 
 

@@ -64,7 +64,7 @@ namespace warsztatSamochodowy.Controllers
                     return RedirectToAction("addAction", "Action", new { proposalId = newProposalId});
                 }
             }
-            return RedirectToAction("ProposalList", "Proposals");
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId});
         }
     }
 }

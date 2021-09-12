@@ -228,7 +228,7 @@
                     <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
                 }
             }
-            <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
+            <button asp-controller="ShowProposal" asp-action="ShowProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
         </div>
     </form>
 
