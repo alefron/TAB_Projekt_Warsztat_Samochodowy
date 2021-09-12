@@ -73,5 +73,35 @@ namespace warsztatSamochodowy.Repository
             var data = Task.Run(GetAddressDictionaryAsync).Result;
             return data;
         }
+
+        public async Task<int> AddAddressAsync(string street, string houseNumber, string localNumber, string city, string postal)
+        {
+            if (localNumber == "")
+            {
+                localNumber = "NULL";
+            }
+            Address address = new Address
+            {
+                Street = street,
+                HouseNumber = houseNumber,
+                LocalNumber = localNumber,
+                City = city,
+                Postal = postal
+            };
+            
+            context.Add<Address>(address);
+            await context.SaveChangesAsync();
+
+            int newId = address.Id;
+
+            return newId;
+        }
+
+        public int AddAddress(string street, string houseNumber, string localNumber, string city, string postal)
+        {
+            Task<int> t = Task.Run(() => { return AddAddressAsync(street, houseNumber, localNumber, city, postal); });
+            var res = t.Result;
+            return t.Result;
+        }
     }
 }

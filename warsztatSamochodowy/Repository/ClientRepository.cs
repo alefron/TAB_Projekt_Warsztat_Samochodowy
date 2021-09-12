@@ -154,5 +154,44 @@ namespace warsztatSamochodowy.Repository
             return t.Result;
         }
 
+        public async Task<int> AddClientAsync(string firstName, string lastName, string companyName, string phoneNumber, string email, int addressId)
+        {
+            if (companyName == "")
+            {
+                companyName = "NULL";
+            }
+            if (lastName == "")
+            {
+                lastName = "NULL";
+            }
+            if (firstName == "")
+            {
+                firstName = "NULL";
+            }
+            Client client = new Client
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                CompanyName = companyName,
+                PhoneNumber = phoneNumber,
+                Email = email,
+                AddressId = addressId
+            };
+
+            context.Add<Client>(client);
+            await context.SaveChangesAsync();
+
+            int newId = client.Id;
+
+            return newId;
+        }
+
+        public int AddClient(string firstName, string lastName, string companyName, string phoneNumber, string email, int addressId)
+        {
+            Task<int> t = Task.Run(() => { return AddClientAsync(firstName, lastName, companyName, phoneNumber, email, addressId); });
+            var res = t.Result;
+            return t.Result;
+        }
+
     }
 }

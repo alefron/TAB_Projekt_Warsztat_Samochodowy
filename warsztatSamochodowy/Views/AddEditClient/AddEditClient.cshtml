@@ -127,7 +127,7 @@
             </div>
             <div class="element-add">
                 <h1>Kod pocztowy: </h1>
-                <input type="text" name="clientName" value="@Model[0].address.Postal" />
+                <input type="text" name="postal" value="@Model[0].address.Postal" />
             </div>
 
         }
@@ -184,7 +184,7 @@
             }
             else
             {
-                <button asp-controller="AddEditClient" asp-action="AddClientToDb" method="get" class="btn save-button" id="saveButton" type="submit" disabled>Zapisz</button>
+                <button asp-controller="AddEditClient" asp-action="AddClientToDb" method="get" class="btn save-button" id="saveButton" type="submit">Zapisz</button>
             }
         }
         <button asp-controller="Client" asp-action="Index" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
