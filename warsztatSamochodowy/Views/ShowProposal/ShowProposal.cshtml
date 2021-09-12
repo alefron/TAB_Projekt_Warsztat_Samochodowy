@@ -102,57 +102,26 @@
                     <div style="position: static;" class="ps ps--active-y">
                         <div class="ps-content">
                             <ul class=" list-group list-group-flush">
+
                                 <li class="list-group-item">
                                     <div class="bg-warning"></div>
                                     <div class="p-0">
-                                        @foreach (var act in Model[0].actions)
-                                        {
-                                            <div class="action-table-row">
-                                                <div class="action-field my-flex-center">
-                                                    @act.ActionTypeId
-                                                </div>
-                                                <div class="worker-field my-flex-center">
-                                                    worker: @act.WorkerId
-                                                </div>
-                                                @if (act.SequenceNumber != null)
-                                                {
-                                                    foreach (var a in Model[0].actions)
-                                                    {
-                                                        if (a.Id == act.SequenceNumber)
-                                                        {
-                                                            <div class="worker-field my-flex-center">
-                                                                wykonaj po: @a.ActionType.CodeAction
-                                                            </div>
-                                                        }
-                                                    }
-
-                                                }
-
-                                                <div class="status-field my-flex-center">
-                                                    @if (act.Status == StatusEnum.OPEN)
-                                                    {
-                                                        <span class='circle circle-blue'></span>
-                                                    }
-                                                    else if (act.Status == StatusEnum.PROCESSING)
-                                                    {
-                                                        <span class='circle circle-yellow'></span>
-                                                    }
-                                                    else if (act.Status == StatusEnum.FINAL)
-                                                    {
-                                                        <span class='circle circle-green'></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span class='circle circle-red'></span>
-                                                    }
-                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="editAction" method="get" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
-                                                </div>
-
+                                        <div class="action-table-row">
+                                            <div class="action-field my-flex-center">
+                                                Typ akcji
                                             </div>
-                                        }
+                                            <div class="worker-field my-flex-center">
+                                                imie i nazwisko
+                                            </div>
+                                            <div class="status-field my-flex-center">
+                                                <div class='circle'></div>
+                                                <div class="action-table-button"><a href="#">Przywroc</a></div>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
