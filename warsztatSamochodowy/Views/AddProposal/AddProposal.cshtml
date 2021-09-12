@@ -258,7 +258,15 @@
                                                                 {
                                                                     <span class='circle circle-red'></span>
                                                                 }
-                                                                <div class="action-table-button"><button asp-controller="Action" asp-action="editAction" method="get" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
+                                                                @if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
+                                                                {
+                                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="editAction" method="get" type="submit" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="action-table-button"><button asp-controller="Action" asp-action="editAction" method="get" type="submit" class="btn btn-red" name="actionId" value="@act.Id" disabled>Edytuj</button></div>
+                                                                }
                                                             </div>
 
                                                         </div>
