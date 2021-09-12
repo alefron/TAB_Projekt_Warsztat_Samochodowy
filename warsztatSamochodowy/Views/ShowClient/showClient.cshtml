@@ -97,7 +97,9 @@
         }
     </div>
 
-    <button class="btn btn-blue">Edytuj</button>
+    <form asp-controller="AddEditClient" asp-action="EditClient" method="get">
+        <button class="btn btn-blue" type="submit" name="clientId" value="@Model[0].client.Id">Edytuj</button>
+    </form>
 
     <br />
     <br />

@@ -1,0 +1,195 @@
+﻿<div style="color: transparent;" hidden>
+    @Model FormAddEditClient
+</div>
+@using System.Net.Http
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
+</head>
+
+<body>
+    <form id="formAddEditClient">
+
+    <div class="element-add">
+        <h1>typ klienta: </h1>
+        <div class="dropdown" style="margin-right: 30px;">
+
+            <select class="form-control SelectFilter mdb-select md-form formElementAddClient" name="type" value="" id="type">
+                @{
+                    if (Model[0].is_editable)
+                    {
+                        <option value="-1" disabled>wybierz typ</option>
+                        if (Model[0].client.CompanyName == null)
+                        {
+                            <option value="osoba prywatna" selected>osoba prywatna</option>
+                            <option value="firma">firma</option>
+                        }
+                        else
+                        {
+                            <option value="osoba prywatna">osoba prywatna</option>
+                            <option value="firma" selected>firma</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="-1" disabled selected>wybierz klienta</option>
+                        <option value="osoba prywatna">osoba prywatna</option>
+                        <option value="firma">firma</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+
+    @{
+        if (Model[0].is_editable)
+        {
+            if (Model[0].client.CompanyName == null)
+            {
+                <div class="element-add">
+                    <h1>Imię: </h1>
+                    <input type="text" name="firstName" value="@Model[0].client.FirstName" />
+                </div>
+                <div class="element-add">
+                    <h1>Nazwisko: </h1>
+                    <input type="text" name="lastName" value="@Model[0].client.LastName" />
+                </div>
+                <div class="element-add">
+                    <h1>Firma: </h1>
+                    <input type="text" name="companyName" value="" disabled />
+                </div>
+            }
+            else
+            {
+                <div class="element-add">
+                    <h1>Imię: </h1>
+                    <input type="text" name="firstName" value="" disabled />
+                </div>
+                <div class="element-add">
+                    <h1>Nazwisko: </h1>
+                    <input type="text" name="lastName" value="" disabled />
+                </div>
+                <div class="element-add">
+                    <h1>Firma: </h1>
+                    <input type="text" name="companyName" value="@Model[0].client.CompanyName" />
+                </div>
+            }
+            <div class="element-add">
+                <h1>Nr telefonu: </h1>
+                <input type="text" name="phoneNumber" value="@Model[0].client.PhoneNumber" />
+            </div>
+            <div class="element-add">
+                <h1>Adres email: </h1>
+                <input type="text" name="email" value="@Model[0].client.Email" />
+            </div>
+            <div class="element-add">
+                <h1>Ulica: </h1>
+                <input type="text" name="street" value="@Model[0].address.Street" />
+            </div>
+            <div class="element-add">
+                <h1>Nr domu: </h1>
+                <input type="text" name="houseNumber" value="@Model[0].address.HouseNumber" />
+            </div>
+            @if (Model[0].address.LocalNumber == null)
+            {
+                <div class="element-add">
+                    <h1>Nr lokalu: </h1>
+                    <input type="text" name="localNumber" value="" />
+                </div>
+            }
+            else
+            {
+                <div class="element-add">
+                    <h1>Nr lokalu: </h1>
+                    <input type="text" name="localNumber" value="@Model[0].address.LocalNumber" />
+                </div>
+            }
+            <div class="element-add">
+                <h1>Miasto: </h1>
+                <input type="text" name="city" value="@Model[0].address.City" />
+            </div>
+            <div class="element-add">
+                <h1>Kod pocztowy: </h1>
+                <input type="text" name="clientName" value="@Model[0].address.Postal" />
+            </div>
+
+        }
+        else
+        {
+            <div class="element-add">
+                <h1>Imię: </h1>
+                <input type="text" name="firstName" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Nazwisko: </h1>
+                <input type="text" name="lastName" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Firma: </h1>
+                <input type="text" name="companyName" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Nr telefonu: </h1>
+                <input type="text" name="phoneNumber" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Adres email: </h1>
+                <input type="text" name="email" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Ulica: </h1>
+                <input type="text" name="street" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Nr domu: </h1>
+                <input type="text" name="houseNumber" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Nr lokalu: </h1>
+                <input type="text" name="localNumber" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Miasto: </h1>
+                <input type="text" name="city" value="" />
+            </div>
+            <div class="element-add">
+                <h1>Kod pocztowy: </h1>
+                <input type="text" name="postal" value="" />
+            </div>
+        }
+    }
+
+    <div class="save-cancel">
+        @{
+            if (Model[0].is_editable)
+            {
+                <button asp-controller="AddEditClient" asp-action="EditClientInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="clientId" value=@Model[0].client.Id>Zapisz</button>
+            }
+            else
+            {
+                <button asp-controller="AddEditClient" asp-action="AddClientToDb" method="get" class="btn save-button" id="saveButton" type="submit" disabled>Zapisz</button>
+            }
+        }
+        <button asp-controller="Client" asp-action="Index" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
+    </div>
+    </form>
+
+</body>
+
