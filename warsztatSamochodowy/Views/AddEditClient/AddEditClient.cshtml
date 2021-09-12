@@ -21,16 +21,17 @@
     <script src="/js/site.js"></script>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <script src="/js/ManagerPojazdy.js"></script>
+    
 </head>
 
 <body>
     <form id="formAddEditClient">
 
-    <div class="element-add">
+    <div class="element-add" id="name-surname">
         <h1>typ klienta: </h1>
         <div class="dropdown" style="margin-right: 30px;">
 
-            <select class="form-control SelectFilter mdb-select md-form formElementAddClient" name="type" value="" id="type">
+            <select class="form-control SelectFilter mdb-select md-form formElementAddClient" name="type" value="" id="clientSelector" onchange="selectClient()">
                 @{
                     if (Model[0].is_editable)
                     {
@@ -65,15 +66,15 @@
             {
                 <div class="element-add">
                     <h1>Imię: </h1>
-                    <input type="text" name="firstName" value="@Model[0].client.FirstName" />
+                    <input type="text" name="firstName" value="@Model[0].client.FirstName" id="inputName"/>
                 </div>
                 <div class="element-add">
                     <h1>Nazwisko: </h1>
-                    <input type="text" name="lastName" value="@Model[0].client.LastName" />
+                    <input type="text" name="lastName" value="@Model[0].client.LastName" id="inputSurname" />
                 </div>
                 <div class="element-add">
                     <h1>Firma: </h1>
-                    <input type="text" name="companyName" value="" disabled />
+                    <input type="text" name="companyName" value="" id="inputCompany" />
                 </div>
             }
             else
@@ -192,4 +193,4 @@
     </form>
 
 </body>
-
+<script src="/js/AddEditClient.js"></script>
