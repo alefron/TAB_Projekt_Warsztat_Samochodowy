@@ -40,7 +40,10 @@ namespace warsztatSamochodowy.Models
         {
             Street = Street.ToUpper();
             HouseNumber = HouseNumber.ToUpper();
-            LocalNumber = LocalNumber.ToUpper();
+            if (LocalNumber != null)
+            {
+                LocalNumber = LocalNumber.ToUpper();
+            }
             City = City.ToUpper();
             Postal = Postal.ToUpper();
         }

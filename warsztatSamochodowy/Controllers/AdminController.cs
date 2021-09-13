@@ -27,7 +27,7 @@ namespace warsztatSamochodowy.Controllers
         private RoleRepository roleRepository = new RoleRepository();
         private AddressRepository addressRepository = new AddressRepository();
         private ProposalRepository proposalRepository = new ProposalRepository();
-        //private AddressRepository addressesRepository = new AddressRepository();
+        private ActionRepository actionRepository = new ActionRepository();
         
         public IActionResult Index()
         {
@@ -62,7 +62,21 @@ namespace warsztatSamochodowy.Controllers
         [ActionName("PersonelEdit")]
         public IActionResult PersonelEdit_Post(PersonelEditForm personelForm)
         {
-            
+            Personel personelToUpdate = personelRepository.GetJoinedPersonelById(personelForm.Id);
+            personelToUpdate.RoleId = personelForm.RoleId;
+            personelForm.Id = personelToUpdate.Id;
+            personelForm.FirstName = personelToUpdate.FirstName;
+            personelForm.LastName = personelToUpdate.LastName;
+            personelForm.Email = personelToUpdate.Email;
+            personelForm.ConfrimEmail = personelToUpdate.Email;
+            personelForm.PhoneNumber = personelToUpdate.PhoneNumber;
+            personelForm.Street = personelToUpdate.Address.Street;
+            personelForm.HouseNumber = personelToUpdate.Address.HouseNumber;
+            personelForm.LocalNumber = personelToUpdate.Address.LocalNumber;
+            personelForm.City = personelToUpdate.Address.City;
+            personelForm.Postal = personelToUpdate.Address.Postal;
+
+
             List<ValidationResult> validationResults = new List<ValidationResult>(); ;
             if (personelForm.Validate(validationResults)==false)
             {
@@ -122,6 +136,9 @@ namespace warsztatSamochodowy.Controllers
             }
             Personel personel = personelForm.GetPersonel();
             personel.Address = personelForm.GetAddres();
+            
+
+            //can insert zwraca zawszw true - niech ktoś zrobi żeby nie dało się dodać drugiej osoby o takim samym mailu
 
             if (personelRepository.CanInsert(personel) == false)
             {
@@ -144,6 +161,12 @@ namespace warsztatSamochodowy.Controllers
 
             personelRepository.Add(personel);
 
+            personel.Role = personelForm.GetRole();
+            if (address != null)
+            {
+                personel.AddressId = address.Id;
+                personel.Address = address;
+            }
 
             ViewData["RoleId"] = roleRepository.GetList().ToSelectListItems();
             return View("PersonelCreateConfirm", personel);
@@ -163,11 +186,11 @@ namespace warsztatSamochodowy.Controllers
             theChosenOne.HashPassword = "";
 
 
-            return View("PersonelDelete",theChosenOne);
+            return RedirectToAction("PersonelDeletePost", "Admin", new { id = theChosenOne.Id });
         }
         [HttpDelete]
-        [HttpPost]
-        [ActionName("PersonelDelete")]
+        [HttpGet]
+        [ActionName("PersonelDeletePost")]
         public IActionResult PersonelDelete_Delete(int id)
         {
             Personel theChosenOne = personelRepository.GetJoinedPersonelById(id);
@@ -187,27 +210,40 @@ namespace warsztatSamochodowy.Controllers
                 this.HttpContext.Response.StatusCode= (int)HttpStatusCode.ExpectationFailed;
                 return  Content("Failed to delete from DB "+e.Message);
             }
-            
-
-
-            return View("PersonelDeleteConfirm", theChosenOne);
+            return RedirectToAction("Index", "Admin");
         }
 
 
         [HttpGet("Admin/getPersonelStatus")]
         public string getPersonelStatus(int personelId)
         {
-            /*List<Proposal> proposals = proposalRepository.
-            string current = "false";
-            foreach (var proposal in proposals)
+            string result = "false";
+            Personel personel = personelRepository.GetJoinedPersonelById(personelId);
+            if (personel.RoleId == "WOR")
             {
-                if (proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING)
+                List<Models.Action> actions = this.actionRepository.GetList();
+                foreach(var act in actions)
                 {
-                    current = "true";
-                    break;
+                    if (act.WorkerId == personelId)
+                    {
+                        result = "true";
+                        break;
+                    }
                 }
-            }*/
-            return "true";
+            }
+            else if (personel.RoleId == "MAN")
+            {
+                List<Proposal> proposals = this.proposalRepository.GetList();
+                foreach (var prop in proposals)
+                {
+                    if (prop.ManagerId == personelId)
+                    {
+                        result = "true";
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
     }

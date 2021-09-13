@@ -69,7 +69,6 @@ namespace warsztatSamochodowy.Repository
                 throw new RepositoryException("Failed To insert Item");
             }
 
-
             dbSet.Add(added);
             return context.SaveChanges();
         }

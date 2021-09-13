@@ -4,50 +4,75 @@
     ViewData["Title"] = "Potwierdzenie Usunięcia";
 }
 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
+
+</head>
+
+
 <h1>Osobnik Został Usunięty z Systemu</h1>
 
-<div>
-    <h4>Pracownik</h4>
+<div class="element-add">
+    <h1>Imię: </h1>
+    <h2>@Html.DisplayFor(model => model.FirstName)</h2> 
+</div>
+
+<!--<div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+        <dt class = "col-sm-2 h2">
+            Imię
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2 h2">
             @Html.DisplayNameFor(model => model.LastName)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2 h2">
             @Html.DisplayNameFor(model => model.Role)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Role.CodeRole)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2 h2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2 h2">
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-2 h2">
             @Html.DisplayNameFor(model => model.Address)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Address.Id)
         </dd>
     </dl>
-</div>
+</div>-->
 <div>
     <a asp-action="Index">Lista</a>
 </div>

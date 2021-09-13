@@ -9,29 +9,30 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
     <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
+    <link href="/css/ManagerKlienci.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="/js/ManagerPojazdy.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <script src="/js/site.js"></script>
-    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
-    <script src="/js/ManagerPojazdy.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table-locale-all.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/export/bootstrap-table-export.min.js"></script>
 </head>
 
 
 <div class="flex-center">
     <a type="submit" class="h2" asp-controller="Admin" asp-action="Index" style="text-decoration: none;">Pracownicy warsztatu</a>
 </div>
+<br />
 
-<a class="btn btn-blue" asp-action="PersonelCreate">dodaj pracownika</a>
+<div class="flex-center">
+    <a class="btn btn-green" asp-action="PersonelCreate">dodaj pracownika</a>
+</div>
+<br />
 
 <div class="row d-flex justify-content-center">
     <div class="col-md-8">
@@ -60,7 +61,7 @@
                                                 </div>
                                                 <div class='controlls'>
                                                     @{
-                                                        var url = "https://localhost:44323/Admin/getPersonelStatus?clientId=" + item.Id;
+                                                        var url = "https://localhost:44323/Admin/getPersonelStatus?personelId=" + item.Id;
                                                         string textResult = await httpRequest(url);
                                                         bool status = textResult == "true" ? true : false;
 
@@ -74,7 +75,7 @@
                                                         else
                                                         {
                                                             <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="bez zadań"></span>
-                                                            <button class='trash-button' data-toggle="modal" data-target="#deleteClientModal" type="button" value="@item.Id.ToString()">
+                                                            <button class='trash-button' data-toggle="modal" data-target="#deletePersonelModal" type="submit" value="@item.Id">
                                                                 <i class="fas fa-trash" style='font-size:24px;color:red'></i>
                                                             </button>
                                                         }
@@ -93,61 +94,54 @@
     </div>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="deletePersonelModal" aria-labelledby="deletePersonelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Usuwanie pracownika</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div>
+                <p class="modal-body" id="personelId"></p>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="PersonelDelete" method="get">
+                    <button type="submit" name="id"  ="jj" class="btn btn-primary" id="deleteConfirmed">Tak, usuń</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Role.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address.FormatedAddress)
-                </td>
-                <td>
-                    <a asp-action="PersonelEdit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="PersonelDelete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/js/ManagerPojazdy.js"></script>
+<script>
+
+    $(document).ready(function (event) {
+        $("#deletePersonelModal").on('show.bs.modal', function (event) {
+            //get button that triggered the modal
+            var button = $(event.relatedTarget);
+
+            //get the button "tak, usuń" in modal window
+            var confirmDelete = document.getElementById("deleteConfirmed");
+
+            //get modal window
+            var modal = $(this);
+
+            //set the button's value to regNumber
+            confirmDelete.value = button.val();
+
+            //set the text in model window
+            modal.find('.modal-body').html("Czy chcesz usunąć pracownika wraz z całą jego historią?");
+        });
+
+    });
+</script>
+
 
 @{
     async Task<string> httpRequest(string url)
