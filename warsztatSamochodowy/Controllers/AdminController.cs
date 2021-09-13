@@ -26,6 +26,7 @@ namespace warsztatSamochodowy.Controllers
         private PersonelRepository personelRepository = new PersonelRepository();
         private RoleRepository roleRepository = new RoleRepository();
         private AddressRepository addressRepository = new AddressRepository();
+        private ProposalRepository proposalRepository = new ProposalRepository();
         //private AddressRepository addressesRepository = new AddressRepository();
         
         public IActionResult Index()
@@ -36,11 +37,10 @@ namespace warsztatSamochodowy.Controllers
         }
 
 
-        [HttpGet]
+
+        [HttpGet("Admin/PersonelEdit")]
         public IActionResult PersonelEdit(int id)
         {
-
-
 
             Personel theChosenOne = personelRepository.GetJoinedPersonelById(id);
             if (theChosenOne == null)
@@ -193,6 +193,22 @@ namespace warsztatSamochodowy.Controllers
             return View("PersonelDeleteConfirm", theChosenOne);
         }
 
+
+        [HttpGet("Admin/getPersonelStatus")]
+        public string getPersonelStatus(int personelId)
+        {
+            /*List<Proposal> proposals = proposalRepository.
+            string current = "false";
+            foreach (var proposal in proposals)
+            {
+                if (proposal.Status == StatusEnum.OPEN || proposal.Status == StatusEnum.PROCESSING)
+                {
+                    current = "true";
+                    break;
+                }
+            }*/
+            return "true";
+        }
 
     }
 }
