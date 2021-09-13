@@ -76,3 +76,7 @@ h2 {
     outline: 1px solid black;
     background: hsla(260, 99%, 52%, 0.6);
 }
+
+.table-title{
+    font-size: 30px !important;
+}
