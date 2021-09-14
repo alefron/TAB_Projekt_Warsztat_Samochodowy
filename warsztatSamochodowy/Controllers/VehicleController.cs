@@ -187,7 +187,9 @@ namespace warsztatSamochodowy.Controllers
         [HttpGet("Vehicle/showVehicle")]
         public IActionResult showVehicle(string regNum)
         {
-            return View();
+            List<FormShowVehicle> modelToShowVechcle = new List<FormShowVehicle>();
+            modelToShowVechcle.Add(new FormShowVehicle(regNum));
+            return View(modelToShowVechcle);
         }
 
         [Authorize(Roles = "manager")]

@@ -32,13 +32,14 @@ namespace warsztatSamochodowy.Controllers
             return View(model);
         }
 
-        [HttpGet("AddVehicle/EdditVehicle")]
-        public IActionResult EditVehicle()
+        [HttpGet("AddVehicle/EditVehicle")]
+        public IActionResult EditVehicle(string regNumber)
         {
             // ustaiwc editable na true
             // i jakos dostac sie do proposala
-            this.model.Add(new FormAddEditVehicle());
-            return View(model);
+            var editVehicle = new FormAddEditVehicle(regNumber);
+            this.model.Add(editVehicle);
+            return View("AddVehicle", model);
         }
 
         [HttpGet("AddVehicle/AddVehicleToDB")]
@@ -70,5 +71,20 @@ namespace warsztatSamochodowy.Controllers
         }
 
 
+   
+    public IActionResult UpdateVehicle(string brand, string regNumber, string type, int client)
+        {
+            // dodac zapisanie do bazy
+            Vehicle vechicle = vehicleRepository.GetVehicleByRegNum(regNumber);
+            
+            vechicle.BrandId = brand;
+            vechicle.RegNumber = regNumber;
+            vechicle.VehicleTypeId = type;
+            vechicle.ClientId = client;
+            vechicle.Name = regNumber + "_" + brand;
+            vehicleRepository.Update(vechicle);
+            
+            return RedirectToAction("showVehicle", "Vehicle", new { regNum = regNumber });
+        }
     }
 }

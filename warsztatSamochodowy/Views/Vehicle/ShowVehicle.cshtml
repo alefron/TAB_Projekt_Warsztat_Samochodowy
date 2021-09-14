@@ -1,3 +1,7 @@
+<div style="color: transparent;">
+    @Model FormShowVehicle
+</div>
+@using System.Net.Http
 
 <!doctype html>
 <html lang="en">
@@ -17,156 +21,155 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <script src="/js/site.js"></script>
 
+
 </head>
 <br />
 <br />
 <div class="codepen-wrapper">
-    <span class="registration-ui">N606 GUR</span>
+    <span class="registration-ui">@Model[0].vehicle.RegNumber</span>
 </div>
-<div class="edit-vehicle-button">Edytuj</div>
+
+<form asp-controller="AddVehicle" asp-action="EditVehicle" method="get">
+    <button type="submit" name="regNumber" value="@Model[0].vehicle.RegNumber" class="edit-vehicle-button">Edytuj</button>
+</form>
 
 <br />
 <br />
 
 <div class="element">
     <h1>Pojazd: </h1>
-    <h2>nietoperzmobil</h2>
+    <h2>@Model[0].vehicle.RegNumber </h2>
 </div>
 
 <div class="element">
     <h1>Marka: </h1>
-    <h2>batman</h2>
+    <h2>@Model[0].brand.Name</h2>
 </div>
 
 <div class="element">
     <h1>Nr rejestracyjny: </h1>
-    <h2>marka</h2>
+    <h2>@Model[0].vehicle.RegNumber</h2>
 </div>
 
 <div class="element">
     <h1>Typ pojazdu: </h1>
-    <h2>marka</h2>
+    <h2>Model[0].vehicle.VehicleType.Name</h2>
 </div>
 
 <div class="element">
     <h1>Wlasciciel: </h1>
-    <h2>marka</h2>
+    <h2>@Model[0].client.FirstName @Model[0].client.LastName @Model[0].client.CompanyName</h2>
 </div>
+@{
+    var uri = new Uri("https://localhost:44323/Vehicle/getVehicleProposalsCount?regNumber=" + @Model[0].vehicle.RegNumber);
 
+    var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+    HttpClientHandler handler = new HttpClientHandler();
+    handler.CookieContainer = new System.Net.CookieContainer();
+    handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+    var clinet = new HttpClient(handler);
+
+    clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+    var response = await clinet.GetAsync(uri);
+    string textResult = await response.Content.ReadAsStringAsync();
+}
 <div class="element">
     <h1>Liczba wykonanych napraw: </h1>
-    <h2>marka</h2>
+    <h2>@textResult</h2>
 </div>
 <br />
 <div class="element">
     <h1 class="table-title">Historia napraw</h1>
 </div>
-
-@*<div class="scroll-area-sm">
-        <perfect-scrollbar class="ps-show-limits">
-            <div style="position: static;" class="ps ps--active-y">
-                <div class="ps-content">
-                    <ul class=" list-group list-group-flush">
-                        @foreach (var item in Model[0].proposals)
-                        {
-                            <li class="list-group-item">
-                                <div class="bg-warning"></div>
-                                <div class="p-0">
-                                    <div class="row">
-                                        <div class="zlecenie-header">
-                                            <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
-                                                <button class="h5 a-anim nav-link btn-table" name="proposalId" value="@item.Id">@item.VehicleId @item.StartDate</button>
-                                            </form>
-                                            <i>@item.Description</i>
-                                        </div>
-                                        <div class="progess-container">
-                                            @{
-                                                var uri = new Uri("https://localhost:44323/Proposals/getProposalActionsComplete?proposalId=" + item.Id);
-
-                                                var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
-
-                                                HttpClientHandler handler = new HttpClientHandler();
-                                                handler.CookieContainer = new System.Net.CookieContainer();
-                                                handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
-
-                                                var clinet = new HttpClient(handler);
-
-                                                clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
-
-                                                var response = await clinet.GetAsync(uri);
-                                                string textResult = await response.Content.ReadAsStringAsync();
-
-
-
-                                                if (@item.Status == StatusEnum.OPEN)
-                                                {
-                                                    <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Nale¿y najpierw zakoñczyæ naprawê, aby j¹ usun¹æ." disabled>
-                                                        <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
-                                                    </button>
-
-                                                    <span class="circle circle-blue" data-toggle="tooltip" data-placement="right" title="przyjête"></span>
-                                                }
-                                                else if (@item.Status == StatusEnum.PROCESSING)
-                                                {
-                                                    <div class="pudelko progress">
-                                                        <div data-percentage="0%" style="width: @textResult;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
-
-                                                    </div>
-                                                    <button class="trash-button" data-toggle="tooltip" data-placement="right" title="Nale¿y najpierw zakoñczyæ naprawê, aby j¹ usun¹æ." disabled>
-                                                        <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
-                                                    </button>
-                                                    <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="trwaj¹ce"></span>
-                                                }
-                                                else if (@item.Status == StatusEnum.FINAL)
-                                                {
-                                                    <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
-                                                        <i class="fas fa-trash" style='font-size:24px;color:red'></i>
-                                                    </button>
-                                                    <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="zakoñczone"></span>
-                                                }
-                                                else
-                                                {
-                                                    <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
-                                                        <i class="fas fa-trash" style='font-size:24px;color:red'></i>
-                                                    </button>
-                                                    <span class="circle circle-red" data-toggle="tooltip" data-placement="right" title="anulowane"></span>
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-8">
+        <div class="card-hover-shadow-2x mb-3 card">
+            <div class="card-header">
+                <div class="text-capitalize font-weight-normal">Lista zleceÅ„</div>
             </div>
-        </perfect-scrollbar>
+            <div class="scroll-area-sm">
+                <perfect-scrollbar class="ps-show-limits">
+                    <div style="position: static;" class="ps ps--active-y">
+                        <div class="ps-content">
+                            <ul class=" list-group list-group-flush">
+                                @foreach (var item in Model[0].proposals)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="bg-warning"></div>
+                                        <div class="p-0">
+                                            <div class="row">
+                                                <div class="zlecenie-header">
+                                                    <form asp-controller="ShowProposal" asp-action="ShowProposal" method="get">
+                                                        <button class="h5 a-anim nav-link btn-table" name="proposalId" value="@item.Id">@item.VehicleId @item.StartDate</button>
+                                                    </form>
+                                                    <i>@item.Description</i>
+                                                </div>
+                                                <div class="progess-container">
+                                                    @{
+                                                        uri = new Uri("https://localhost:44323/Proposals/getProposalActionsComplete?proposalId=" + item.Id);
+
+                                                        cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+                                                        handler = new HttpClientHandler();
+                                                        handler.CookieContainer = new System.Net.CookieContainer();
+                                                        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+                                                        clinet = new HttpClient(handler);
+
+                                                        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+                                                        response = await clinet.GetAsync(uri);
+                                                        textResult = await response.Content.ReadAsStringAsync();
+
+
+
+                                                        if (@item.Status == StatusEnum.OPEN)
+                                                        {
+                                                            <button class="trash-button" data-toggle="tooltip" data-placement="right" title="NaleÅ¼y najpierw zakoÅ„czyÄ‡ naprawÄ™, aby jÄ… usunÄ…Ä‡." disabled>
+                                                                <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                            </button>
+
+                                                            <span class="circle circle-blue" data-toggle="tooltip" data-placement="right" title="przyjÄ™te"></span>
+                                                        }
+                                                        else if (@item.Status == StatusEnum.PROCESSING)
+                                                        {
+                                                            <div class="pudelko progress">
+                                                                <div data-percentage="0%" style="width: @textResult;" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+
+                                                            </div>
+                                                            <button class="trash-button" data-toggle="tooltip" data-placement="right" title="NaleÅ¼y najpierw zakoÅ„czyÄ‡ naprawÄ™, aby jÄ… usunÄ…Ä‡." disabled>
+                                                                <i class="fas fa-trash" style='font-size:24px;color:gray'></i>
+                                                            </button>
+                                                            <span class="circle circle-yellow" data-toggle="tooltip" data-placement="right" title="trwajÄ…ce"></span>
+                                                        }
+                                                        else if (@item.Status == StatusEnum.FINAL)
+                                                        {
+                                                            <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
+                                                                <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                            </button>
+                                                            <span class="circle circle-green" data-toggle="tooltip" data-placement="right" title="zakoÅ„czone"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@item.Id">
+                                                                <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                            </button>
+                                                            <span class="circle circle-red" data-toggle="tooltip" data-placement="right" title="anulowane"></span>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
     </div>
-                </div>
-            </div>
-        </div>
-
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModallabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Usuwanie zlecenia</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div>
-                    <p class="modal-body" id="proposal"></p>
-                </div>
-                <div class="modal-footer">
-                    <form asp-controller="Proposals" asp-action="deleteProposal" method="get">
-                        <button type="submit" class="btn btn-primary" name="proposalId" value="" id="deleteConfirmed">Tak, usuñ</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-
-                </div>
-            </div>
-        </div>
-    </div>*@
-
+</div>
