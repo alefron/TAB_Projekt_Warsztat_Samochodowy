@@ -24,29 +24,54 @@
             {
                 <div class="element-add">
                     <h1>Pojazd: </h1>
-                    <h4>Model[0].vehicle.RegNumber + " " + Model[0].vehicle.Name</h4>
+                    <h4>@Model[0].vehicle.Name</h4>
                 </div>
             }
         }
-        <div class="element-add">
-            <h1>Marka: </h1>
-            <div class="dropdown">
-                <select class="form-control SelectFilter mdb-select md-form formElement" name="brand" value="" data-target="vehicleDropdown" searchable="Search here.." id="Brand">
-                    @{
-                        <option value="-1" selected disabled>Wybierz markę</option>
-                        foreach (var brand in Model[0].brands)
+    <div class="element-add">
+        <h1>Marka: </h1>
+        <div class="dropdown">
+            <select class="form-control SelectFilter mdb-select md-form formElement" name="brand" value="" data-target="vehicleDropdown" searchable="Search here.." id="Brand">
+                @{
+                    <option value="-1" selected disabled>Wybierz markę</option>
+                    foreach (var brand in Model[0].brands)
+                    {
+                        if (Model[0].is_editable)
                         {
-                            <option value="@brand.CodeBrand" >@brand.Name</option>
+                            if (Model[0].brand == brand)
+                            {
+                                <option value="@brand.CodeBrand" selected>@brand.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@brand.CodeBrand">@brand.Name</option>
+                            }
+                        }
+                        else
+                        {
+                            <option value="@brand.CodeBrand">@brand.Name</option>
                         }
                     }
-                </select>
-            </div>
+                }
+            </select>
         </div>
-
+        <input hidden name="isEdit" value="@Model[0].is_editable.ToString().ToLower()" />
+        <button asp-controller="Vehicle" asp-action="addNewBrand"  method="get" class="btn add-button" type="submit" style="margin-left: 20px"> <i class="fas fa-plus" style="color: black"></i></button>
+    </div>
 
         <div class="element-add">
             <h1>Nr rejestracyjny: </h1>
-            <input type="text" name="regNumber" value="" placeholder="..." />
+
+            @{
+                if (Model[0].is_editable)
+                {
+                    <input type="text" name="regNumber" value="@Model[0].vehicle.RegNumber" readonly="readonly"/>
+                }
+                else
+                {
+                    <input type="text" name="regNumber" value="@Model[0].vehicle.RegNumber"/>
+                }
+            }
         </div>
 
         <div class="element-add">
@@ -57,7 +82,21 @@
                         <option value="-1" selected disabled>Wybierz typ</option>
                         foreach (var type in Model[0].vehicleTypes)
                         {
-                            <option value="@type.CodeType">@type.Name</option>
+                            if (Model[0].is_editable)
+                            {
+                                if (Model[0].vehicleType == type)
+                                {
+                                    <option value="@type.CodeType" selected>@type.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@type.CodeType">@type.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="@type.CodeType">@type.Name</option>
+                            }
                         }
                     }
                 </select>
@@ -70,10 +109,25 @@
             <div class="dropdown">
                 <select class="form-control SelectFilter mdb-select md-form formElement" name="client" value="" data-target="vehicleDropdown" searchable="Search here.." id="Owner">
                     @{
-                        <option value="-1" selected disabled >Wybierz klienta</option>
+                        <option value="-1" selected disabled>Wybierz klienta</option>
                         foreach (var client in Model[0].clients)
                         {
-                            <option value="@client.Id">@client.FirstName @client.LastName @client.CompanyName</option>
+
+                            if (Model[0].is_editable)
+                            {
+                                if (Model[0].client.Id == client.Id)
+                                {
+                                    <option value="@client.Id" selected>@client.FirstName @client.LastName @client.CompanyName</option>
+                                }
+                                else
+                                {
+                                    <option value="@client.Id">@client.FirstName @client.LastName @client.CompanyName</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="@client.Id">@client.FirstName @client.LastName @client.CompanyName</option>
+                            }
                         }
                     }
                 </select>
@@ -84,9 +138,18 @@
         <br />
         <br />
         <div class="save-cancel">
-            <button asp-controller="AddVehicle" asp-action="AddVehicleToDB" method="get" class="btn save-button" id="saveButton" type="submit" name ="propasalId" value="@Model[0].proposalId">Zapisz</button>
-
-            <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" >Anuluj</button>
+            @{
+                if (Model[0].is_editable)
+                {
+                    <button asp-controller="AddVehicle" asp-action="UpdateVehicle" method="get" class="btn save-button" id="saveButton" type="submit">Zapisz</button>
+                    <button asp-controller="Vehicle" asp-action="showVehicle" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+                }
+                else
+                {
+                    <button asp-controller="AddVehicle" asp-action="AddVehicleToDB" method="get" class="btn save-button" id="saveButton" type="submit" name="propasalId" value="@Model[0].proposalId">Zapisz</button>
+                    <button asp-controller="AddProposal" asp-action="AddProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+                }
+            }
         </div>
     </form>
 </body>

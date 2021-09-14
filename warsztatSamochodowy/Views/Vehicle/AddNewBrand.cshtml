@@ -1,0 +1,52 @@
+﻿
+<div style="color: transparent;">
+    @Model  FormAddNewBrand
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <form id="addNewBrand">
+        <h1>Nowa marka: </h1>
+        <input type="text" name="brandToAdd" value="" />
+        <button asp-controller="Vehicle" asp-action="addNewBrandToDB" method="get" class="btn save-button" id="saveButton" type="submit">Dodaj</button>
+
+        <input hidden name="isEdit" value="@Model[0].isEdit.ToString().ToLower()" />
+        <input hidden name="regNumber" value="@Model[0].regNumber" />
+
+        <select class="form-control SelectFilter mdb-select md-form formElement" name="brandToDel" value="" data-target="vehicleDropdown" searchable="Search here.." id="Brand">
+            @{
+                foreach (var brand in Model[0].brands)
+                {
+                    <option value="@brand.CodeBrand" selected>@brand.Name</option>
+                }
+            }
+
+        </select>
+        <button asp-controller="Vehicle" asp-action="deleteBrandFromDB" method="get" class="btn cancel-button" id="cancelButton" type="submit">Usuń</button>
+        @{
+            if (Model[0].isEdit)
+            {
+                <button asp-controller="AddVehicle" asp-action="EditVehicle" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+            }
+            else
+            {
+                <button asp-controller="AddVehicle" asp-action="AddVehicle" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+            }
+        }
+    </form>
+</body>
+
+

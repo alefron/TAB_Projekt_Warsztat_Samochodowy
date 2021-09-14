@@ -185,9 +185,11 @@ namespace warsztatSamochodowy.Controllers
 
         [Authorize(Roles = "manager")]
         [HttpGet("Vehicle/showVehicle")]
-        public IActionResult showVehicle(string regNum)
+        public IActionResult showVehicle(string regNumber)
         {
-            return View();
+            List<FormShowVehicle> modelToShowVechcle = new List<FormShowVehicle>();
+            modelToShowVechcle.Add(new FormShowVehicle(regNumber));
+            return View(modelToShowVechcle);
         }
 
         [Authorize(Roles = "manager")]
@@ -221,6 +223,60 @@ namespace warsztatSamochodowy.Controllers
             return RedirectToAction("VehicleList", "Vehicle");
         }
 
+        [Authorize(Roles = "manager")]
+        public IActionResult addNewBrand(bool isEdit, string regNumber)
+        {
+            List<FormAddNewBrand> list = new List<FormAddNewBrand>();
+            list.Add(new FormAddNewBrand());
+            list[0].isEdit = isEdit;
+            list[0].regNumber = regNumber;
+            return View(list);
+        }
+
+        [Authorize(Roles = "manager")]
+        public IActionResult addNewBrandToDB(string brandToAdd, bool isEdit, string regNumber)
+        {
+            if(brandToAdd != null)
+            {
+                // dodawnaie marki
+                Brand brand = new Brand();
+                brand.CodeBrand = brandToAdd.ToUpper().Substring(0, 3);
+                brand.Name = brandToAdd;
+                brandRepository.Add(brand);
+            }
+
+            if (isEdit)
+            {
+                return RedirectToAction("EditVehicle", "AddVehicle", new { @regNumber = regNumber });
+            }
+            else
+            {
+                return RedirectToAction("AddVehicle", "AddVehicle");
+            }
+        }
+
+        [Authorize(Roles = "manager")]
+        public IActionResult deleteBrandFromDB(string brandToDel, bool isEdit, string regNumber)
+        {
+            if (brandToDel != null)
+            {
+                // usuwanie marki\
+                var brand = brandRepository.GetByID(brandToDel);
+                if (brand != null)
+                {
+                    brandRepository.Remove(brand);
+                }
+            }
+
+            if (isEdit)
+            {
+                return RedirectToAction("EditVehicle", "AddVehicle", new { @regNumber = regNumber });
+            }
+            else
+            {
+                return RedirectToAction("AddVehicle", "AddVehicle");
+            }
+        }
         /*[HttpPost("/Vehicle/vehicleList")]
         public IActionResult getVehicleListSortedByBrand(string returnUrl)
         {

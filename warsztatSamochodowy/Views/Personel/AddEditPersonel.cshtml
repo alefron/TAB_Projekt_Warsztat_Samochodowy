@@ -1,0 +1,138 @@
+﻿<div style="color: transparent;" hidden>
+    @Model FormAddEditPersonel
+</div>
+@using System.Net.Http
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
+
+</head>
+
+<body>
+    <form id="formAddEditClient">
+
+        @{
+            if (Model[0].isAdmin)
+            {
+                <div class="element-add">
+                    <h1>Rola pracownika: </h1>
+                    <select class="form-control SelectFilter mdb-select md-form formElement" name="role" value="" searchable="Search here.." id="Role">
+                        @{
+                            if (Model[0].personel.Role.CodeRole == "MAN")
+                            {
+                                <option value="1">Pracownik</option>
+                                <option value="2" selected>Menager</option>
+                                <option value="3">Administrator</option>
+                            }
+                            else if (Model[0].personel.Role.CodeRole == "ADM")
+                            {
+                                <option value="1">Pracownik</option>
+                                <option value="2">Menager</option>
+                                <option value="3" selected>Administrator</option>
+                            }
+                            else
+                            {
+                                <option value="1" selected>Pracownik</option>
+                                <option value="2">Menager</option>
+                                <option value="3">Administrator</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+        }
+
+        <input hidden name="addresId" value="@Model[0].personel.Address.Id" />
+        <input hidden name="personelId" value="@Model[0].personel.Id" />
+
+        <div class="element-add">
+            <h1>Imię: </h1>
+            <input class="validationElement" type="text" name="firstName" value="@Model[0].personel.FirstName" />
+        </div>
+        <div class="element-add">
+            <h1>Nazwisko: </h1>
+            <input class="validationElement" type="text" name="lastName" value="@Model[0].personel.LastName" />
+        </div>
+        <div class="element-add">
+            <h1>Nr telefonu: </h1>
+            <input class="validationElement" type="text" name="phoneNumber" value="@Model[0].personel.PhoneNumber"  maxlength="9"/>
+        </div>
+        <div class="element-add">
+            <h1>Adres email: </h1>
+            <input class="validationElement" type="text" name="email" value="@Model[0].personel.Email" />
+        </div>
+        <div class="element-add">
+            <h1>Ulica: </h1>
+            <input class="validationElement" type="text" name="street" value="@Model[0].personel.Address.Street" />
+        </div>
+        <div class="element-add">
+            <h1>Nr domu: </h1>
+            <input class="validationElement" type="text" name="houseNumber" value="@Model[0].personel.Address.HouseNumber" />
+        </div>
+        <div class="element-add">
+            <h1>Nr lokalu: </h1>
+            <input type="text" name="localNumber" value="@Model[0].personel.Address.LocalNumber" />
+        </div>
+        <div class="element-add">
+            <h1>Miasto: </h1>
+            <input class="validationElement" type="text" name="city" value="@Model[0].personel.Address.City" />
+        </div>
+        <div class="element-add">
+            <h1>Kod pocztowy: </h1>
+            <input class="validationElement" type="text" name="postal" value="@Model[0].personel.Address.Postal" maxlength="6" />
+        </div>
+
+        <div class="save-cancel">
+            <button asp-controller="Personel" asp-action="updateMyAccount" method="get" class="btn save-button" id="saveButton" type="submit">Zapisz</button>
+
+            <button asp-controller="Client" asp-action="Index" method="get" class="btn cancel-button" id="cancelButton">Anuluj</button>
+        </div>
+    </form>
+
+</body>
+<script src="/js/AddEditClient.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        validate();
+        $(".validationElement").on("change click ready load", validate );
+    });
+
+
+    function validate() {
+        var isEmpty = false;
+
+        $(".validationElement").each(function () {
+            if ($(this).val() == "") {
+                isEmpty = true;
+            }
+        });
+        var button = $("#saveButton");
+        if (isEmpty == true) {
+            button.prop("disabled", !0);
+        }
+        else {
+            button.removeAttr("disabled");
+        }
+
+    }
+
+</script>
