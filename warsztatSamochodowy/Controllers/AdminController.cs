@@ -50,6 +50,7 @@ namespace warsztatSamochodowy.Controllers
             }
             theChosenOne.HashPassword = "";
             PersonelEditForm personelForm = new PersonelEditForm(theChosenOne);
+            personelForm.Id = theChosenOne.Id;
 
             //Get posible values for roleID dropdown
             ViewData["RoleId"] = roleRepository.GetList().ToSelectListItems();
@@ -107,8 +108,10 @@ namespace warsztatSamochodowy.Controllers
 
             personel.AddressId = address.Id;
 
+
             personelRepository.Update(personel);
 
+            personel.Role = personelForm.GetRole();
 
             return View("PersonelEditConfirm", personel);
 

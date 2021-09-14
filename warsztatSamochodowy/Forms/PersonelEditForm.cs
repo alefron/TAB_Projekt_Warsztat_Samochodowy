@@ -115,6 +115,27 @@ namespace warsztatSamochodowy.Forms
             };
         }
 
+        public Role GetRole()
+        {
+            Role role = new Role
+            {
+                CodeRole = this.RoleId
+            };
+            if (this.RoleId == "WOR")
+            {
+                role.Name = "Worker";
+            }
+            if (this.RoleId == "MAN")
+            {
+                role.Name = "Manager";
+            }
+            if (this.RoleId == "ADM")
+            {
+                role.Name = "Administrator";
+            }
+            return role;
+        }
+
 
     }
 }

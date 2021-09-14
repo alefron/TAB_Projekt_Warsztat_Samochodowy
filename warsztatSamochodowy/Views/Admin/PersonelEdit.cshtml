@@ -3,24 +3,23 @@
 @{
     ViewData["Title"] = "PersonelEdit";
 }
+@using System.Net.Http
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
-    <link href="~/css/ShowPorposal.css" rel="stylesheet" />
-    <link href="/css/ManagerKlienci.css" rel="stylesheet" />
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
     <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-    <script src="/js/ManagerPojazdy.js"></script>
+    <link href="/css/ManagerPojazdy.css" rel="stylesheet" />
     <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <!--<script src="~/lib/jquery/dist/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <script src="/js/site.js"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="/js/ManagerPojazdy.js"></script>
 </head>
 
 <h1>Edytuj Pracownika</h1>
@@ -33,63 +32,87 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Imię: </h1>
                 <h2>@Html.DisplayFor(model => model.FirstName)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Nazwisko: </h1>
                 <h2>@Html.DisplayFor(model => model.LastName)</h2>
             </div>
 
-            <div class="element-add">
-                <h1>Rola: </h1>
-                <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
-                <span asp-validation-for="RoleId" class="text-danger"></span>
-            </div>
+            @{
+                var url = "https://localhost:44323/Admin/getPersonelStatus?personelId=" + Model.Id;
+                string textResult = await httpRequest(url);
+                bool status = textResult == "true" ? true : false;
+                if (status)
+                {
+                    <div class="element">
+                        <h1>Rola: </h1>
+                        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId" disabled></select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                        <div class="h6 alert-danger">Aby zmienić rolę, pracownik nie może mieć przypisanych żadnych akcji ani zleceń.</div>
+                    </div>
+                }
+                else
+                {
+                    <div class="element">
+                        <h1>Rola: </h1>
+                        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                        <span asp-validation-for="RoleId" class="text-danger"></span>
+                    </div>
+                }
+            }
 
-            <div class="element-add">
+
+            <div class="element">
                 <h1>Email: </h1>
                 <h2>@Html.DisplayFor(model => model.Email)</h2>
             </div>
 
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Numer Telefonu: </h1>
                 <h2>@Html.DisplayFor(model => model.PhoneNumber)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Ulica: </h1>
                 <h2>@Html.DisplayFor(model => model.Street)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Numer domu: </h1>
                 <h2>@Html.DisplayFor(model => model.HouseNumber)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Numer Lokalu: </h1>
                 <h2>@Html.DisplayFor(model => model.LocalNumber)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Miasto: </h1>
                 <h2>@Html.DisplayFor(model => model.City)</h2>
             </div>
 
-            <div class="element-add">
+            <div class="element">
                 <h1>Kod pocztowy: </h1>
                 <h2>@Html.DisplayFor(model => model.Postal)</h2>
             </div>
             <br />
             <br />
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            @{
+                if (!status)
+                {
+                    <div class="form-group">
+                        <input type="submit" value="Zapisz" class="btn btn-blue" />
+                    </div>
+                }
+            }
+
         </form>
     </div>
 </div>
@@ -102,4 +125,27 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+@{
+    async Task<string> httpRequest(string url)
+    {
+        var uri = new Uri(url);
+
+        var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
+
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.CookieContainer = new System.Net.CookieContainer();
+        handler.CookieContainer.Add(uri, new System.Net.Cookie(".AspNetCore.Cookies", cookies));
+
+        var clinet = new HttpClient(handler);
+
+        clinet.DefaultRequestHeaders.Add(".AspNetCore.Cookies", cookies);
+
+        var response = await clinet.GetAsync(uri);
+        string textResult = await response.Content.ReadAsStringAsync();
+
+        return textResult;
+    }
+
 }
