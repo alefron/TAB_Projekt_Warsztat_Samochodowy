@@ -16,6 +16,7 @@ function selectClient() {
         inputCompany.disabled = true;
         inputName.disabled = false;
         inputSurname.disabled = false;
+        inputCompany.value = "";
     }
     else {
         inputCompany.disabled = false;

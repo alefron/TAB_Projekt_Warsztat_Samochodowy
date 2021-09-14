@@ -39,8 +39,20 @@ namespace warsztatSamochodowy.Controllers
         }
 
         [HttpGet("AddEditClient/EditClientInDb")]
-        public IActionResult EditClientInDb(string type, string firstName, string lastName, string companyName, string phoneNumber, string email, string street, string houseNumber, string localNumber, string city, string postal)
+        public IActionResult EditClientInDb(
+            string type,
+            string firstName,
+            string lastName,
+            string companyName,
+            string phoneNumber,
+            string email,
+            string street,
+            string houseNumber,
+            string localNumber,
+            string city,
+            string postal)
         {
+            
             return RedirectToAction("Index", "Client");
         }
 

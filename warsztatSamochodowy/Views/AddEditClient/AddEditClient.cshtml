@@ -94,7 +94,7 @@
             }
             <div class="element-add">
                 <h1>Nr telefonu: </h1>
-                <input type="text" name="phoneNumber" value="@Model[0].client.PhoneNumber" />
+                <input type="text" name="phoneNumber" maxlength="9" value="@Model[0].client.PhoneNumber" />
             </div>
             <div class="element-add">
                 <h1>Adres email: </h1>
@@ -128,7 +128,7 @@
             </div>
             <div class="element-add">
                 <h1>Kod pocztowy: </h1>
-                <input type="text" name="postal" value="@Model[0].address.Postal" />
+                <input type="text" name="postal" maxlength="6" value="@Model[0].address.Postal" />
             </div>
 
         }
@@ -136,19 +136,19 @@
         {
             <div class="element-add">
                 <h1>Imię: </h1>
-                <input type="text" name="firstName" value="" />
+                <input type="text" name="firstName" value="" id="inputName" />
             </div>
             <div class="element-add">
                 <h1>Nazwisko: </h1>
-                <input type="text" name="lastName" value="" />
+                <input type="text" name="lastName" value="" id="inputSurname" />
             </div>
             <div class="element-add">
                 <h1>Firma: </h1>
-                <input type="text" name="companyName" value="" />
+                <input type="text" name="companyName" value="" id="inputCompany" />
             </div>
             <div class="element-add">
                 <h1>Nr telefonu: </h1>
-                <input type="text" name="phoneNumber" value="" />
+                <input type="text" name="phoneNumber" value="" maxlength="9" />
             </div>
             <div class="element-add">
                 <h1>Adres email: </h1>
@@ -172,7 +172,7 @@
             </div>
             <div class="element-add">
                 <h1>Kod pocztowy: </h1>
-                <input type="text" name="postal" value="" />
+                <input type="text" name="postal" value="" maxlength="6" />
             </div>
         }
     }
@@ -193,4 +193,5 @@
     </form>
 
 </body>
+
 <script src="/js/AddEditClient.js"></script>

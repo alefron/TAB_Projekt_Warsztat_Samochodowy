@@ -23,7 +23,7 @@ namespace warsztatSamochodowy.Controllers
             
         }
 
-        [HttpGet("AddVehicle/AddVehicle{propasalId:int}")]
+        [HttpGet("AddVehicle/AddVehicle")]
         public IActionResult AddVehicle(int propasalId)
         {
             var added = new FormAddEditVehicle();
