@@ -376,21 +376,18 @@ namespace warsztatSamochodowy.Repository
         }
 
 
+
         public List<Models.Action> getAllActionByActionTypeId(string actionTypeId)
         {
-            return Task.Run(() => { return getAllActionByActionTypeIdAsync(actionTypeId); }).Result;
+            return Task.Run(() => { return getAllActionByActionTypeIdAsynch(actionTypeId); }).Result;
         }
 
-        public async Task<List<Models.Action>> getAllActionByActionTypeIdAsync(string actionTypeId)
+        public async Task<List<Models.Action>> getAllActionByActionTypeIdAsynch(string actionTypeId)
         {
             return await context.Actions
                 .Where((action) => action.ActionType.CodeAction == actionTypeId)
                 .ToListAsync();
         }
-
     }
-
-
-
 
 }
