@@ -19,6 +19,7 @@ namespace warsztatSamochodowy.Forms
         public Brand brand { get; set; }
         public Vehicle vehicle { get; set; }
         public Client client { get; set; }
+        public VehicleType vehicleType { get; set; }
 
         public FormShowVehicle(string regNumber)
         {
@@ -27,6 +28,7 @@ namespace warsztatSamochodowy.Forms
             this.client = clientRepository.getClientById(vehicle.ClientId);
             this.brand = brandRepository.GetByID(vehicle.BrandId);
             this.proposals = proposalRepository.GetProposalByVehicle(regNumber);
+            this.vehicleType = vehicleTypeRepository.GetVehicleByCode(vehicle.VehicleTypeId);
         }
     }
 }
