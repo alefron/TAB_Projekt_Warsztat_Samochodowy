@@ -183,5 +183,16 @@ namespace warsztatSamochodowy.Repository
             var res = t.Result;
             return t.Result;
         }
+
+        public async Task<List<Proposal>> GetProposalByWorkerAsync(int id)
+        {
+            return await context.Proposals
+            .Where((proposal) => !proposal.Actions.Any(act => act.WorkerId == id)).ToListAsync();
+        }
+
+        public List<Proposal> GetProposalByWorker(int id)
+        {
+            return Task.Run(() => { return GetProposalByWorkerAsync(id); }).Result;
+        }
     }
 }

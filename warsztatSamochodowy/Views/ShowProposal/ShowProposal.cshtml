@@ -49,62 +49,74 @@
             <div data-percentage="0%" style="width: @textResult" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
 
-        <form asp-controller="Proposals" asp-action="SetStatus" method="get">
-            <input type="hidden" name="proposalId" value="@Model[0].proposal.Id" />
-            @{
-                if (textResult == "100%" && Model[0].proposal.Status == StatusEnum.PROCESSING)
-                {
-                    <div class="end-button" style="background: none !important; outline: none !important;">
-                        <button type="submit" name="status" value=2 class="btn btn-yellow" style="margin-left: 100px;">Zakończ</button>
-                    </div>
-                }
-                else if (textResult == "0%" && Model[0].proposal.Status == StatusEnum.OPEN)
-                {
-                    if (Model[0].actions.Count != 0)
-                    {
-                        <div class="end-button" style="background: none !important; outline: none !important;">
-                            <button type="submit" name="status" value=1 class="btn btn-blue" style="margin-left: 100px;">rozpocznij</button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="end-button" style="background: none !important; outline: none !important;">
-                            <button data-toggle="tooltip" data-placement="left" title="Aby rozpocząć dodaj przynajmniej jedną akcję" class="btn btn-blue" style="margin-left: 100px;" disabled>rozpocznij</button>
-                        </div>
-                    }
-                }
-                else if ((textResult == "100%" && Model[0].proposal.Status == StatusEnum.FINAL) || Model[0].proposal.Status == StatusEnum.CANCELED)
-                {
-                    <div class="end-button" style="background: none !important; outline: none !important;">
-                        <button type="submit" name="status" value=1 class="btn btn-green" style="margin-left: 100px;">otwórz ponownie</button>
-                    </div>
-                }
-                else if (textResult != "100%" && Model[0].proposal.Status == StatusEnum.PROCESSING)
-                {
-                    <div class="end-button" style="background: none !important; outline: none !important;">
-                        <button type="submit" name="status" value=3 class="btn btn-red" style="margin-left: 100px;">anuluj</button>
-                    </div>
-                }
-
-            }
-
-        </form>
-
-    </div>
-
-    <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
         @{
-            if (Model[0].proposal.Status == StatusEnum.PROCESSING || Model[0].proposal.Status == StatusEnum.OPEN)
+            if (Model[0].currentUser.RoleId == "MAN")
             {
-                <button type="submit" name="proposalId" value=@Model[0].proposal.Id class="btn btn-red">edytuj zlecenie</button>
-            }
-            else
-            {
-                <button class="btn btn-red" disabled>edytuj zlecenie</button>
+                <form asp-controller="Proposals" asp-action="SetStatus" method="get">
+                    <input type="hidden" name="proposalId" value="@Model[0].proposal.Id" />
+                    @{
+                        if (textResult == "100%" && Model[0].proposal.Status == StatusEnum.PROCESSING)
+                        {
+                            <div class="end-button" style="background: none !important; outline: none !important;">
+                                <button type="submit" name="status" value=2 class="btn btn-yellow" style="margin-left: 100px;">Zakończ</button>
+                            </div>
+                        }
+                        else if (textResult == "0%" && Model[0].proposal.Status == StatusEnum.OPEN)
+                        {
+                            if (Model[0].actions.Count != 0)
+                            {
+                                <div class="end-button" style="background: none !important; outline: none !important;">
+                                    <button type="submit" name="status" value=1 class="btn btn-blue" style="margin-left: 100px;">rozpocznij</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="end-button" style="background: none !important; outline: none !important;">
+                                    <button data-toggle="tooltip" data-placement="left" title="Aby rozpocząć dodaj przynajmniej jedną akcję" class="btn btn-blue" style="margin-left: 100px;" disabled>rozpocznij</button>
+                                </div>
+                            }
+                        }
+                        else if ((textResult == "100%" && Model[0].proposal.Status == StatusEnum.FINAL) || Model[0].proposal.Status == StatusEnum.CANCELED)
+                        {
+                            <div class="end-button" style="background: none !important; outline: none !important;">
+                                <button type="submit" name="status" value=1 class="btn btn-green" style="margin-left: 100px;">otwórz ponownie</button>
+                            </div>
+                        }
+                        else if (textResult != "100%" && Model[0].proposal.Status == StatusEnum.PROCESSING)
+                        {
+                            <div class="end-button" style="background: none !important; outline: none !important;">
+                                <button type="submit" name="status" value=3 class="btn btn-red" style="margin-left: 100px;">anuluj</button>
+                            </div>
+                        }
+
+                    }
+
+                </form>
             }
         }
 
-    </form>
+
+
+    </div>
+
+    @if (Model[0].currentUser.RoleId == "MAN")
+    {
+        <form asp-controller="AddProposal" asp-action="AddProposal" method="get">
+            @{
+                if (Model[0].proposal.Status == StatusEnum.PROCESSING || Model[0].proposal.Status == StatusEnum.OPEN)
+                {
+                    <button type="submit" name="proposalId" value=@Model[0].proposal.Id class="btn btn-red">edytuj zlecenie</button>
+                }
+                else
+                {
+                    <button class="btn btn-red" disabled>edytuj zlecenie</button>
+                }
+            }
+
+        </form>
+    }
+
+
 
     <div class='element'>
         <h1>Pojazd: </h1>
@@ -160,22 +172,25 @@
                 <div class='element'>
                     <h1>Akcje: </h1>
                 </div>
-                <div>
-                    <form asp-controller="Action" asp-action="AddAction" method="get">
-                        @{
-                            if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
-                            {
-                                <button type="submit" value=@Model[0].proposal.Id name="proposalId" id="addAction" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="dodaj nową akcję">dodaj akcję</button>
-                            }
-                            else
-                            {
-                                <button type="submit" value=@Model[0].proposal.Id name="proposalId" id="addAction" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="Aby modyfikować zlecenie, otwórz je ponownie." disabled>dodaj akcję</button>
-                            }
-                        }
-                    </form>
 
-                </div>
+                @if (Model[0].currentUser.RoleId == "MAN")
+                {
+                    <div>
+                        <form asp-controller="Action" asp-action="AddAction" method="get">
+                            @{
+                                if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
+                                {
+                                    <button type="submit" value=@Model[0].proposal.Id name="proposalId" id="addAction" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="dodaj nową akcję">dodaj akcję</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" value=@Model[0].proposal.Id name="proposalId" id="addAction" class="btn btn-blue" data-toggle="tooltip" data-placement="right" title="Aby modyfikować zlecenie, otwórz je ponownie." disabled>dodaj akcję</button>
+                                }
+                            }
+                        </form>
 
+                    </div>
+                }
 
             </div>
 

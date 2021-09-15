@@ -19,12 +19,13 @@ namespace warsztatSamochodowy.Forms
         public List<Models.Action> actions { get; set; } = new List<Models.Action>();
         public Vehicle vehicle { get; set; } = new Vehicle();
         public Client client { get; set; } = new Client();
+        public Personel currentUser { get; set; } = new Personel();
 
         public Personel meneger { get; set; } = new Personel();
 
 
         public int proposalId { get; set; }
-        public ShowProposalForm(int proposalId)
+        public ShowProposalForm(int proposalId, int currentUserId)
         {
             this.proposalId = proposalId;
             this.proposal = proposalRepository.GetProposalById(proposalId);
@@ -32,6 +33,7 @@ namespace warsztatSamochodowy.Forms
             this.actions = actionRepository.GetActionsForProposal(proposalId);
             this.vehicle = vehicleRepository.GetVehicleByRegNum(this.proposal.VehicleId);
             this.client = clientRepository.getClientById(this.vehicle.ClientId);
+            this.currentUser = personelRepository.GetPersonelByID(currentUserId);
         }
     }
 }

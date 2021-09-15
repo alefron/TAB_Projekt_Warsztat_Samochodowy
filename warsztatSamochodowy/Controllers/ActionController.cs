@@ -10,12 +10,13 @@ using warsztatSamochodowy.Repository;
 
 namespace warsztatSamochodowy.Controllers
 {
-    [Authorize(Roles = "manager")]
+    
     public class ActionController : Controller
     {
         private ActionRepository actionRepository = new ActionRepository();
         private List<FormAddEditAction> model { get; set; } = new List<FormAddEditAction>();
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Action/addAction")]
         public IActionResult addAction(int proposalId)
         {
@@ -23,6 +24,9 @@ namespace warsztatSamochodowy.Controllers
             this.model.Add(form);
             return View("AddEditAction", model);
         }
+
+        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "worker")]
         [HttpGet("Action/editAction")]
 
         public IActionResult editAction(int actionId)
@@ -33,12 +37,16 @@ namespace warsztatSamochodowy.Controllers
             return View("AddEditAction", model);
         }
 
+        [Authorize(Roles = "manager")]
         public IActionResult AddActionToDb(int proposalId, string type, int worker, int sequenceNumber, string description, string result)
         {
             int insertActionId = actionRepository.AddAction(proposalId, type, worker, sequenceNumber, description);
             return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = proposalId });
         }
 
+
+        [Authorize(Roles = "worker")]
+        [Authorize(Roles = "manager")]
         public IActionResult UpdateActionInDb(int actionId, string type, int worker, int sequenceNumber, string description, string result)
         {
             int insertActionId = actionRepository.UpdateAction(actionId, type, worker, sequenceNumber, description, result);
@@ -46,6 +54,9 @@ namespace warsztatSamochodowy.Controllers
             return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = updatedAction.ProposalId });
         }
 
+
+        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "worker")]
         [HttpGet("Action/isSequenceNumberOk")]
         public bool isSequenceNumberOk(int sequenceNumber, int actionId)
         {
