@@ -359,8 +359,6 @@ namespace warsztatSamochodowy.Repository
                     act.SequenceNumber = -1;
                 }
             }
-
-
             foreach(var act in actions)
             {
                 if (act.Id != actionFromDb.Id)
@@ -383,6 +381,12 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(() => { return getAllActionByActionTypeIdAsync(actionTypeId); }).Result;
         }
 
+        public async Task<List<Models.Action>> getAllActionByActionTypeIdAsync(string actionTypeId)
+        {
+            return await context.Actions
+                .Where((action) => action.ActionType.CodeAction == actionTypeId)
+                .ToListAsync();
+        }
 
     }
 
