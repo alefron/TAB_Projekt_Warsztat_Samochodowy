@@ -3,6 +3,7 @@
     @Model FormAddEditAction
 </div>
 @using System.Net.Http
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,8 +43,12 @@
         }
     }
 
-    <form id="addEditActionForm">
-        <div class="element-add">
+<form id="addEditActionForm">
+    <div class="element-add">
+
+
+        @if (Model[0].currentUser.RoleId == "MAN")
+        {
             <h1>Typ akcji: </h1>
             <div class="dropdown">
                 <select class="form-control typeDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="type" value="" searchable="Search here.." id="type">
@@ -72,9 +77,18 @@
                 </select>
 
             </div>
+        }
+        else
+        {
+            <h1>Typ akcji: @Model[0].action.ActionType.CodeAction</h1>
+        }
 
-        </div>
-        <div class="element-add">
+
+    </div>
+    <div class="element-add">
+
+        @if (Model[0].currentUser.RoleId == "MAN")
+        {
             <h1>Pracownik: </h1>
             <div class="dropdown">
                 <select class="form-control workerDropdown SelectFilter mdb-select md-form dropdown formElementAddAction" name="worker" value="" searchable="Search here.." id="worker">
@@ -103,23 +117,37 @@
                 </select>
 
             </div>
+        }
+        else
+        {
+            <h1>Pracownik: @Model[0].currentUser.FirstName @Model[0].currentUser.LastName</h1>
+        }
 
-        </div>
-        <div class="element-add">
+
+    </div>
+    <div class="element-add">
+        @{
+            warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
+            if (Model[0].is_editable && Model[0].action.SequenceNumber != null)
+            {
+                foreach (var act in Model[0].actions)
+                {
+                    if (act.Id == Model[0].action.SequenceNumber)
+                    {
+                        actionBefore = act;
+                    }
+                }
+            }
+        }
+
+        @if (Model[0].currentUser.RoleId == "MAN")
+        {
             <h1>Wykonaj po: </h1>
             <div class="dropdown">
                 <select class="form-control sequenceDropdown SelectFilter mdb-select md-form dropdown" name="sequenceNumber" value="" searchable="Search here.." id="sequenceNumber">
                     @{
-                        warsztatSamochodowy.Models.Action actionBefore = new warsztatSamochodowy.Models.Action();
                         if (Model[0].is_editable && Model[0].action.SequenceNumber != null)
                         {
-                            foreach (var act in Model[0].actions)
-                            {
-                                if (act.Id == Model[0].action.SequenceNumber)
-                                {
-                                    actionBefore = act;
-                                }
-                            }
                             <option value="-1">wykonaj po</option>
                         }
                         else
@@ -155,82 +183,182 @@
                     }
                 </select>
             </div>
+        }
+        else
+        {
 
+            foreach (var act in Model[0].actions)
+            {
+                if (Model[0].action.SequenceNumber != null && act.Id == Model[0].action.SequenceNumber)
+                {
+                    actionBefore = act;
+                    break;
+                }
+            }
+
+            if (actionBefore.ActionType != null)
+            {
+                <h1 data-toggle="tooltip" data-placement="right" title="opis: @actionBefore.Description">Wykonaj po: @actionBefore.ActionType.CodeAction - @actionBefore.ActionType.Name</h1>
+            }
+
+
+        }
+
+    </div>
+
+    <div class="element-add">
+        <h1>Data rozpoczęcia: @Model[0].action.StartDate</h1>
+    </div>
+    @if (Model[0].action.Status == StatusEnum.CANCELED || Model[0].action.Status == StatusEnum.FINAL)
+    {
+        <div class="element-add">
+            <h1>Data zakończenia: @Model[0].action.EndDate</h1>
         </div>
-        <br>
+    }
 
-        <div class='my-row'>
-            <div class='my-column'>
-                <div class='element'>
-                    <h1>Opis: </h1>
-                </div>
-                <div class='proposal-card'>
-                    @{
-                        if (!Model[0].is_editable)
-                        {
-                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
-                        }
-                        else
-                        {
-                            <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].action.Description">@Model[0].action.Description</textarea>
-                        }
-                    }
-                </div>
+    <div class="element-add">
+        <h1>Status: @Model[0].action.Status</h1>
+    </div>
+
+    <br />
+
+    @if (Model[0].currentUser.RoleId == "WOR")
+    {
+        if (Model[0].action.Status != StatusEnum.PROCESSING || (actionBefore.ActionTypeId != null && actionBefore.Status != StatusEnum.CANCELED && actionBefore.Status != StatusEnum.FINAL))
+        {
+            <button asp-controller="Worker" asp-action="SetFinal" class="btn btn-green" type="submit" name="id" value="@Model[0].action.Id" disabled>Oznacz jako zakończoną</button>
+            <div class="h6 alert-danger">Aby zakończyć akcję, akcja musi mieć status "trwająca" oraz akcja o wyższym priorytecie musi mieć status "zakończona" lub "anulowana".</div>
+        }
+        else
+        {
+            <button asp-controller="Worker" asp-action="SetFinal" class="btn btn-green" type="submit" name="id" value="@Model[0].action.Id">Oznacz jako zakończoną</button>
+        }
+    }
+    else if (Model[0].currentUser.RoleId == "MAN")
+    {
+        if (Model[0].action.Status == StatusEnum.CANCELED)
+        {
+            if (actionBefore.Id == 0 || actionBefore.Status == StatusEnum.CANCELED || actionBefore.Status == StatusEnum.FINAL)
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id">Przywróć akcję</button>
+            }
+            else
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id" disabled>Przywróć akcję</button>
+                <div class="h6 alert-danger">Aby zakończyć akcję, akcja o wyższym priorytecie musi mieć status "zakończona" lub "anulowana".</div>
+            }
+        }
+        else if (Model[0].action.Status == StatusEnum.PROCESSING)
+        {
+            <button asp-controller="Action" asp-action="SetFinal" class="btn btn-green" type="submit" name="id" value="@Model[0].action.Id">Zakończ akcję</button>
+            <br />
+            <br />
+            <button asp-controller="Action" asp-action="SetCancelled" class="btn btn-red" type="submit" name="id" value="@Model[0].action.Id">anuluj akcję</button>
+        }
+        else if (Model[0].action.Status == StatusEnum.FINAL)
+        {
+            if (actionBefore.Id == 0 || actionBefore.Status == StatusEnum.CANCELED || actionBefore.Status == StatusEnum.FINAL)
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id">Otwórz ponownie</button>
+            }
+            else
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id" disabled>Otwórz ponownie</button>
+                <div class="h6 alert-danger">Aby zakończyć akcję, akcja o wyższym priorytecie musi mieć status "zakończona" lub "anulowana".</div>
+            }
+        }
+        else if (Model[0].action.Status == StatusEnum.OPEN)
+        {
+            if (actionBefore.Id == 0 || actionBefore.Status == StatusEnum.CANCELED || actionBefore.Status == StatusEnum.FINAL)
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id">Rozpocznij</button>
+            }
+            else
+            {
+                <button asp-controller="Action" asp-action="SetProcessingAgain" class="btn btn-yellow" type="submit" name="id" value="@Model[0].action.Id" disabled>rozpocznij</button>
+                <div class="h6 alert-danger">Aby zakończyć akcję, akcja o wyższym priorytecie musi mieć status "zakończona" lub "anulowana".</div>
+            }
+        }
+    }
+
+
+
+
+
+
+
+    <div class='my-row'>
+        <div class='my-column'>
+            <div class='element'>
+                <h1>Opis: </h1>
             </div>
-            @{
-                if (Model[0].action.Result != null)
-                {
-                    <div class='my-column'>
-                        <div class='element'>
-                            <h1>Rezultat: </h1>
-                        </div>
-                        <div class='proposal-card'>
-                            <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].action.Result">@Model[0].action.Result</textarea>
-                        </div>
-                    </div>
+            <div class='proposal-card'>
+                @{
+                    if (!Model[0].is_editable)
+                    {
+                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="domyślny opis" disabled>Wybierz klienta oraz pojazd, aby wpisać opis.</textarea>
+                    }
+                    else
+                    {
+                        <textarea rows="5" cols="58" class="formElement" id="description" name="description" value="@Model[0].action.Description">@Model[0].action.Description</textarea>
+                    }
                 }
-                else if (Model[0].action.Status == StatusEnum.FINAL)
-                {
-                    <div class='my-column'>
-                        <div class='element'>
-                            <h1>Rezultat: </h1>
-                        </div>
-                        <div class='proposal-card'>
-                            <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
-                        </div>
-                    </div>
-                }
-                else if (Model[0].is_editable)
-                {
-                    <div class='my-column'>
-                        <div class='element'>
-                            <h1>Rezultat: </h1>
-                        </div>
-                        <div class='proposal-card'>
-                            <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
-                        </div>
-                    </div>
-                }
-            }
+            </div>
         </div>
-        <br />
-        <br />
+        @{
+            if (Model[0].action.Result != null)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value="@Model[0].action.Result">@Model[0].action.Result</textarea>
+                    </div>
+                </div>
+            }
+            else if (Model[0].action.Status == StatusEnum.FINAL)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value=""></textarea>
+                    </div>
+                </div>
+            }
+            else if (Model[0].is_editable)
+            {
+                <div class='my-column'>
+                    <div class='element'>
+                        <h1>Rezultat: </h1>
+                    </div>
+                    <div class='proposal-card'>
+                        <textarea rows="5" cols="58" id="result" name="result" value="" disabled>Aby wpisać rezultat, ustaw stan zlecenia na "zakończone".</textarea>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <br />
+    <br />
 
 
-        <div class="save-cancel">
-            @{
-                if (Model[0].is_editable)
-                {
-                    <button asp-controller="Action" asp-action="UpdateActionInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
-                }
-                else
-                {
-                    <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
-                }
+    <div class="save-cancel">
+        @{
+            if (Model[0].is_editable)
+            {
+                <button asp-controller="Action" asp-action="UpdateActionInDb" method="get" class="btn save-button" id="saveButton" type="submit" name="actionId" value=@Model[0].action.Id>Zapisz</button>
             }
-            <button asp-controller="ShowProposal" asp-action="ShowProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
-        </div>
-    </form>
+            else
+            {
+                <button asp-controller="Action" asp-action="AddActionToDb" method="get" class="btn save-button" id="saveButton" type="submit" name="proposalId" value=@Model[0].proposal.Id disabled>Zapisz</button>
+            }
+        }
+        <button asp-controller="ShowProposal" asp-action="ShowProposal" method="get" class="btn cancel-button" id="cancelButton" type="submit" name="proposalId" value="@Model[0].proposal.Id">Anuluj</button>
+    </div>
+</form>
 
 </body>
 

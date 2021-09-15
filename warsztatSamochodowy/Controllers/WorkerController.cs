@@ -102,7 +102,7 @@ namespace warsztatSamochodowy.Controllers
             action = actionRepository.SetActionStatus(form.Id, StatusEnum.FINAL);
 
 
-            return View("BrowseAction", action);
+            return RedirectToAction("ShowProposal", "ShowProposal", new {proposalId = action.ProposalId });
         }
 
 
@@ -131,7 +131,7 @@ namespace warsztatSamochodowy.Controllers
             actionRepository.Update(action);
             action = actionRepository.SetActionStatus(form.Id, StatusEnum.CANCELED);
 
-            return View("BrowseAction", action);
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = action.ProposalId });
         }
 
 

@@ -48,7 +48,7 @@
     width:100%;
     height:75px;
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-evenly;
     align-items:center;
 }
 
@@ -175,4 +175,14 @@
 .action-table-button a{
     text-decoration: none;
     color :black;
+}
+.trash-button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    padding-right: 50px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 }

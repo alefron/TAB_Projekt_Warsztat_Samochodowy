@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Forms;
 using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
+using warsztatSamochodowy.Security;
 
 namespace warsztatSamochodowy.Controllers
 {
@@ -14,13 +16,18 @@ namespace warsztatSamochodowy.Controllers
     public class ActionController : Controller
     {
         private ActionRepository actionRepository = new ActionRepository();
+        private ProposalRepository proposalRepository = new ProposalRepository();
+
         private List<FormAddEditAction> model { get; set; } = new List<FormAddEditAction>();
 
         [Authorize(Roles = "manager")]
         [HttpGet("Action/addAction")]
         public IActionResult addAction(int proposalId)
         {
-            FormAddEditAction form = new FormAddEditAction(proposalId);
+            var id = User.Claims.Where(c => c.Type == CustomClaims.Identifier)
+                .Select(c => c.Value).SingleOrDefault();
+
+            FormAddEditAction form = new FormAddEditAction(proposalId, Int32.Parse(id));
             this.model.Add(form);
             return View("AddEditAction", model);
         }
@@ -30,8 +37,11 @@ namespace warsztatSamochodowy.Controllers
 
         public IActionResult editAction(int actionId)
         {
+            var id = User.Claims.Where(c => c.Type == CustomClaims.Identifier)
+                .Select(c => c.Value).SingleOrDefault();
+
             Models.Action actToUpdate = actionRepository.GetActionById(actionId);
-            FormAddEditAction form = new FormAddEditAction(actToUpdate);
+            FormAddEditAction form = new FormAddEditAction(actToUpdate, Int32.Parse(id));
             this.model.Add(form);
             return View("AddEditAction", model);
         }
@@ -82,6 +92,128 @@ namespace warsztatSamochodowy.Controllers
             return true;
         }
 
-        
+
+
+
+
+
+        private string buildHeader(Models.Action action)
+        {
+            StringBuilder headerSb = new StringBuilder();
+
+
+            if (action?.Proposal?.Vehicle != null)
+            {
+                headerSb.Append(action.Proposal.Vehicle.RegNumber);
+                headerSb.Append(" - ");
+            }
+            if (action?.ActionType != null)
+            {
+                headerSb.Append(action.ActionType.Name);
+                headerSb.Append(" - ");
+            }
+            if (action?.Proposal != null)
+            {
+                headerSb.Append(action.Description);
+            }
+
+            return headerSb.ToString();
+        }
+
+
+        [Authorize(Roles = "manager,worker")]
+
+        [HttpGet]
+        public IActionResult SetFinal(int id)
+        {
+            var action = actionRepository.GetActionById(id);
+
+            if (action.Status == StatusEnum.CANCELED || action.Status == StatusEnum.FINAL)
+            {
+                return View("BrowseAction", action);
+            }
+
+            ViewData["Header"] = buildHeader(action);
+
+            return View("~/Views/Worker/SetFinal.cshtml", new ActionSetFinalForm(action));
+        }
+
+        [Authorize(Roles = "manager,worker")]
+
+        [HttpPost]
+        public IActionResult SetFinal(ActionSetFinalForm form)
+        {
+            var action = actionRepository.GetActionById(form.Id);
+
+
+
+            action.EndDate = DateTime.Now;
+            action.Result = form.ResultText;
+            actionRepository.Update(action);
+            action = actionRepository.SetActionStatus(form.Id, StatusEnum.FINAL);
+
+
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = action.ProposalId });
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet]
+        public IActionResult SetCancelled(int id)
+        {
+
+            var action = actionRepository.GetActionById(id);
+
+            if (action.Status == StatusEnum.CANCELED || action.Status == StatusEnum.FINAL)
+            {
+                return View("BrowseAction", action);
+            }
+            ViewData["Header"] = buildHeader(action);
+
+            return View("~/Views/Worker/SetCancelled.cshtml", new ActionSetCancelledForm(action));
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpPost]
+        public IActionResult SetCancelled(ActionSetCancelledForm form)
+        {
+            var action = actionRepository.GetActionById(form.Id);
+
+            action.EndDate = DateTime.Now;
+            action.Result = form.ResultText;
+            actionRepository.Update(action);
+            action = actionRepository.SetActionStatus(form.Id, StatusEnum.CANCELED);
+
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = action.ProposalId });
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet]
+        public IActionResult SetProcessingAgain(int id)
+        {
+            var action = actionRepository.GetActionById(id);
+
+            action.EndDate = null;
+            action.StartDate = DateTime.Now;
+            actionRepository.Update(action);
+            action = actionRepository.SetActionStatus(id, StatusEnum.PROCESSING);
+
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = action.ProposalId });
+        }
+
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Action/deleteAction")]
+        public IActionResult deleteAction(int actionId)
+        {
+            Models.Action actionToUpdate = actionRepository.GetActionById(actionId);
+            Proposal proposal = proposalRepository.GetProposalById(actionToUpdate.ProposalId);
+            actionRepository.DeleteAction(actionToUpdate);
+
+            return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = actionToUpdate.ProposalId});
+        }
+
+
+
+
     }
 }

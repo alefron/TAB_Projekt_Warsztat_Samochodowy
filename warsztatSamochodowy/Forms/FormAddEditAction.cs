@@ -24,9 +24,9 @@ namespace warsztatSamochodowy.Forms
         public bool is_editable { get; set; }
         public List<ActionType> types { get; set; } = new List<ActionType>();
         public List<Personel> workers { get; set; } = new List<Personel>();
-        
+        public Personel currentUser { get; set; } = new Personel();
 
-        public FormAddEditAction(int proposalId)
+        public FormAddEditAction(int proposalId, int currentUserId)
         {
             this.is_editable = false;
             this.proposal = this.proposalRepository.GetProposalById(proposalId);
@@ -34,10 +34,11 @@ namespace warsztatSamochodowy.Forms
             this.client = this.clientRepository.getClientById(vehicle.ClientId);
             this.actions = this.actionRepository.GetActionsForProposal(proposalId);
             this.types = this.actionTypeRepository.GetActionTypes();
+            this.currentUser = this.personelRepository.GetPersonelByID(currentUserId);
             this.fillWorkers();
         }
 
-        public FormAddEditAction(Models.Action action)
+        public FormAddEditAction(Models.Action action, int currentUserId)
         {
             this.is_editable = true;
             this.action = action;
@@ -46,6 +47,8 @@ namespace warsztatSamochodowy.Forms
             this.vehicle = vehicleRepository.GetVehicleByRegNum(this.proposal.VehicleId);
             this.client = clientRepository.getClientById(this.vehicle.ClientId);
             this.types = this.actionTypeRepository.GetActionTypes();
+            this.currentUser = this.personelRepository.GetPersonelByID(currentUserId);
+
             this.fillWorkers();
 
 

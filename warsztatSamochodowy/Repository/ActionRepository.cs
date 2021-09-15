@@ -58,12 +58,19 @@ namespace warsztatSamochodowy.Repository
         public async Task<int> UpdateActionAsync(int actionId, string type, int worker, int sequenceNumber, string description, string result)
         {
             Models.Action toUpdate = this.GetActionById(actionId);
-            toUpdate.SequenceNumber = sequenceNumber;
-            toUpdate.Description = description;
-            toUpdate.Result = result;
-            toUpdate.WorkerId = worker;
-            toUpdate.ActionTypeId = type;
-
+            if (type != null && worker != 0 && sequenceNumber != 0)
+            {
+                toUpdate.SequenceNumber = sequenceNumber;
+                toUpdate.Description = description;
+                toUpdate.Result = result;
+                toUpdate.WorkerId = worker;
+                toUpdate.ActionTypeId = type;
+            }
+            else
+            {
+                toUpdate.Description = description;
+                toUpdate.Result = result;
+            }
 
             context.Update<Models.Action>(toUpdate);
             await context.SaveChangesAsync();
@@ -282,7 +289,7 @@ namespace warsztatSamochodowy.Repository
                     context.Proposals.Update(proposal);
                 }
 
-            }else
+            }/*else
             if (newStatus == StatusEnum.CANCELED)
             {
                 var proposal = await context.Proposals
@@ -292,7 +299,7 @@ namespace warsztatSamochodowy.Repository
                 proposal.Status = StatusEnum.CANCELED; //Any action is cancelled so propsoal is cancelled
                 context.Proposals.Update(proposal);
 
-            }
+            }*/
         }
 
         public async Task< Models.Action> SetActionStatusAsync(int actionId,StatusEnum status)
@@ -333,6 +340,36 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(()=> { return SetActionStatusAsync(actionId, status); }).Result;
         }
 
+
+        public async Task<int> DeleteActionAsync(Models.Action action)
+        {
+            var actionFromDb = context.Actions.Where((a) => a.Id == action.Id).FirstOrDefault();
+            int actionId = actionFromDb.Id;
+            var actions = context.Actions.Where((a) => a.ProposalId == actionFromDb.ProposalId).ToList();
+            foreach(var act in actions)
+            {
+                if (act.SequenceNumber == actionId)
+                {
+                    act.SequenceNumber = -1;
+                }
+            }
+
+
+            foreach(var act in actions)
+            {
+                if (act.Id != actionFromDb.Id)
+                {
+                    context.Actions.Update(act);
+                }
+            }
+            context.Actions.Remove(actionFromDb);
+            return await context.SaveChangesAsync();
+        }
+        public int DeleteAction(Models.Action action)
+        {
+            Task<int> t = Task.Run(() => { return DeleteActionAsync(action); });
+            return t.Result;
+        }
 
 
 
