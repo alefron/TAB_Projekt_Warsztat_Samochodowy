@@ -58,124 +58,54 @@
         </div>
     </div>
 
+        <input hidden name="clientId" value="@Model[0].client.Id" />
+        <input hidden name="adresId" value="@Model[0].address.Id" />
 
-    @{
-        if (Model[0].is_editable)
-        {
-            if (Model[0].client.CompanyName == null)
-            {
-                <div class="element-add">
-                    <h1>Imię: </h1>
-                    <input type="text" name="firstName" value="@Model[0].client.FirstName" id="inputName"/>
-                </div>
-                <div class="element-add">
-                    <h1>Nazwisko: </h1>
-                    <input type="text" name="lastName" value="@Model[0].client.LastName" id="inputSurname" />
-                </div>
-                <div class="element-add">
-                    <h1>Firma: </h1>
-                    <input type="text" name="companyName" value="" id="inputCompany" />
-                </div>
-            }
-            else
-            {
-                <div class="element-add">
-                    <h1>Imię: </h1>
-                    <input type="text" name="firstName" value="" disabled />
-                </div>
-                <div class="element-add">
-                    <h1>Nazwisko: </h1>
-                    <input type="text" name="lastName" value="" disabled />
-                </div>
-                <div class="element-add">
-                    <h1>Firma: </h1>
-                    <input type="text" name="companyName" value="@Model[0].client.CompanyName" />
-                </div>
-            }
-            <div class="element-add">
-                <h1>Nr telefonu: </h1>
-                <input type="text" name="phoneNumber" maxlength="9" value="@Model[0].client.PhoneNumber" />
-            </div>
-            <div class="element-add">
-                <h1>Adres email: </h1>
-                <input type="text" name="email" value="@Model[0].client.Email" />
-            </div>
-            <div class="element-add">
-                <h1>Ulica: </h1>
-                <input type="text" name="street" value="@Model[0].address.Street" />
-            </div>
-            <div class="element-add">
-                <h1>Nr domu: </h1>
-                <input type="text" name="houseNumber" value="@Model[0].address.HouseNumber" />
-            </div>
-            @if (Model[0].address.LocalNumber == null)
-            {
-                <div class="element-add">
-                    <h1>Nr lokalu: </h1>
-                    <input type="text" name="localNumber" value="" />
-                </div>
-            }
-            else
-            {
-                <div class="element-add">
-                    <h1>Nr lokalu: </h1>
-                    <input type="text" name="localNumber" value="@Model[0].address.LocalNumber" />
-                </div>
-            }
-            <div class="element-add">
-                <h1>Miasto: </h1>
-                <input type="text" name="city" value="@Model[0].address.City" />
-            </div>
-            <div class="element-add">
-                <h1>Kod pocztowy: </h1>
-                <input type="text" name="postal" maxlength="6" value="@Model[0].address.Postal" />
-            </div>
-
-        }
-        else
-        {
             <div class="element-add">
                 <h1>Imię: </h1>
-                <input type="text" name="firstName" value="" id="inputName" />
+                <input type="text" name="firstName" value="@Model[0].client.FirstName" id="inputName"/>
             </div>
             <div class="element-add">
                 <h1>Nazwisko: </h1>
-                <input type="text" name="lastName" value="" id="inputSurname" />
+                <input  type="text" name="lastName" value="@Model[0].client.LastName" id="inputSurname" />
             </div>
             <div class="element-add">
                 <h1>Firma: </h1>
-                <input type="text" name="companyName" value="" id="inputCompany" />
+                <input  type="text" name="companyName" value="@Model[0].client.CompanyName" id="inputCompany" />
             </div>
+
             <div class="element-add">
                 <h1>Nr telefonu: </h1>
-                <input type="text" name="phoneNumber" value="" maxlength="9" />
+                <input class="validationElement" type="text" name="phoneNumber" maxlength="9" value="@Model[0].client.PhoneNumber" />
             </div>
             <div class="element-add">
                 <h1>Adres email: </h1>
-                <input type="text" name="email" value="" />
+                <input class="validationElement" type="text" name="email" value="@Model[0].client.Email" />
             </div>
             <div class="element-add">
                 <h1>Ulica: </h1>
-                <input type="text" name="street" value="" />
+                <input class="validationElement" type="text" name="street" value="@Model[0].address.Street" />
             </div>
             <div class="element-add">
                 <h1>Nr domu: </h1>
-                <input type="text" name="houseNumber" value="" />
+                <input class="validationElement" type="text" name="houseNumber" value="@Model[0].address.HouseNumber" />
             </div>
+
             <div class="element-add">
                 <h1>Nr lokalu: </h1>
-                <input type="text" name="localNumber" value="" />
+                <input type="text" name="localNumber" value="@Model[0].address.LocalNumber" />
             </div>
+
             <div class="element-add">
                 <h1>Miasto: </h1>
-                <input type="text" name="city" value="" />
+                <input class="validationElement" type="text" name="city" value="@Model[0].address.City" />
             </div>
             <div class="element-add">
                 <h1>Kod pocztowy: </h1>
-                <input type="text" name="postal" value="" maxlength="6" />
+                <input class="validationElement" type="text" name="postal" maxlength="6" value="@Model[0].address.Postal" />
             </div>
-        }
-    }
+
+
 
     <div class="save-cancel">
         @{
@@ -195,3 +125,44 @@
 </body>
 
 <script src="/js/AddEditClient.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        validate();
+        $(".validationElement").on("change click ready load", validate);
+        $("#clientSelector").on("change click ready load", validate);
+        $(document).on("change click ready load", validate);
+    });
+
+
+    function validate() {
+        var isEmpty = false;
+
+        if ($("#clientSelector").val() === "firma") {
+            $("#inputName").removeClass("validationElement")
+            $("#inputSurname").removeClass("validationElement")
+            $("#inputCompany").addClass("validationElement")
+        }
+        else {
+            $("#inputName").addClass("validationElement")
+            $("#inputSurname").addClass("validationElement")
+            $("#inputCompany").removeClass("validationElement")
+        }
+
+        $(".validationElement").each(function () {
+            if ($(this).val() === "") {
+                isEmpty = true;
+            }
+        });
+        var button = $("#saveButton");
+        if (isEmpty == true) {
+            button.prop("disabled", !0);
+        }
+        else {
+            button.removeAttr("disabled");
+        }
+
+    }
+
+</script>

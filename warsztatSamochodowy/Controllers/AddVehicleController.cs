@@ -84,7 +84,7 @@ namespace warsztatSamochodowy.Controllers
             vechicle.Name = regNumber + "_" + brand;
             vehicleRepository.Update(vechicle);
             
-            return RedirectToAction("showVehicle", "Vehicle", new { regNum = regNumber });
+            return RedirectToAction("showVehicle", "Vehicle", new { regNumber = regNumber });
         }
     }
 }
