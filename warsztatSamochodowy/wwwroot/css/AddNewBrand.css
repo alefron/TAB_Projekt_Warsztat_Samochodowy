@@ -1,0 +1,52 @@
+.select-section{
+    width: 320px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.select-section button {
+    width:90px;
+}
+
+.select-section select, button{
+    height: 100%;
+
+}
+
+.add-section {
+    height: 50px;
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+    .add-section input{
+        width:200px;
+    }
+    .add-section button {
+        width: 90px;
+    }
+    .add-section input, button {
+        height: 100%;
+    }
+
+
+
+    .center-section{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+
+    .section{
+        display:flex;
+        flex-direction: column;
+    }
+.section-title {
+    margin-left:-11%;
+    font-size: 20px;
+}
