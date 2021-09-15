@@ -25,8 +25,7 @@ namespace warsztatSamochodowy.Controllers
             return View("AddEditAction", model);
         }
 
-        [Authorize(Roles = "manager")]
-        [Authorize(Roles = "worker")]
+        [Authorize(Roles = "manager,worker")]
         [HttpGet("Action/editAction")]
 
         public IActionResult editAction(int actionId)
@@ -45,8 +44,8 @@ namespace warsztatSamochodowy.Controllers
         }
 
 
-        [Authorize(Roles = "worker")]
-        [Authorize(Roles = "manager")]
+        [Authorize(Roles = "worker,manager")]
+
         public IActionResult UpdateActionInDb(int actionId, string type, int worker, int sequenceNumber, string description, string result)
         {
             int insertActionId = actionRepository.UpdateAction(actionId, type, worker, sequenceNumber, description, result);
@@ -55,8 +54,8 @@ namespace warsztatSamochodowy.Controllers
         }
 
 
-        [Authorize(Roles = "manager")]
-        [Authorize(Roles = "worker")]
+        [Authorize(Roles = "manager,worker")]
+
         [HttpGet("Action/isSequenceNumberOk")]
         public bool isSequenceNumberOk(int sequenceNumber, int actionId)
         {
