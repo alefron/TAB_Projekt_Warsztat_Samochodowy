@@ -37,9 +37,7 @@ namespace warsztatSamochodowy.Controllers
 
 
 
-            var proposals = proposalRepository.GetProposalByWorker(id);
-            //var actions= actionRepository.GetActionsForWorker(id);
-            
+            var proposals = proposalRepository.GetProposalByWorker(id);            
             return View(proposals);
         }
 

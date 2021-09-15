@@ -203,74 +203,151 @@
                             <div class="ps-content">
                                 <ul class=" list-group list-group-flush">
 
-                                    <li class="list-group-item">
-                                        <div class="bg-warning"></div>
-                                        <div class="p-0">
-                                            @foreach (var act in Model[0].actions)
-                                            {
-                                                <div class="action-table-row">
-                                                    <div class="name">
-                                                        @act.ActionTypeId
-                                                    </div>
-                                                    <div class="worker">
-                                                        worker: @act.WorkerId
-                                                    </div>
-                                                    <div class="wykonaj-po">
-                                                        @if (act.SequenceNumber != null)
-                                                        {
-                                                            foreach (var a in Model[0].actions)
+                                    @if (Model[0].currentUser.RoleId == "WOR")
+                                    {
+                                        <li class="list-group-item" style="background-color: hsla(220, 100%, 77%, 0.51);">
+                                            <div class="bg-warning"></div>
+                                            <div class="p-0">
+                                                @foreach (var act in Model[0].actions)
+                                                {
+                                                    <div class="action-table-row">
+                                                        <div class="name">
+                                                            @act.ActionTypeId
+                                                        </div>
+                                                        <div class="worker">
+                                                            worker: @act.WorkerId
+                                                        </div>
+                                                        <div class="wykonaj-po">
+                                                            @if (act.SequenceNumber != null)
                                                             {
-                                                                if (a.Id == act.SequenceNumber)
+                                                                foreach (var a in Model[0].actions)
                                                                 {
-                                                                    <div class="worker-field my-flex-center">
-                                                                        wykonaj po: @a.ActionType.CodeAction
-                                                                    </div>
+                                                                    if (a.Id == act.SequenceNumber)
+                                                                    {
+                                                                        <div class="worker-field my-flex-center">
+                                                                            wykonaj po: @a.ActionType.CodeAction
+                                                                        </div>
+                                                                    }
                                                                 }
+
                                                             }
 
-                                                        }
+                                                        </div>
 
-                                                    </div>
-
-                                                    <div class="edit-dot my-flex-center">
-                                                        @if (act.Status == StatusEnum.OPEN)
-                                                        {
-                                                            <span class='circle circle-blue'></span>
-                                                        }
-                                                        else if (act.Status == StatusEnum.PROCESSING)
-                                                        {
-                                                            <span class='circle circle-yellow'></span>
-                                                        }
-                                                        else if (act.Status == StatusEnum.FINAL)
-                                                        {
-                                                            <span class='circle circle-green'></span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class='circle circle-red'></span>
-                                                        }
-
-                                                        <form asp-controller="Action" asp-action="editAction" method="get">
-                                                            @if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
+                                                        <div class="edit-dot my-flex-center">
+                                                            @if (act.Status == StatusEnum.OPEN)
                                                             {
-                                                                <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
-
+                                                                <span class='circle circle-blue'></span>
+                                                            }
+                                                            else if (act.Status == StatusEnum.PROCESSING)
+                                                            {
+                                                                <span class='circle circle-yellow'></span>
+                                                            }
+                                                            else if (act.Status == StatusEnum.FINAL)
+                                                            {
+                                                                <span class='circle circle-green'></span>
                                                             }
                                                             else
                                                             {
-                                                                <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id" disabled>Edytuj</button></div>
+                                                                <span class='circle circle-red'></span>
                                                             }
-                                                        </form>
+
+                                                            <form asp-controller="Action" asp-action="editAction" method="get">
+                                                                @if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
+                                                                {
+                                                                    <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id" disabled>Edytuj</button></div>
+                                                                }
+                                                            </form>
 
 
+
+                                                        </div>
 
                                                     </div>
+                                                }
+
+                                            </div>
+                                        </li>
+                                    }
+                                    @{
+                                        else
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="bg-warning"></div>
+                                                <div class="p-0">
+                                                    @foreach (var act in Model[0].actions)
+                                                    {
+                                                        <div class="action-table-row">
+                                                            <div class="name">
+                                                                @act.ActionTypeId
+                                                            </div>
+                                                            <div class="worker">
+                                                                worker: @act.WorkerId
+                                                            </div>
+                                                            <div class="wykonaj-po">
+                                                                @if (act.SequenceNumber != null)
+                                                                {
+                                                                    foreach (var a in Model[0].actions)
+                                                                    {
+                                                                        if (a.Id == act.SequenceNumber)
+                                                                        {
+                                                                            <div class="worker-field my-flex-center">
+                                                                                wykonaj po: @a.ActionType.CodeAction
+                                                                            </div>
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                            </div>
+
+                                                            <div class="edit-dot my-flex-center">
+                                                                @if (act.Status == StatusEnum.OPEN)
+                                                                {
+                                                                    <span class='circle circle-blue'></span>
+                                                                }
+                                                                else if (act.Status == StatusEnum.PROCESSING)
+                                                                {
+                                                                    <span class='circle circle-yellow'></span>
+                                                                }
+                                                                else if (act.Status == StatusEnum.FINAL)
+                                                                {
+                                                                    <span class='circle circle-green'></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class='circle circle-red'></span>
+                                                                }
+
+                                                                <form asp-controller="Action" asp-action="editAction" method="get">
+                                                                    @if (Model[0].proposal.Status == StatusEnum.OPEN || Model[0].proposal.Status == StatusEnum.PROCESSING)
+                                                                    {
+                                                                        <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id">Edytuj</button></div>
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="action-table-button"><button type="submit" class="btn btn-red" name="actionId" value="@act.Id" disabled>Edytuj</button></div>
+                                                                    }
+                                                                </form>
+
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    }
 
                                                 </div>
-                                            }
+                                            </li>
+                                        }
+                                    }
 
-                                        </div>
-                                    </li>
 
                                 </ul>
                             </div>
