@@ -187,7 +187,7 @@ namespace warsztatSamochodowy.Repository
         public async Task<List<Proposal>> GetProposalByWorkerAsync(int id)
         {
             return await context.Proposals
-            .Where((proposal) => !proposal.Actions.Any(act => act.WorkerId == id)).ToListAsync();
+            .Where((proposal) => proposal.Actions.Any(act => act.WorkerId == id)).ToListAsync();
         }
 
         public List<Proposal> GetProposalByWorker(int id)
