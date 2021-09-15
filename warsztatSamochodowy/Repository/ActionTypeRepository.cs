@@ -19,6 +19,19 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(GetActionTypesAcync).Result;
         }
 
+        public async Task<ActionType> GetActionTypeByIdAsync(string Code)
+        {
+            return await context.ActionTypes
+                .Where((types) => types.CodeAction == Code)
+                .FirstOrDefaultAsync();
+        }
+
+        public ActionType GetActionTypeById(string reg)
+        {
+            return Task.Run(() => { return GetActionTypeByIdAsync(reg); }).Result;
+        }
+
+
         public async Task<List<ActionType>> GetActionTypesAcync()
         {
             var types = new List<ActionType>();

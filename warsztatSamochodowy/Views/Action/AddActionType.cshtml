@@ -1,0 +1,74 @@
+﻿
+<div style="color: transparent;">
+    @Model  FormAddNewBrand
+</div>
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/ShowPorposal.css" rel="stylesheet" />
+    <link href="/css/AddNewBrand.css" rel="stylesheet" />
+    <link href="/css/AddProposal.css" rel="stylesheet" />
+    <link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+
+<body>
+
+
+
+    <form id="addNewBrand">
+        <h1 class="section-title center-section">Nowy typ akcji: </h1>
+        <div class="center-section">
+            <div class="add-section">
+                <input type="text" name="actionToAdd" value="" placeholder="" minlength="5" />
+                <button asp-controller="Action" asp-action="addActionTypeToDB" method="get" class="btn save-button" id="saveButton" type="submit" style="display: flex; justify-content:center; align-items: center">Dodaj</button>
+            </div>
+        </div>
+
+        <input hidden name="isEdit" value="@Model[0].isEdit.ToString().ToLower()" />
+        <input hidden name="proposalId" value="@Model[0].proposalId" />
+        <input hidden name="actionId" value="@Model[0].actionId" />
+        <br />
+        <br />
+        <h1 class="center-section section-title">Usuń typ: </h1>
+        <div class="center-section">
+            <div class="select-section">
+                <select class=" SelectFilter mdb-select md-form formElement" name="actionTodel" value="" data-target="vehicleDropdown" searchable="Search here.." id="Brand" style="width: 200px !important">
+
+                    <i class="fas fa-caret-down"></i>
+                    @{
+                        foreach (var type in Model[0].actions)
+                        {
+                            <option value="@type.CodeAction" selected>@type.Name</option>
+                        }
+                    }
+
+                </select>
+                <button asp-controller="Action" asp-action="deleteActionFromDB" method="get" class="btn cancel-button" id="cancelButton" type="submit" style="display: flex; justify-content:center; align-items: center">Usuń</button>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="center-section">
+            @{
+                if (Model[0].isEdit)
+                {
+                    <button asp-controller="Action" asp-action="editAction" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+                }
+                else
+                {
+                    <button asp-controller="Action" asp-action="addAction" method="get" class="btn cancel-button" id="cancelButton" type="submit">Anuluj</button>
+                }
+            }
+        </div>
+
+    </form>
+</body>
+
+

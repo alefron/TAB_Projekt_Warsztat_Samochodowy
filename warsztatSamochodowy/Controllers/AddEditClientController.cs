@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using warsztatSamochodowy.Forms;
+using warsztatSamochodowy.Models;
 using warsztatSamochodowy.Repository;
 
 namespace warsztatSamochodowy.Controllers
@@ -40,6 +41,8 @@ namespace warsztatSamochodowy.Controllers
 
         [HttpGet("AddEditClient/EditClientInDb")]
         public IActionResult EditClientInDb(
+            int clientId,
+            int adresId,
             string type,
             string firstName,
             string lastName,
@@ -52,7 +55,24 @@ namespace warsztatSamochodowy.Controllers
             string city,
             string postal)
         {
-            
+            Client client = clientRepository.getClientById(clientId);
+            Address adres = addressRepository.GetAddressById(adresId);
+
+            client.FirstName = firstName;
+            client.LastName = lastName;
+            client.Email = email;
+            client.PhoneNumber = phoneNumber;
+            client.CompanyName = companyName;
+
+            adres.HouseNumber = houseNumber;
+            adres.LocalNumber = localNumber;
+            adres.City = city;
+            adres.Street = street;
+            adres.Postal = postal;
+
+            clientRepository.Update(client);
+            addressRepository.Update(adres);
+
             return RedirectToAction("Index", "Client");
         }
 
