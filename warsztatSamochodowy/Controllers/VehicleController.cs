@@ -236,13 +236,35 @@ namespace warsztatSamochodowy.Controllers
         [Authorize(Roles = "manager")]
         public IActionResult addNewBrandToDB(string brandToAdd, bool isEdit, string regNumber)
         {
-            if(brandToAdd != null)
+            
+            if (brandToAdd != null )
             {
                 // dodawnaie marki
-                Brand brand = new Brand();
-                brand.CodeBrand = brandToAdd.ToUpper().Substring(0, 3);
-                brand.Name = brandToAdd;
-                brandRepository.Add(brand);
+                string startIndex = brandToAdd.ToUpper().Substring(0, 3);
+                if(brandRepository.GetByID(startIndex) != null)
+                {
+                    bool good = true;
+                    while (brandRepository.GetByID(startIndex) != null)
+                    {
+                        if (brandRepository.GetByID(startIndex).Name.ToUpper() == brandToAdd.ToUpper())
+                            good = false;
+                        startIndex += "1";
+                    }
+                    if (good)
+                    {
+                        Brand brand = new Brand();
+                        brand.CodeBrand = startIndex;
+                        brand.Name = brandToAdd;
+                        brandRepository.Add(brand);
+                    }                    
+                }
+                else
+                {
+                    Brand brand = new Brand();
+                    brand.CodeBrand = startIndex;
+                    brand.Name = brandToAdd;
+                    brandRepository.Add(brand);
+                }
             }
 
             if (isEdit)
