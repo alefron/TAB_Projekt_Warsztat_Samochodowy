@@ -83,6 +83,10 @@
             <h1>Typ akcji: @Model[0].action.ActionType.CodeAction</h1>
         }
 
+         <input hidden name="isEdit" value="@Model[0].is_editable.ToString().ToLower()" />
+            <input hidden name="proposalId" value="@Model[0].proposal.Id" />
+            <input hidden name="actionId" value="@Model[0].action.Id" />
+            <button asp-controller="Action" asp-action="addActionType" method="get" class="btn add-button" type="submit" style="margin-left:30px"> <i class="fas fa-plus" style="color: black"></i></button>
 
     </div>
     <div class="element-add">

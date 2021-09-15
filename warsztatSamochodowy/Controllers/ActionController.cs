@@ -200,6 +200,50 @@ namespace warsztatSamochodowy.Controllers
             return RedirectToAction("ShowProposal", "ShowProposal", new { proposalId = action.ProposalId });
         }
 
+        [Authorize(Roles = "manager")]
+        [HttpGet("Action/addActionType")]
+        public IActionResult addActionType(int proposalId, int actionId, bool isEdit)
+        {
+            List<FormAddActionType> list = new List<FormAddActionType>();
+            list.Add(new FormAddActionType(proposalId,actionId, isEdit));
+            return View(list);
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Action/addActionTypeToDB")]
+        public IActionResult addActionTypeToDB(int proposalId, int actionId, bool isEdit, string actionToAdd)
+        {
+            if(!String.IsNullOrEmpty(actionToAdd) && actionToAdd.Length >= 5)
+            {
+                ActionType actrionTypeToAdd = new ActionType();
+                actrionTypeToAdd.CodeAction = actionToAdd.ToUpper().Substring(0, 5);
+                actrionTypeToAdd.Name = actionToAdd;
+                actionTypeRepository.Add(actrionTypeToAdd);
+            }
+
+            if(isEdit)
+                return RedirectToAction("editAction", "Action", new { actionId = actionId });
+            else
+                return RedirectToAction("addAction", "Action", new { proposalId = proposalId });
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Action/deleteActionFromDB")]
+        public IActionResult deleteActionFromDB(int proposalId, int actionId, bool isEdit, string actionTodel)
+        {
+            ActionType action = actionTypeRepository.GetActionTypeById(actionTodel);
+
+            if(action != null)
+            {
+                actionTypeRepository.Remove(action);
+            }
+
+            if (isEdit)
+                return RedirectToAction("editAction", "Action", new { actionId = actionId });
+            else
+                return RedirectToAction("addAction", "Action", new { proposalId = proposalId });
+        }
+
 
         [Authorize(Roles = "manager")]
         [HttpGet("Action/deleteAction")]
