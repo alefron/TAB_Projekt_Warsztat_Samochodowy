@@ -83,6 +83,10 @@ namespace warsztatSamochodowy.Controllers
             return true;
         }
 
-        
+        [HttpGet("Action/addActionType")]
+        public IActionResult addActionType()
+        {
+            return View();
+        }
     }
 }
