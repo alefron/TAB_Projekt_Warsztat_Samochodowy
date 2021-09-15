@@ -17,6 +17,7 @@ namespace warsztatSamochodowy.Controllers
     {
         private ActionRepository actionRepository = new ActionRepository();
         private ProposalRepository proposalRepository = new ProposalRepository();
+        private ActionTypeRepository actionTypeRepository = new ActionTypeRepository();
 
         private List<FormAddEditAction> model { get; set; } = new List<FormAddEditAction>();
 
