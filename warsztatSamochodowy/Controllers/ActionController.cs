@@ -97,7 +97,7 @@ namespace warsztatSamochodowy.Controllers
         [HttpGet("Action/addActionTypeToDB")]
         public IActionResult addActionTypeToDB(int proposalId, int actionId, bool isEdit, string actionToAdd)
         {
-            if(!String.IsNullOrEmpty(actionToAdd) && actionToAdd.Length >= 5)
+            if(!String.IsNullOrEmpty(actionToAdd) && actionToAdd.Length >= 5 && actionTypeRepository.GetActionTypeById(actionToAdd.ToUpper().Substring(0, 5)) == null)
             {
                 ActionType actrionTypeToAdd = new ActionType();
                 actrionTypeToAdd.CodeAction = actionToAdd.ToUpper().Substring(0, 5);
@@ -126,6 +126,16 @@ namespace warsztatSamochodowy.Controllers
                 return RedirectToAction("editAction", "Action", new { actionId = actionId });
             else
                 return RedirectToAction("addAction", "Action", new { proposalId = proposalId });
+        }
+
+        [Authorize(Roles = "manager")]
+        [HttpGet("Action/actionTypeInActions")]
+        public string actionTypeInActions(string actionId)
+        {
+            if (actionRepository.getAllActionByActionTypeId(actionId).Count == 0)
+                return "false";
+            else
+                return "true";
         }
 
     }
