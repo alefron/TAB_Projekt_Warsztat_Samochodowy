@@ -226,7 +226,7 @@
 
     <br />
 
-    @if (Model[0].is_editable)
+    @if (Model[0].is_editable && Model[0].proposal.Status == StatusEnum.PROCESSING)
     {
         @if (Model[0].currentUser.RoleId == "WOR")
         {
