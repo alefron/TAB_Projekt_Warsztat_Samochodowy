@@ -4,6 +4,8 @@
     ViewData["Title"] = "SetCancelled";
 }
 
+<link href="/css/ManagerZlecenia.css" rel="stylesheet" />
+
 <h1>Anuluj</h1>
 
 <h3>@ViewData["Header"]</h3>
@@ -14,21 +16,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="ResultText" class="control-label"></label>
+                <h2>Wpisz rezultat</h2>
                 <textarea asp-for="ResultText" class="form-control"></textarea>
                 <span asp-validation-for="ResultText" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Anuluj" class="btn btn-primary" />
-            </div>
+            <br />
+            <button class="btn btn-blue" type="submit">Realizuj</button>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Lista</a>
-    <a asp-action="SetFinal" asp-route-id="@Model.Id">Realizuj</a> |
-    <a asp-action="BrowseAction" asp-route-id="@Model.Id">Przeglądaj</a>
+    <br />
+    <form asp-controller="Action" asp-action="editAction" method="get">
+        <button class="btn btn-green" name="actionId" value="@Model.Id" type="submit">Powrót</button>
+    </form>
+    <br />
+
+
 </div>
 
 @section Scripts {

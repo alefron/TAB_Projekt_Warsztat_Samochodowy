@@ -13,7 +13,7 @@ using warsztatSamochodowy.Utils;
 
 namespace warsztatSamochodowy.Controllers
 {
-    [Authorize(Roles = "manager")]
+    
     public class ProposalsController : Controller
     {
         private ProposalRepository proposalRepository = new ProposalRepository();
@@ -26,6 +26,7 @@ namespace warsztatSamochodowy.Controllers
             this.proposals = proposalRepository.GetJoinedProposals();
             this.model.Add(new FormProposals(proposals));
         }
+        [Authorize(Roles = "manager")]
 
         [HttpGet("Proposals/proposalsList")]
         public IActionResult ProposalList()
@@ -34,6 +35,7 @@ namespace warsztatSamochodowy.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "manager, worker")]
         [HttpGet("Proposals/getProposalActionsComplete")]
         public string getProposalActionsComplete(int proposalId)
         {
@@ -127,6 +129,7 @@ namespace warsztatSamochodowy.Controllers
             return View("proposalList", modelFiltered);
         }
 
+        [Authorize(Roles = "manager")]
         [HttpGet("Proposals/SetStatus")]
         public IActionResult SetStatus(int proposalId, int status)
         {
