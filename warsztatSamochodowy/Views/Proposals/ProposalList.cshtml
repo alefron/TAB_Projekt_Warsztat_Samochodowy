@@ -123,7 +123,7 @@
                                                     </div>
                                                     <div class="progess-container">
                                                         @{
-                                                            var uri = new Uri("https://localhost:44323/Proposals/getProposalActionsComplete?proposalId=" + item.Id);
+                                                            var uri = new Uri("https://localhost:44323/Action/actionTypeInActions?actionId=" + item.Id);
 
                                                             var cookies = Context.Request.Cookies[".AspNetCore.Cookies"];
 

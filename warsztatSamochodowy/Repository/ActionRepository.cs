@@ -340,6 +340,12 @@ namespace warsztatSamochodowy.Repository
             return Task.Run(()=> { return SetActionStatusAsync(actionId, status); }).Result;
         }
 
+        public async Task<List<Models.Action>> getAllActionByActionTypeIdAsync(string actionTypeId)
+        {
+            return await context.Actions
+                .Where((action) => action.ActionType.CodeAction == actionTypeId)
+                .ToListAsync();
+        }
 
         public async Task<int> DeleteActionAsync(Models.Action action)
         {
@@ -353,8 +359,6 @@ namespace warsztatSamochodowy.Repository
                     act.SequenceNumber = -1;
                 }
             }
-
-
             foreach(var act in actions)
             {
                 if (act.Id != actionFromDb.Id)
@@ -373,9 +377,17 @@ namespace warsztatSamochodowy.Repository
 
 
 
+        public List<Models.Action> getAllActionByActionTypeId(string actionTypeId)
+        {
+            return Task.Run(() => { return getAllActionByActionTypeIdAsynch(actionTypeId); }).Result;
+        }
+
+        public async Task<List<Models.Action>> getAllActionByActionTypeIdAsynch(string actionTypeId)
+        {
+            return await context.Actions
+                .Where((action) => action.ActionType.CodeAction == actionTypeId)
+                .ToListAsync();
+        }
     }
-
-
-
 
 }
