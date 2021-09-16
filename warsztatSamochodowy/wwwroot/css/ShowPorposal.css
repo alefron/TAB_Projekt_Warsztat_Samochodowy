@@ -186,3 +186,8 @@
     cursor: pointer;
     outline: inherit;
 }
+.moja-ikona {
+    transform: translate(-50%,-300%);
+    color: #428bca;
+    font-size: 60px;
+}

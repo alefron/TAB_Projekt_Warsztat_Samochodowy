@@ -1,0 +1,33 @@
+﻿.containerLetters {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.bouncing-letter {
+    padding: 5px;
+    font-size: 50px;
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    animation: animate 2s cubic-bezier(.03,1.14,.62,.99);
+}
+
+@keyframes animate {
+    0% {
+        transform: translateY(0);
+        color: black;
+    }
+
+
+
+    50% {
+        transform: translateY(-30%);
+        color: rgb(20, 179, 250);
+    }
+
+    100% {
+        transform: translateY(0);
+        color: black;
+    }
+}

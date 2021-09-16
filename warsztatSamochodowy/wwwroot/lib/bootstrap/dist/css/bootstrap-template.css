@@ -5006,7 +5006,6 @@ fieldset:disabled .btn {
   display: -ms-flexbox;
   display: flex;
   height: 1rem;
-  overflow: hidden;
   font-size: 0.75rem;
   background-color: #f7f7f9;
 }
@@ -5018,7 +5017,7 @@ fieldset:disabled .btn {
   flex-direction: column;
   -ms-flex-pack: center;
   justify-content: center;
-  overflow: hidden;
+ 
   color: #fff;
   text-align: center;
   white-space: nowrap;
@@ -10782,3 +10781,23 @@ th {
 .card-title, .card-header {
   color: inherit;
 }
+
+:root {
+   
+}
+
+.progress-bar-success-animate {
+    --procentProgressBar: 0%;
+    animation: progres 2s ease-in-out forwards;
+}
+
+@keyframes progres {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: var(--procentProgressBar);
+    }
+}
+

@@ -18,6 +18,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap-template.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css%22%3E
     <script src="/js/site.js"></script>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <script src="/js/ManagerPojazdy.js"></script>
@@ -40,15 +43,32 @@
         </div>
     </div>
     <br />
-
+    <br />
     <div class='progress-container-all'>
         @{
             string url = "https://localhost:44323/Proposals/getProposalActionsComplete?proposalId=" + Model[0].proposal.Id;
             string textResult = await httpRequest(url);
         }
+
+
+
+
         <div class="progress-bar-container progress">
-            <div data-percentage="0%" style="width: @textResult" class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="progresBar" data-percentage="0%" class="progress-bar progress-bar-success progress-bar-success-animate" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <script>
+                        var r = document.getElementById('progresBar');
+                        r.style.setProperty('--procentProgressBar', '@textResult');
+                </script>
+                <div style="margin: 0 auto">@textResult</div>
+
+            </div>
+            <i class="moja-ikona fas fa-car-side"></i>
         </div>
+
+
+
+
+
 
         @{
             if (Model[0].currentUser.RoleId == "MAN")
@@ -307,26 +327,26 @@
 
                                                             </div>
 
-                                                            <div class="edit-dot my-flex-center">
+                                                            <div class=" my-flex-center edit-dot">
                                                                 @if (act.Status == StatusEnum.OPEN)
                                                                 {
-                                                                    <span class='circle circle-blue'></span>
+                                                                    <div class='circle circle-blue'></div>
                                                                 }
                                                                 else if (act.Status == StatusEnum.PROCESSING)
                                                                 {
-                                                                    <span class='circle circle-yellow'></span>
+                                                                    <div class='circle circle-yellow'></div>
                                                                 }
                                                                 else if (act.Status == StatusEnum.FINAL)
                                                                 {
-                                                                    <span class='circle circle-green'></span>
+                                                                    <div class='circle circle-green'></div>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <span class='circle circle-red'></span>
+                                                                    <div class='circle circle-red'></div>
                                                                 }
 
                                                                 <button class='trash-button' data-toggle="modal" data-target="#deleteModal" type="button" value="@act.Id">
-                                                                    <i class="fas fa-trash" style='font-size:24px;color:red'></i>
+                                                                    <i class="fas fa-trash" style="font-size:24px;color:red"></i>
                                                                 </button>
 
                                                                 <form asp-controller="Action" asp-action="editAction" method="get">
