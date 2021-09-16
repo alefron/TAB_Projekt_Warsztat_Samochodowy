@@ -38,8 +38,7 @@ namespace warsztatSamochodowy.Controllers
             {
                 if (person.Email == email)
                 {
-                    //if (person.HashPassword == SecurityUtils.Hasher.GetHash(password))
-                    if (person.HashPassword == password)
+                    if (person.HashPassword == SecurityUtils.Hasher.GetHash(password))
                     {
                         var roleID = person.RoleId;
 
